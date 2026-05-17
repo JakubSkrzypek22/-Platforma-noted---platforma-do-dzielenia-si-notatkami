@@ -6,7 +6,7 @@
     <!-- Sidebar -->
     <aside class="w-64 glass border-r border-slate-800 hidden md:flex flex-col relative z-20">
         <div class="h-16 flex items-center px-6 border-b border-slate-800">
-            <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">TravelApp</h1>
+            <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Platforma noted</h1>
         </div>
         <nav class="flex-1 px-4 py-6 space-y-2">
             <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('dashboard') ? 'bg-primary/20 text-primary border border-primary/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
@@ -41,7 +41,7 @@
         <!-- Topbar -->
         <header class="h-16 glass border-b border-slate-800 flex items-center justify-between px-6 z-20">
             <div class="flex items-center md:hidden">
-                <span class="text-xl font-bold text-white">TravelApp</span>
+                <span class="text-xl font-bold text-white">Platforma noted</span>
             </div>
             <div class="hidden md:block text-slate-300 font-medium">
                 Witaj, {{ Auth::user()->name ?? 'Podróżniku' }}!

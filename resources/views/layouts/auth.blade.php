@@ -8,8 +8,8 @@
     
     <div class="z-10 w-full max-w-md p-6">
         <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary mb-2">TravelApp</h1>
-            <p class="text-slate-400">Twoja brama do świata</p>
+            <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary mb-2">Platforma noted</h1>
+            <p class="text-slate-400">Dziel się swoimi notatkami z innymi</p>
         </div>
         
         <!-- Glassmorphism Card -->
