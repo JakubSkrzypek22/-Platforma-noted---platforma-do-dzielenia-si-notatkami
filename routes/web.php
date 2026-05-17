@@ -1,29 +1,30 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TripController;
-use App\Http\Controllers\CountryController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CountryController;
+use App\Http\Controllers\TripController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('trips.index');
 });
 
-Route::controller(TripController::class)->group(function () {
-    Route::get('/trips/image-upload', 'imageUpload')->name('trips.image_upload');
-    Route::post('/trips/image-upload', 'imageUploadStore')->name('trips.image_upload.store');
-    Route::get('/trips', 'index')->name('trips.index');
-    Route::get('/trips/{id}', 'show')->name('trips.show');
-    Route::get('/trips/{id}/edit', 'edit')->name('trips.edit');
-    Route::put('/trips/{id}', 'update')->name('trips.update');
-    Route::post('/trips/favourite', 'favourite')->name('trips.favourite');
-});
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
 
-Route::resource('countries', CountryController::class)->middleware('auth');
+Route::get('/register', function () {
+    return view('auth.register');
+})->name('register');
 
-Route::controller(AuthController::class)->group(function () {
-    Route::get('/auth/login', 'login')->name('login');
-    Route::post('/auth/login', 'authenticate')->name('login.authenticate');
-    Route::get('/auth/logout', 'logout')->name('logout');
-});
+Route::get('/dashboard', function () {
+    return view('dashboard.index');
+})->name('dashboard');
+
+Route::get('/countries', function () {
+    return view('countries.index');
+})->name('countries');
+
+Route::get('/trips', function () {
+    return view('trips.index');
+})->name('trips');
