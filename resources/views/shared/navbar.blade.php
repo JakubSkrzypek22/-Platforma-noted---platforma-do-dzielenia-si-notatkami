@@ -8,11 +8,11 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
                 <a class="nav-link @if (str_contains(request()->path(), 'trips')) active @endif"
-                    href="{{ route('trips.index') }}">Wycieczki</a>
+                    href="{{ route('trips') }}">Wycieczki</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link @if (str_contains(request()->path(), 'countries')) active @endif"
-                    href="{{ route('countries.index') }}">Kraje</a>
+                    href="{{ route('countries') }}">Kraje</a>
             </li>
         </ul>
         <ul id="navbar-user" class="navbar-nav mb-2 mb-lg-0">

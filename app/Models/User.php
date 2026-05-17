@@ -2,43 +2,26 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'role_id',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -47,8 +30,21 @@ class User extends Authenticatable
         ];
     }
 
-    public function isAdmin() : bool {
-        return $this->role_id == DB::table('roles')->where('name', 'admin')->value('id');
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 
+    public function isAdmin()
+    {
+        return $this->role && $this->role->name === 'admin';
+    }
+
+    public function trips()
+    {
+        // Assuming user_trip table or relation. There is a user_country table though.
+        // I will use user_country since it was mentioned in migrations, maybe the user wants that?
+        // Wait, 'user_country' exists. Let's add countries()
+        return $this->belongsToMany(Country::class);
+    }
 }
