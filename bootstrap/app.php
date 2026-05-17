@@ -26,7 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (QueryException $e, Request $request) {
-            $errorCode = $e->errorInfo[0];
+            $errorCode = $e->errorInfo[0] ?? null;
             if ($errorCode == '23000') {
                 return back()->withError('Nie można usunąć rekordu, dla którego istnieją rekordy podrzędne.');
             } else {
