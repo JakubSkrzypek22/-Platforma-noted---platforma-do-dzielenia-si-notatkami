@@ -7,7 +7,7 @@
         <p class="text-slate-400">Podsumowanie Twojej aktywności w serwisie</p>
     </div>
     <div class="hidden sm:flex space-x-3">
-        <a href="{{ route('trips') }}" class="glass px-4 py-2 rounded-lg text-sm font-medium hover:bg-white/5 transition-colors text-white border border-slate-700">
+        <a href="{{ route('notes') }}" class="glass px-4 py-2 rounded-lg text-sm font-medium hover:bg-white/5 transition-colors text-white border border-slate-700">
             <i class="fa-solid fa-book-open mr-2 text-primary"></i> Moje Notatki
         </a>
     </div>
@@ -88,7 +88,7 @@
     <div class="glass rounded-2xl p-6 border border-slate-700/50 bg-gradient-to-br from-slate-900/80 to-primary/10">
         <h3 class="text-xl font-bold text-white mb-2">Wystaw nową notatkę!</h3>
         <p class="text-slate-300 mb-6 text-sm">Wgrywaj swoje notatki, pomóż innym i zarabiaj. Przeglądaj propozycje.</p>
-        <a href="{{ route('trips') }}" class="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-primary to-secondary hover:from-blue-600 hover:to-purple-600 text-white rounded-xl font-medium transition-all duration-300 hover:scale-105">
+        <a href="{{ route('notes') }}" class="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-primary to-secondary hover:from-blue-600 hover:to-purple-600 text-white rounded-xl font-medium transition-all duration-300 hover:scale-105">
             Dodaj Materiał <i class="fa-solid fa-arrow-right ml-2"></i>
         </a>
     </div>

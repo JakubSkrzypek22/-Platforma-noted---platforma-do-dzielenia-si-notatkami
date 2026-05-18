@@ -13,11 +13,11 @@
                 <i class="fa-solid fa-house w-6"></i>
                 <span class="font-medium">Pulpit</span>
             </a>
-            <a href="{{ route('trips') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('trips*') ? 'bg-primary/20 text-primary border border-primary/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+            <a href="{{ route('notes') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('notes*') ? 'bg-primary/20 text-primary border border-primary/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                 <i class="fa-solid fa-book-open w-6"></i>
                 <span class="font-medium">Moje Notatki</span>
             </a>
-            <a href="{{ route('countries') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('countries*') ? 'bg-primary/20 text-primary border border-primary/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+            <a href="{{ route('subjects') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('subjects*') ? 'bg-primary/20 text-primary border border-primary/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                 <i class="fa-solid fa-graduation-cap w-6"></i>
                 <span class="font-medium">Przedmioty</span>
             </a>

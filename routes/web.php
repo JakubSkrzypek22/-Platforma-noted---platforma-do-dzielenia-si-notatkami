@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\CountryController;
-use App\Http\Controllers\TripController;
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\NoteController;
 
 // Public routes
 Route::get('/', function () {
@@ -25,14 +25,14 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
-    // Countries
-    Route::get('/countries', [CountryController::class, 'index'])->name('countries');
+    // Subjects
+    Route::get('/subjects', [SubjectController::class, 'index'])->name('subjects');
     
-    // Trips
-    Route::get('/trips', [TripController::class, 'index'])->name('trips');
+    // Notes
+    Route::get('/notes', [NoteController::class, 'index'])->name('notes');
     
     // Admin routes (Example middleware placeholder for admin role)
     Route::middleware('can:admin')->group(function () {
-        Route::post('/trips', [TripController::class, 'store'])->name('trips.store');
+        Route::post('/notes', [NoteController::class, 'store'])->name('notes.store');
     });
 });
