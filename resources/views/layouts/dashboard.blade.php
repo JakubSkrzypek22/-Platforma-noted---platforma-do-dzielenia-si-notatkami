@@ -11,15 +11,15 @@
         <nav class="flex-1 px-4 py-6 space-y-2">
             <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('dashboard') ? 'bg-primary/20 text-primary border border-primary/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
                 <i class="fa-solid fa-house w-6"></i>
-                <span class="font-medium">Dashboard</span>
+                <span class="font-medium">Pulpit</span>
             </a>
             <a href="{{ route('trips') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('trips*') ? 'bg-primary/20 text-primary border border-primary/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                <i class="fa-solid fa-plane w-6"></i>
-                <span class="font-medium">Wycieczki</span>
+                <i class="fa-solid fa-book-open w-6"></i>
+                <span class="font-medium">Moje Notatki</span>
             </a>
             <a href="{{ route('countries') }}" class="flex items-center px-4 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('countries*') ? 'bg-primary/20 text-primary border border-primary/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
-                <i class="fa-solid fa-earth-americas w-6"></i>
-                <span class="font-medium">Kraje</span>
+                <i class="fa-solid fa-graduation-cap w-6"></i>
+                <span class="font-medium">Przedmioty</span>
             </a>
         </nav>
         <div class="p-4 border-t border-slate-800">
