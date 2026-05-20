@@ -1,107 +1,52 @@
-# Platforma noted 📚
+# 📚 Notet — Drugie życie Twoich notatek akademickich! ✨
 
-Platforma do dzielenia się notatkami akademickimi, zbudowana na **Laravel 13**.
-
----
-
-## 🌿 Gałęzie projektu
-
-| Gałąź | Opis |
-|-------|------|
-| `main` | Wersja Jannka – architektura Trips/Countries (podróże, kraje) |
-| `jannek` | Wersja Jakuba – architektura Notes/Subjects (notatki, przedmioty) |
+> **Notet** to innowacyjna platforma społecznościowo-handlowa stworzona przez studentów dla studentów. Wyobraź sobie **Vinted**, ale zamiast ubrań wymieniasz się, kupujesz i sprzedajesz **notatki, opracowania, ściągi oraz materiały naukowe**! 
 
 ---
 
-## 🚀 Jak zacząć (dla każdego członka zespołu)
+## 🎯 Czym jest Notet?
 
-### 1. Sklonuj repozytorium
-```bash
-git clone https://github.com/JakubSkrzypek22/-Platforma-noted---platforma-do-dzielenia-si-notatkami.git
-cd "-Platforma-noted---platforma-do-dzielenia-si-notatkami"
-```
+Notet powstał, aby rozwiązać odwieczny problem każdego studenta: *„Skąd wziąć dobre materiały na kolokwium?”* oraz *„Co zrobić z setkami stron świetnych notatek po zdanym egzaminie?”*. 
 
-### 2. Przełącz się na odpowiednią gałąź
-
-Wersja Jakuba (Notatki):
-```bash
-git checkout jannek
-```
-Wersja Jannka (Wycieczki):
-```bash
-git checkout main
-```
-
-### 3. Zainstaluj zależności PHP
-```bash
-composer install
-```
-
-### 4. Skonfiguruj plik środowiskowy
-```bash
-copy .env.example .env
-php artisan key:generate
-```
-
-### 5. Zbuduj bazę danych i wypełnij danymi testowymi
-```bash
-php artisan migrate:fresh --seed
-```
-
-### 6. Uruchom serwer deweloperski
-```bash
-php artisan serve
-```
-
-Aplikacja będzie dostępna pod adresem: **http://localhost:8000**
+Dzięki Notet studenci mogą w łatwy sposób monetyzować swoją ciężką pracę z całego semestru, a inni mogą błyskawicznie zyskać dostęp do sprawdzonych, wysokiej jakości materiałów dydaktycznych.
 
 ---
 
-## 🔐 Konta testowe
+## 🚀 Główne Funkcje Platformy
 
-### Gałąź `jannek` (architektura Notes/Subjects)
+### 💼 1. Vinted dla Notatek (Sprzedaż i Wymiana)
+* **Zarabiaj na wiedzy:** Wystawiaj swoje estetyczne i rzetelne notatki, schematy, czy opracowania. Sam decydujesz o cenie!
+* **Łatwe dodawanie:** Intuicyjny formularz pozwala na błyskawiczne wgranie plików i dodanie opisu.
+* **Darmowe materiały:** Możesz również dzielić się wiedzą bezpłatnie, budując swoją reputację w społeczności akademickiej.
 
-| Email | Hasło | Rola |
-|-------|-------|------|
-| `jan@email.com` | `1234` | Admin |
-| `marta@email.com` | `1234` | User |
-| `pawel@email.com` | `1234` | User |
+### ⭐️ 2. System Ocen i Recenzji
+* **Kupuj bez ryzyka:** Każdy zakupiony materiał może zostać oceniony (w skali gwiazdkowej) oraz skomentowany.
+* **Wiarygodność:** System opinii eliminuje niekompletne lub błędne notatki, promując najlepszych twórców.
 
-### Gałąź `main` (architektura Trips/Countries)
+### 🔍 3. Precyzyjne Wyszukiwanie i Kategoryzacja
+* **Filtrowanie:** Szukaj według przedmiotów, tematów, poziomu trudności, a także konkretnych uczelni i wydziałów.
+* **Personalizacja:** Otrzymuj rekomendacje materiałów dopasowane do Twojego kierunku studiów.
 
-| Email | Hasło | Rola |
-|-------|-------|------|
-| `jan@email.com` | `1234` | Admin |
-| `siuhun@email.com` | `1234` | User |
-| `marta@email.com` | `1234` | User |
-
----
-
-## 🛠 Wymagania
-
-- PHP 8.2+
-- Composer
-- SQLite (domyślnie, bez dodatkowej konfiguracji)
+### 💬 4. Społeczność Studencka
+* Zadawaj pytania autorom notatek, sugeruj poprawki i dyskutuj w sekcji komentarzy pod materiałami.
 
 ---
 
-## 📁 Architektura projektu
+## 🛠️ Strona Technologiczna
 
-```
-app/
-├── Http/
-│   ├── Controllers/       # AuthController, DashboardController, NoteController...
-│   └── Middleware/        # RoleMiddleware
-├── Models/                # User, Role, Note, Subject (lub Trip, Country)
-database/
-├── migrations/            # Struktura tabel
-└── seeders/               # Dane testowe
-resources/views/
-├── layouts/               # app, auth, dashboard blade layouts
-├── auth/                  # login, register
-├── dashboard/             # panel główny
-├── notes/ lub trips/      # lista materiałów
-└── subjects/ lub countries/ # lista kategorii
-routes/
-└── web.php                # Routing aplikacji
-```
+Platforma została zaprojektowana z myślą o szybkości działania, bezpieczeństwie i nowoczesnym wyglądzie:
+* **Backend:** Laravel 13 (nowoczesny framework PHP gwarantujący stabilność i wysokie bezpieczeństwo)
+* **Frontend:** Blade, TailwindCSS & Vanilla CSS (responsywny, płynny i estetyczny interfejs użytkownika)
+* **Baza danych:** Szybka i zoptymalizowana baza danych dopasowana do dynamicznego skalowania materiałów.
+
+---
+
+## 💡 Dlaczego warto dołączyć do Notet?
+
+* **Dla Twórców:** Twój wysiłek włożony w pisanie schludnych notatek wreszcie się opłaci. Wykład, który starannie spisałeś, może stać się Twoim stałym źródłem dochodu!
+* **Dla Kupujących:** Oszczędzasz dziesiątki godzin na szukaniu informacji w Internecie. Otrzymujesz skondensowaną, sprawdzoną wiedzę od starszych roczników.
+* **Dla Środowiska:** Promujemy cyfrowy obieg dokumentów. Mniej papieru, więcej wiedzy w chmurze!
+
+---
+
+*Notet — Ucz się mądrzej, nie ciężej! 🎓*
