@@ -1,73 +1,72 @@
 @extends('layouts.auth')
 
 @section('auth-content')
-<div class="text-center mb-8">
-    <h2 class="text-2xl font-bold text-white mb-2">Dołącz do nas</h2>
-    <p class="text-slate-400 text-sm">Rozpocznij swoją podróż w 3 minuty.</p>
+<div class="text-center mb-4">
+    <h2 class="h4 fw-bold text-body mb-1">Dołącz do nas!</h2>
+    <p class="text-secondary small">Zarejestruj się, aby dzielić się notatkami studenckimi.</p>
 </div>
 
-<form method="POST" action="{{ route('register') }}" class="space-y-5">
+<form method="POST" action="{{ route('register') }}" class="vstack gap-3">
     @csrf
     
     <div>
-        <label for="name" class="block text-sm font-medium text-slate-300 mb-1">Nazwa użytkownika</label>
-        <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i class="fa-regular fa-user text-slate-400"></i>
-            </div>
-            <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus class="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300">
+        <label for="name" class="form-label small fw-bold text-body">Nazwa użytkownika</label>
+        <div class="input-group">
+            <span class="input-group-text bg-transparent border-end-0 text-secondary"><i class="bi bi-person"></i></span>
+            <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus class="form-control border-start-0 ps-0" placeholder="np. JanKowalski">
         </div>
-        @error('name')<p class="mt-1 text-sm text-red-400">{{ $message }}</p>@enderror
+        @error('name')
+            <p class="mt-1 text-sm text-danger">{{ $message }}</p>
+        @enderror
     </div>
 
     <div>
-        <label for="email" class="block text-sm font-medium text-slate-300 mb-1">Adres e-mail</label>
-        <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i class="fa-regular fa-envelope text-slate-400"></i>
-            </div>
-            <input id="email" type="email" name="email" value="{{ old('email') }}" required class="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300">
+        <label for="email" class="form-label small fw-bold text-body">Adres e-mail</label>
+        <div class="input-group">
+            <span class="input-group-text bg-transparent border-end-0 text-secondary"><i class="bi bi-envelope"></i></span>
+            <input id="email" type="email" name="email" value="{{ old('email') }}" required class="form-control border-start-0 ps-0" placeholder="nazwa@uczelnia.edu.pl">
         </div>
-        @error('email')<p class="mt-1 text-sm text-red-400">{{ $message }}</p>@enderror
+        @error('email')
+            <p class="mt-1 text-sm text-danger">{{ $message }}</p>
+        @enderror
     </div>
 
     <div>
-        <label for="password" class="block text-sm font-medium text-slate-300 mb-1">Hasło</label>
-        <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i class="fa-solid fa-lock text-slate-400"></i>
-            </div>
-            <input id="password" type="password" name="password" required class="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300">
+        <label for="password" class="form-label small fw-bold text-body">Hasło</label>
+        <div class="input-group">
+            <span class="input-group-text bg-transparent border-end-0 text-secondary"><i class="bi bi-lock"></i></span>
+            <input id="password" type="password" name="password" required class="form-control border-start-0 ps-0" placeholder="••••••••">
         </div>
-        @error('password')<p class="mt-1 text-sm text-red-400">{{ $message }}</p>@enderror
+        @error('password')
+            <p class="mt-1 text-sm text-danger">{{ $message }}</p>
+        @enderror
     </div>
 
     <div>
-        <label for="password_confirmation" class="block text-sm font-medium text-slate-300 mb-1">Powtórz hasło</label>
-        <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i class="fa-solid fa-lock text-slate-400"></i>
-            </div>
-            <input id="password_confirmation" type="password" name="password_confirmation" required class="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300">
+        <label for="password_confirmation" class="form-label small fw-bold text-body">Powtórz hasło</label>
+        <div class="input-group">
+            <span class="input-group-text bg-transparent border-end-0 text-secondary"><i class="bi bi-lock-fill"></i></span>
+            <input id="password_confirmation" type="password" name="password_confirmation" required class="form-control border-start-0 ps-0" placeholder="••••••••">
         </div>
     </div>
 
-    <div class="flex items-start">
-        <div class="flex items-center h-5">
-            <input id="terms" type="checkbox" name="terms" required class="w-4 h-4 rounded border-slate-700 bg-slate-900 text-primary focus:ring-primary">
-        </div>
-        <label for="terms" class="ml-2 block text-sm text-slate-300">
-            Akceptuję <a href="#" class="text-primary hover:underline">Regulamin</a> i <a href="#" class="text-primary hover:underline">Politykę Prywatności</a>
+    <div class="form-check my-2">
+        <input id="terms" type="checkbox" name="terms" required class="form-check-input">
+        <label for="terms" class="form-check-label small text-secondary">
+            Akceptuję <a href="#" class="text-primary text-decoration-none fw-bold">Regulamin</a> i <a href="#" class="text-primary text-decoration-none fw-bold">Politykę Prywatności</a>
         </label>
+        @error('terms')
+            <p class="mt-1 text-sm text-danger d-block">{{ $message }}</p>
+        @enderror
     </div>
-    @error('terms')<p class="text-sm text-red-400">{{ $message }}</p>@enderror
 
-    <button type="submit" class="w-full bg-gradient-to-r from-primary to-secondary hover:from-blue-600 hover:to-purple-600 text-white font-medium py-3 px-4 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
+    <button type="submit" class="btn btn-primary w-100 py-2.5 fw-bold shadow mt-2">
         Utwórz konto
     </button>
 </form>
 
-<div class="mt-6 text-center text-sm text-slate-400">
-    Masz już konto? <a href="{{ route('login') }}" class="font-medium text-primary hover:text-secondary transition-colors duration-300">Zaloguj się</a>
+<div class="mt-4 text-center small text-secondary">
+    Masz już konto? 
+    <a href="{{ route('login') }}" class="text-primary text-decoration-none fw-bold">Zaloguj się</a>
 </div>
 @endsection
