@@ -103,7 +103,7 @@
 
     <!-- Tab Content Pane Wrapper -->
     <div class="tab-content" id="notetTabsContent">
-        
+
         <!-- TAB 1: STRONA GŁÓWNA (Pulpit użytkownika) -->
         <div class="tab-pane fade show active" id="home-pane" role="tabpanel" aria-labelledby="home-tab">
             <div class="d-flex align-items-center justify-content-between mb-4">
@@ -134,7 +134,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-md-6 col-lg-4">
                     <div class="card premium-card p-4 h-100">
                         <div class="d-flex align-items-center justify-content-between mb-3">
@@ -184,7 +184,7 @@
                                     <p class="mb-0 text-secondary small">od Marta Z. za "Makroekonomia - Ćwiczenia"</p>
                                 </div>
                             </div>
-                            
+
                             <div class="d-flex align-items-center p-3 rounded-3 bg-body-secondary bg-opacity-50">
                                 <div class="w-10 h-10 rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center me-3 text-success" style="width: 40px; height: 40px; flex-shrink: 0;">
                                     <i class="bi bi-cash-stack"></i>
@@ -197,7 +197,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-lg-6">
                     <div class="card premium-card p-5 h-100 hero-banner shadow-lg text-white d-flex flex-column justify-content-between">
                         <div>
@@ -216,7 +216,7 @@
         <!-- TAB 2: IDEA STRONY (BOGATY KONTENT BEZ GEOGRAFII) -->
         <div class="tab-pane fade" id="idea-pane" role="tabpanel" aria-labelledby="idea-tab">
             <div class="editorial-wrapper py-3">
-                
+
                 <!-- Header Jumbotron -->
                 <div class="text-center mb-5">
                     <span class="text-primary fw-bold text-uppercase tracking-widest fs-7">Filozofia Projektu</span>
@@ -232,12 +232,12 @@
                             Tradycyjne modele edukacyjne borykają się z ogromnym marnotrawstwem zasobów poznawczych. Prace pisane w pocie czoła, skrupulatnie prowadzone notatki z wykładów, szczegółowo rozpisane projekty semestralne lądują na dnie cyfrowych folderów po zdanym egzaminie. Jest to strata potencjału intelektualnego, który mógłby wielokrotnie służyć kolejnym rocznikom.
                         </p>
                         <p class="text-secondary mb-0" style="text-align: justify; line-height: 1.7;">
-                            Notet stawia czoła temu wyzwaniu. Przenosimy ideę gospodarki obiegu zamkniętego (<i>circular economy</i>) bezpośrednio na grunt akademicki. Dajemy drugie życie opracowaniom dydaktycznym, pozwalając autorom czerpać korzyści finansowe ze swojego trudu, a kupującym ułatwiając natychmiastowe dotarcie do syntetycznych i sprawdzonych źródeł wiedzy.
+                            Noted stawia czoła temu wyzwaniu. Przenosimy ideę gospodarki obiegu zamkniętego (<i>circular economy</i>) bezpośrednio na grunt akademicki. Dajemy drugie życie opracowaniom dydaktycznym, pozwalając autorom czerpać korzyści finansowe ze swojego trudu, a kupującym ułatwiając natychmiastowe dotarcie do syntetycznych i sprawdzonych źródeł wiedzy.
                         </p>
                     </div>
                     <div class="col-md-5">
                         <div class="p-4 rounded-4 bg-primary bg-opacity-10 border border-primary border-opacity-10 shadow-inner">
-                            <h4 class="fw-bold mb-3 text-primary"><i class="bi bi-lightbulb-fill me-2"></i>Wizja Notet</h4>
+                            <h4 class="fw-bold mb-3 text-primary"><i class="bi bi-lightbulb-fill me-2"></i>Wizja Noted</h4>
                             <p class="text-secondary small mb-0" style="line-height: 1.6;">
                                 Wierzymy w pełną demokratyzację dostępu do materiałów naukowych. Wiedza nie powinna być zamknięta w ciasnych kręgach. Poprzez dynamiczne, zintegrowane mechanizmy oceny to studenci sami kreują standardy jakości dydaktycznej, filtrując i nagradzając najbardziej wartościowe i precyzyjne materiały.
                             </p>
@@ -310,7 +310,7 @@
                         </h2>
                         <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionIdea">
                             <div class="accordion-body text-secondary" style="line-height: 1.6;">
-                                Zasady projektowania interfejsu Notet opierają się na zaawansowanych badaniach nad percepcją wzrokową i ergonomią. Harmonijne schematy kolorystyczne (w tym innowacyjny motyw kremowy) eliminują zmęczenie oczu podczas całonocnych powtórek materiału, ułatwiając zapamiętywanie kluczowych pojęć w sprzyjającym, estetycznym środowisku.
+                                Zasady projektowania interfejsu Noted opierają się na zaawansowanych badaniach nad percepcją wzrokową i ergonomią. Harmonijne schematy kolorystyczne (w tym innowacyjny motyw kremowy) eliminują zmęczenie oczu podczas całonocnych powtórek materiału, ułatwiając zapamiętywanie kluczowych pojęć w sprzyjającym, estetycznym środowisku.
                             </div>
                         </div>
                     </div>
@@ -321,7 +321,7 @@
 
         <!-- TAB 3: KOSZYK (DYNAMICZNY CRUD NOTATEK W BOOTSTRAPIE) -->
         <div class="tab-pane fade" id="basket-pane" role="tabpanel" aria-labelledby="basket-tab">
-            
+
             <!-- Stats Counter Row -->
             <div class="row g-4 mb-4 text-center">
                 <div class="col-6 col-md-3">
@@ -352,7 +352,7 @@
 
             <!-- Main Grid Row -->
             <div class="row g-4">
-                
+
                 <!-- Left Panel: Create Form Card -->
                 <div class="col-lg-4">
                     <div class="card premium-card p-4 shadow-sm position-sticky" style="top: 20px; z-index: 10;">
@@ -361,7 +361,7 @@
                             Wystaw Nową Notatkę
                         </h4>
                         <hr class="my-3 text-secondary border-opacity-10">
-                        
+
                         <form id="note-form" onsubmit="handleCreateNote(event)">
                             <div class="mb-3">
                                 <label for="form-title" class="form-label small fw-bold text-body">Tytuł Opracowania</label>
@@ -398,7 +398,7 @@
 
                 <!-- Right Panel: Note cards grid list & filters -->
                 <div class="col-lg-8">
-                    
+
                     <!-- Filter Pills & Search Input Row -->
                     <div class="card premium-card p-3 mb-4 shadow-sm">
                         <div class="row g-3 align-items-center">
@@ -511,7 +511,7 @@
         // Filter trigger
         function setFilter(filterType) {
             activeFilter = filterType;
-            
+
             // Handle active class updates
             const pills = document.querySelectorAll('#filter-pills-container button');
             pills.forEach(pill => pill.classList.remove('active'));
@@ -533,7 +533,7 @@
         // CREATE operation handler
         function handleCreateNote(e) {
             e.preventDefault();
-            
+
             const title = document.getElementById('form-title').value.trim();
             const content = document.getElementById('form-content').value.trim();
             const price = parseFloat(document.getElementById('form-price').value) || 0;
@@ -650,7 +650,7 @@
 
             // Filter logic
             const filtered = notes.filter(n => {
-                const matchesSearch = n.title.toLowerCase().includes(searchQuery) || 
+                const matchesSearch = n.title.toLowerCase().includes(searchQuery) ||
                                       n.content.toLowerCase().includes(searchQuery);
                 if (!matchesSearch) return false;
 
@@ -741,7 +741,7 @@
                                 </div>
                                 <p class="text-secondary small text-break mb-4" style="line-height: 1.5;">${escapeHtml(note.content)}</p>
                             </div>
-                            
+
                             <div>
                                 <hr class="my-3 text-secondary border-opacity-10">
                                 <div class="d-flex justify-content-between align-items-center">
@@ -749,15 +749,15 @@
                                         <i class="bi bi-tag-fill me-1.5 small"></i>
                                         <span>${note.price.toFixed(2)} PLN</span>
                                     </div>
-                                    
-                                    <select class="form-select form-select-sm w-auto py-1 border-0 fw-bold rounded-pill text-uppercase fs-8 ${statusBadgeClass}" 
+
+                                    <select class="form-select form-select-sm w-auto py-1 border-0 fw-bold rounded-pill text-uppercase fs-8 ${statusBadgeClass}"
                                             onchange="handleQuickStatusChange(${note.id}, this.value)" style="font-size: 0.72rem; cursor: pointer; padding-right: 1.8rem;">
                                         <option value="w trakcie zakupu" ${note.status === 'w trakcie zakupu' ? 'selected' : ''}>Oczekuje</option>
                                         <option value="zakupione" ${note.status === 'zakupione' ? 'selected' : ''}>Kupiono</option>
                                         <option value="zwrócone" ${note.status === 'zwrócone' ? 'selected' : ''}>Zwrócono</option>
                                     </select>
                                 </div>
-                                
+
                                 <div class="d-flex justify-content-end gap-2 mt-3 pt-2">
                                     <button class="btn btn-sm btn-light border d-flex align-items-center text-body" onclick="startInlineEdit(${note.id})">
                                         <i class="bi bi-pencil me-1.5"></i> Edytuj

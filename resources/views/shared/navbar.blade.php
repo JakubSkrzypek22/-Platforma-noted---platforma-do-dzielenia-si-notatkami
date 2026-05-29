@@ -60,21 +60,37 @@
 
             <!-- Authentication Links -->
             @if (Auth::check())
-                <li class="nav-item">
-                    <span class="navbar-text me-2 text-secondary">Witaj, {{ Auth::user()->name }}</span>
-                </li>
-                <li class="nav-item">
-                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                        @csrf
-                        <button type="submit" class="btn btn-outline-danger btn-sm">
-                            <i class="bi bi-box-arrow-right me-1"></i> Wyloguj się
-                        </button>
-                    </form>
+                <li class="nav-item dropdown me-2">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center fw-bold" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle fs-5 me-2"></i>
+                        {{ Auth::user()->name }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-1" aria-labelledby="navbarUserDropdown">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('dashboard') }}">
+                                <i class="bi bi-speedometer2 me-2"></i> Panel roboczy
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST" class="px-2">
+                                @csrf
+                                <button type="submit" class="btn btn-danger btn-sm w-100 d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-box-arrow-right me-1"></i> Wyloguj się
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
                 </li>
             @else
-                <li class="nav-item">
-                    <a class="btn btn-outline-primary btn-sm" href="{{ route('login') }}">
+                <li class="nav-item me-2">
+                    <a class="btn btn-outline-primary btn-sm px-3 fw-semibold" href="{{ route('login') }}">
                         <i class="bi bi-box-arrow-in-right me-1"></i> Zaloguj się
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-primary btn-sm px-3 fw-semibold text-white" href="{{ route('register') }}">
+                        <i class="bi bi-person-plus me-1"></i> Zarejestruj się
                     </a>
                 </li>
             @endif

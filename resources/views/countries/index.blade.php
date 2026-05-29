@@ -36,9 +36,9 @@
     <div class="row align-items-center g-3 mb-4">
         <div class="col-md-8">
             <h2 class="fw-bold mb-1 text-body">Przedmioty</h2>
-            <p class="text-secondary mb-0">Wydziały i przedmioty dostępne na platformie Notet.</p>
+            <p class="text-secondary mb-0">Wydziały i przedmioty dostępne na platformie Noted.</p>
         </div>
-        
+
         <div class="col-md-4">
             <div class="input-group">
                 <span class="input-group-text bg-transparent border-end-0 text-secondary"><i class="bi bi-search"></i></span>
@@ -60,11 +60,11 @@
                             Wydział
                         </span>
                     </div>
-                    
+
                     <h3 class="h5 fw-bold mb-1 text-body subject-title">{{ $country->name }}</h3>
                     <p class="text-secondary small mb-4"><i class="bi bi-folder2-open me-1.5"></i> Materiały: {{ $country->area }}</p>
                 </div>
-                
+
                 <div>
                     <hr class="my-3 text-secondary border-opacity-10">
                     <div class="d-flex justify-content-between align-items-center small">
@@ -91,7 +91,7 @@
         function filterSubjects() {
             const query = document.getElementById('subjectSearch').value.toLowerCase().trim();
             const cards = document.querySelectorAll('.subject-card');
-            
+
             cards.forEach(card => {
                 const name = card.getAttribute('data-name');
                 if (name.includes(query)) {
