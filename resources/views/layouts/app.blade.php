@@ -1,7 +1,6 @@
 @include('shared.html')
 @include('shared.head', ['pageTitle' => $pageTitle ?? 'Noted — Drugie Życie Twoich Notatek 📚'])
-<body class="d-flex flex-column min-vh-100 bg-body-tertiary text-body">
+<body class="flex flex-col min-h-screen bg-bg-body text-text-body font-sans antialiased">
     @yield('content')
 </body>
 </html>
-

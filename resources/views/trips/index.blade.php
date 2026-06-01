@@ -4,23 +4,23 @@
     <!-- Custom style overrides for notes database page -->
     <style>
         .premium-card {
-            border: 1px solid var(--bs-border-color);
+            border: 1px solid var(--color-border);
             border-radius: 16px;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            background-color: var(--bs-card-bg);
+            background-color: var(--color-card-bg);
             overflow: hidden;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
         }
         .premium-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 20px -8px rgba(0, 0, 0, 0.1);
-            border-color: var(--bs-primary);
+            border-color: var(--color-primary);
         }
         .note-img-container {
             height: 180px;
             position: relative;
             overflow: hidden;
-            background-color: var(--bs-tertiary-bg);
+            background-color: var(--color-border);
         }
         .note-img-container img {
             width: 100%;
@@ -36,33 +36,33 @@
         }
     </style>
 
-    <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-4">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-            <h2 class="fw-bold mb-1 text-body">Baza Notatek</h2>
-            <p class="text-secondary mb-0">Przeglądaj najlepsze materiały naukowe udostępnione przez społeczność.</p>
+            <h2 class="text-2xl font-bold text-text-body mb-1">Baza Notatek</h2>
+            <p class="text-slate-500 dark:text-slate-400 text-sm">Przeglądaj najlepsze materiały naukowe udostępnione przez społeczność.</p>
         </div>
         
         @if(Auth::user()->isAdmin())
-        <button type="button" class="btn btn-primary px-4 py-2.5 rounded-3 fw-bold d-flex align-items-center shadow-sm" data-bs-toggle="modal" data-bs-target="#addTripModal">
-            <i class="bi bi-plus-lg me-2 fs-5"></i> Wystaw Notatkę
+        <button type="button" onclick="toggleModal('addTripModal', true)" class="bg-primary hover:bg-primary-hover text-white px-5 py-2.5 rounded-xl font-bold flex items-center shadow-md hover:shadow-lg transition-all cursor-pointer">
+            <i class="bi bi-plus-lg mr-2 text-lg"></i> Wystaw Notatkę
         </button>
         @endif
     </div>
 
     @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center rounded-3 p-3 mb-4 border-0 shadow-sm" role="alert">
-        <i class="bi bi-check-circle-fill fs-4 me-3 text-success"></i>
-        <div>
-            {{ session('success') }}
+    <div class="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 text-emerald-700 dark:text-emerald-400 p-4 rounded-xl text-sm flex items-center justify-between shadow-sm mb-6" id="successAlert">
+        <div class="flex items-center">
+            <i class="bi bi-check-circle-fill text-lg mr-3 text-emerald-500"></i>
+            <span>{{ session('success') }}</span>
         </div>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button type="button" onclick="document.getElementById('successAlert').style.display='none'" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"><i class="bi bi-x-lg"></i></button>
     </div>
     @endif
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
         @forelse ($trips as $index => $trip)
-        <div class="col">
-            <div class="card premium-card h-100 d-flex flex-column justify-content-between">
+        <div class="flex">
+            <div class="premium-card h-full flex flex-col justify-between flex-grow">
                 <div>
                     <!-- Image placeholder with gradient -->
                     <div class="note-img-container">
@@ -78,59 +78,59 @@
                         @endphp
                         <img src="{{ $imgSrc }}" alt="Notatki">
                         
-                        <span class="badge bg-black bg-opacity-70 text-white rounded-pill border border-secondary-subtle px-3 py-1.5 font-medium position-absolute" style="top: 15px; right: 15px; z-index: 2; font-size: 0.8rem;">
+                        <span class="bg-black/70 text-white border border-white/20 px-3 py-1.5 text-xs font-semibold rounded-full position-absolute" style="top: 15px; right: 15px; z-index: 2;">
                             {{ $trip->period % 2 == 0 ? 'Wersja PDF' : 'Skan Zeszytu' }}
                         </span>
                         
-                        <span class="badge bg-primary px-2.5 py-1.5 font-bold text-uppercase position-absolute" style="bottom: 15px; left: 15px; z-index: 2; font-size: 0.72rem; letter-spacing: 0.5px;">
+                        <span class="bg-primary px-2.5 py-1 text-white font-bold text-uppercase position-absolute rounded" style="bottom: 15px; left: 15px; z-index: 2; font-size: 0.72rem; letter-spacing: 0.5px;">
                             {{ strtoupper($trip->continent) }}
                         </span>
                     </div>
                     
-                    <div class="p-4">
-                        <h3 class="h5 fw-bold mb-2 text-break text-body">{{ $trip->name }}</h3>
-                        <p class="text-secondary small mb-4" style="line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold mb-2 text-break text-text-body">{{ $trip->name }}</h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mb-5 leading-relaxed" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                             {{ $trip->description }}
                         </p>
                         
                         <!-- Vinted Style Seller Rating -->
-                        <div class="d-flex align-items-center text-secondary" style="font-size: 0.85rem;">
-                            <div class="w-6 h-6 rounded-circle bg-secondary bg-opacity-10 d-flex align-items-center justify-content-center text-primary me-2" style="width: 28px; height: 28px;">
+                        <div class="flex items-center text-slate-500 dark:text-slate-400 text-xs">
+                            <div class="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-2.5">
                                 <i class="bi bi-person"></i>
                             </div>
-                            <span class="fw-bold me-2">Sprzedawca</span>
-                            <div class="rating-stars me-1">
+                            <span class="font-bold mr-2 text-text-body">Sprzedawca</span>
+                            <div class="rating-stars mr-1">
                                 <i class="bi bi-star-fill"></i>
                                 <i class="bi bi-star-fill"></i>
                                 <i class="bi bi-star-fill"></i>
                                 <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star text-muted"></i>
+                                <i class="bi bi-star opacity-30"></i>
                             </div>
-                            <span class="text-muted small">(12)</span>
+                            <span class="text-slate-400 text-xs">(12)</span>
                         </div>
                     </div>
                 </div>
                 
-                <div class="px-4 pb-4">
-                    <hr class="my-3 text-secondary border-opacity-10">
-                    <div class="d-flex justify-content-between align-items-center">
+                <div class="px-6 pb-6">
+                    <div class="border-t border-border my-4"></div>
+                    <div class="flex justify-between items-center">
                         <div>
-                            <span class="text-muted small d-block">Cena</span>
-                            <span class="h4 fw-bold mb-0 text-body">{{ number_format($trip->price, 2, ',', ' ') }} zł</span>
+                            <span class="text-slate-400 text-xs block mb-0.5">Cena</span>
+                            <span class="text-xl font-extrabold text-text-body">{{ number_format($trip->price, 2, ',', ' ') }} zł</span>
                         </div>
-                        <a href="#" class="btn btn-outline-primary rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                            <i class="bi bi-arrow-right fs-5"></i>
+                        <a href="#" class="border border-primary text-primary hover:bg-primary hover:text-white rounded-xl p-2 flex items-center justify-center transition-all w-10 h-10">
+                            <i class="bi bi-arrow-right text-lg"></i>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
         @empty
-        <div class="col-12 text-center py-5">
-            <div class="empty-state shadow-sm">
-                <i class="bi bi-journal-x display-3 text-secondary opacity-50 mb-3 d-block"></i>
-                <h4 class="fw-bold text-body">Brak Dostępnych Notatek</h4>
-                <p class="text-secondary small mx-auto mb-0" style="max-width: 480px;">
+        <div class="col-span-full text-center py-12">
+            <div class="bg-card-bg border-2 border-dashed border-border rounded-2xl p-12 max-w-md mx-auto">
+                <i class="bi bi-journal-x text-5xl text-slate-400 mb-3 block"></i>
+                <h4 class="text-lg font-bold text-text-body mb-1">Brak Dostępnych Notatek</h4>
+                <p class="text-slate-500 dark:text-slate-400 text-sm">
                     Aktualnie nie mamy żadnych materiałów w naszej bazie. Zaglądaj tu częściej, by nie przegapić nowości!
                 </p>
             </div>
@@ -140,64 +140,78 @@
 
     <!-- Modal Dodawania (Tylko dla Admina) -->
     @if(Auth::user()->isAdmin())
-    <div class="modal fade" id="addTripModal" tabindex="-1" aria-labelledby="addTripModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden bg-body-tertiary">
-                <div style="height: 4px; background: linear-gradient(135deg, var(--bs-primary) 0%, #818cf8 100%);"></div>
-                
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold text-body" id="addTripModalLabel"><i class="bi bi-plus-circle text-primary me-2"></i>Wystaw Notatkę</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                
-                <div class="modal-body p-4">
-                    <form action="{{ route('trips.store') }}" method="POST" class="needs-validation">
-                        @csrf
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold text-body">Tytuł Materiału</label>
-                            <input type="text" name="name" required class="form-control" placeholder="np. Makroekonomia - Opracowanie">
+    <div id="addTripModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="relative bg-card-bg w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-border">
+            <div style="height: 4px; background: linear-gradient(135deg, var(--color-primary) 0%, #818cf8 100%);"></div>
+            
+            <div class="flex items-center justify-between p-6 border-b border-border">
+                <h5 class="text-lg font-bold text-text-body flex items-center"><i class="bi bi-plus-circle text-primary mr-2"></i>Wystaw Notatkę</h5>
+                <button type="button" onclick="toggleModal('addTripModal', false)" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"><i class="bi bi-x-lg text-lg"></i></button>
+            </div>
+            
+            <div class="p-6">
+                <form action="{{ route('trips.store') }}" method="POST" class="flex flex-col gap-4">
+                    @csrf
+                    <div>
+                        <label class="block text-xs font-bold text-text-body mb-1.5">Tytuł Materiału</label>
+                        <input type="text" name="name" required class="w-full px-3 py-2 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm placeholder-slate-400" placeholder="np. Makroekonomia - Opracowanie">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-text-body mb-1.5">Przedmiot</label>
+                            <input type="text" name="continent" required class="w-full px-3 py-2 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm placeholder-slate-400" placeholder="np. Ekonomia">
                         </div>
-                        
-                        <div class="row g-3 mb-3">
-                            <div class="col-6">
-                                <label class="form-label small fw-bold text-body">Przedmiot</label>
-                                <input type="text" name="continent" required class="form-control" placeholder="np. Ekonomia">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label small fw-bold text-body">Stron / Rozmiar</label>
-                                <input type="number" name="period" required class="form-control" placeholder="np. 24">
-                            </div>
+                        <div>
+                            <label class="block text-xs font-bold text-text-body mb-1.5">Stron / Rozmiar</label>
+                            <input type="number" name="period" required class="w-full px-3 py-2 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm placeholder-slate-400" placeholder="np. 24">
                         </div>
+                    </div>
 
-                        <div class="row g-3 mb-3">
-                            <div class="col-6">
-                                <label class="form-label small fw-bold text-body">Wydział ID</label>
-                                <input type="number" name="country_id" required class="form-control" placeholder="np. 1">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label small fw-bold text-body">Cena (zł)</label>
-                                <input type="number" step="0.01" name="price" required class="form-control" placeholder="0.00">
-                            </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-text-body mb-1.5">Wydział ID</label>
+                            <input type="number" name="country_id" required class="w-full px-3 py-2 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm placeholder-slate-400" placeholder="np. 1">
                         </div>
+                        <div>
+                            <label class="block text-xs font-bold text-text-body mb-1.5">Cena (zł)</label>
+                            <input type="number" step="0.01" name="price" required class="w-full px-3 py-2 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm placeholder-slate-400" placeholder="0.00">
+                        </div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold text-body">Opis (czytelność, zakres)</label>
-                            <textarea name="description" rows="3" required class="form-control" placeholder="Krótki opis zawartości, dla jakiego kierunku..."></textarea>
-                        </div>
-                        
-                        <div class="mb-4">
-                            <label class="form-label small fw-bold text-body">Obrazek (Nazwa pliku)</label>
-                            <input type="text" name="img" value="default.jpg" required class="form-control">
-                        </div>
+                    <div>
+                        <label class="block text-xs font-bold text-text-body mb-1.5">Opis (czytelność, zakres)</label>
+                        <textarea name="description" rows="3" required class="w-full px-3 py-2 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm placeholder-slate-400 resize-none" placeholder="Krótki opis zawartości, dla jakiego kierunku..."></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-text-body mb-1.5">Obrazek (Nazwa pliku)</label>
+                        <input type="text" name="img" value="default.jpg" required class="w-full px-3 py-2 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm" />
+                    </div>
 
-                        <button type="submit" class="btn btn-primary w-100 py-2.5 fw-bold shadow">
-                            Wystaw Materiał
-                        </button>
-                    </form>
-                </div>
+                    <button type="submit" class="w-full py-2.5 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all mt-2 cursor-pointer">
+                        Wystaw Materiał
+                    </button>
+                </form>
             </div>
         </div>
     </div>
     @endif
 
+    <script>
+        function toggleModal(modalId, show) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                if (show) {
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    modal.classList.remove('flex');
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }
+            }
+        }
+    </script>
 @endsection
