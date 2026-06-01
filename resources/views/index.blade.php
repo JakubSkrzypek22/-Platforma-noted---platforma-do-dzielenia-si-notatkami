@@ -379,7 +379,7 @@ $dummyNotes = [
 
                             <!-- Zajawka Tekstu -->
                             <p class="card-text text-muted small mb-4 lh-relaxed flex-grow-1">
-                                {{ Str::limit($note['excerpt'], 130, '...') }}
+                                {{ strlen($note['excerpt']) > 130 ? substr($note['excerpt'], 0, 130) . '...' : $note['excerpt'] }}
                             </p>
 
                             <!-- Autor z awatarem -->
