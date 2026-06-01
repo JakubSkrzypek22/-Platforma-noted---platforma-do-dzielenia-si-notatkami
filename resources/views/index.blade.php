@@ -350,10 +350,10 @@ $dummyNotes = [
                 <!-- Popularne wyszukiwania -->
                 <div class="flex items-center gap-2 flex-wrap justify-center lg:justify-start">
                     <span class="text-white/60 text-sm">Popularne:</span>
-                    <a href="{{ route('categories.show', 'informatyka') }}" class="bg-white/10 hover:bg-primary text-white border border-white/10 text-xs font-semibold rounded-full px-3 py-1.5 transition-all hover:scale-105">Informatyka</a>
-                    <a href="{{ route('categories.show', 'medycyna') }}" class="bg-white/10 hover:bg-primary text-white border border-white/10 text-xs font-semibold rounded-full px-3 py-1.5 transition-all hover:scale-105">Medycyna</a>
-                    <a href="{{ route('categories.show', 'matematyka') }}" class="bg-white/10 hover:bg-primary text-white border border-white/10 text-xs font-semibold rounded-full px-3 py-1.5 transition-all hover:scale-105">Matematyka</a>
-                    <a href="{{ route('categories.show', 'prawo') }}" class="bg-white/10 hover:bg-primary text-white border border-white/10 text-xs font-semibold rounded-full px-3 py-1.5 transition-all hover:scale-105">Prawo</a>
+                    <button type="button" class="quick-search-tag bg-white/10 hover:bg-primary text-white border border-white/10 text-xs font-semibold rounded-full px-3 py-1.5 transition-all hover:scale-105 cursor-pointer" data-search="Informatyka">Informatyka</button>
+                    <button type="button" class="quick-search-tag bg-white/10 hover:bg-primary text-white border border-white/10 text-xs font-semibold rounded-full px-3 py-1.5 transition-all hover:scale-105 cursor-pointer" data-search="Medycyna">Medycyna</button>
+                    <button type="button" class="quick-search-tag bg-white/10 hover:bg-primary text-white border border-white/10 text-xs font-semibold rounded-full px-3 py-1.5 transition-all hover:scale-105 cursor-pointer" data-search="Matematyka">Matematyka</button>
+                    <button type="button" class="quick-search-tag bg-white/10 hover:bg-primary text-white border border-white/10 text-xs font-semibold rounded-full px-3 py-1.5 transition-all hover:scale-105 cursor-pointer" data-search="Prawo">Prawo</button>
                 </div>
             </div>
 
@@ -556,7 +556,7 @@ $dummyNotes = [
             const title     = titleEl2 ? titleEl2.textContent.trim().toLowerCase() : '';
 
             const categoryMatch = (activeFilter === 'all' || cat === activeFilter);
-            const searchMatch   = (query === '' || title.includes(query));
+            const searchMatch   = (query === '' || title.includes(query) || cat.toLowerCase().includes(query));
 
             if (categoryMatch && searchMatch) {
                 card.classList.remove('hidden-card');
@@ -617,6 +617,17 @@ $dummyNotes = [
         document.querySelector('[data-filter="all"]').classList.add('active');
         activeFilter = 'all';
         applyFilters();
+    });
+
+    // Quick-search popular tags
+    document.querySelectorAll('.quick-search-tag').forEach(function (tag) {
+        tag.addEventListener('click', function () {
+            var term = tag.getAttribute('data-search');
+            searchInput.value = term;
+            searchInput.focus();
+            applyFilters();
+            catalogSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
     });
 })();
 </script>
