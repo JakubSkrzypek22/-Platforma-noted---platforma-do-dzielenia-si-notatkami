@@ -88,6 +88,90 @@ $dummyNotes = [
         'rating' => '4.9',
         'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Zofia'
     ],
+    [
+        'id' => 7,
+        'title' => 'Mechanika Kwantowa - Podstawy i formalizm matematyczny',
+        'author' => 'Piotr Zając',
+        'university' => 'Politechnika Gdańska',
+        'category' => 'Fizyka',
+        'category_class' => 'bg-violet-100 text-violet-800 dark:bg-violet-950/30 dark:text-violet-400 border border-violet-200 dark:border-violet-900/30',
+        'excerpt' => 'Omówienie równania Schrödingera, zasady nieoznaczoności Heisenberga i modelu atomu Bohra. Zawiera wyprowadzenia i przykłady zastosowań w fizyce atomowej.',
+        'likes' => 121,
+        'views' => 2100,
+        'downloads' => 678,
+        'rating' => '4.8',
+        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Piotr'
+    ],
+    [
+        'id' => 8,
+        'title' => 'Termodynamika - Zasady i procesy termodynamiczne',
+        'author' => 'Alicja Szymańska',
+        'university' => 'Politechnika Łódźka',
+        'category' => 'Fizyka',
+        'category_class' => 'bg-violet-100 text-violet-800 dark:bg-violet-950/30 dark:text-violet-400 border border-violet-200 dark:border-violet-900/30',
+        'excerpt' => 'Streszczenie czterech zasad termodynamiki, cyklu Carnota, entropii i entalpi. Tabele wzorów przydatne na egzamin z fizyki technicznej.',
+        'likes' => 76,
+        'views' => 1540,
+        'downloads' => 412,
+        'rating' => '4.5',
+        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Alicja'
+    ],
+    [
+        'id' => 9,
+        'title' => 'Chemia Organiczna - Reakcje substytucji i eliminacji',
+        'author' => 'Bartosz Krawczyk',
+        'university' => 'Politechnika Wrocławska',
+        'category' => 'Chemia',
+        'category_class' => 'bg-lime-100 text-lime-800 dark:bg-lime-950/30 dark:text-lime-400 border border-lime-200 dark:border-lime-900/30',
+        'excerpt' => 'Systematyczne omówienie reakcji SN1, SN2, E1 i E2 z mechanizmami krokowymi i przykładami substratów. Idealne do powtórki przed egzaminem.',
+        'likes' => 109,
+        'views' => 1870,
+        'downloads' => 534,
+        'rating' => '4.7',
+        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Bartosz'
+    ],
+    [
+        'id' => 10,
+        'title' => 'Stechiometria i obliczenia chemiczne - Skrypt ćwiczeniowy',
+        'author' => 'Natalia Dąbrowska',
+        'university' => 'Uniwersytet Gdański',
+        'category' => 'Chemia',
+        'category_class' => 'bg-lime-100 text-lime-800 dark:bg-lime-950/30 dark:text-lime-400 border border-lime-200 dark:border-lime-900/30',
+        'excerpt' => 'Zestaw 60 rozwiązanych zadań z chemii ogólnej i nieorganicznej: stężenia, pH, równowagi i ilości molarne. Pełne toki rozwiązań krok po kroku.',
+        'likes' => 92,
+        'views' => 1380,
+        'downloads' => 460,
+        'rating' => '4.6',
+        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Natalia'
+    ],
+    [
+        'id' => 11,
+        'title' => 'Algorytmy i Struktury Danych - Kompleksowy przewodnik',
+        'author' => 'Michał Kowalczyk',
+        'university' => 'Politechnika Poznańska',
+        'category' => 'Informatyka',
+        'category_class' => 'bg-blue-100 text-blue-800 dark:bg-blue-950/30 dark:text-blue-400 border border-blue-200 dark:border-blue-900/30',
+        'excerpt' => 'Wyczerpujące opracowanie sortowania, grafów, drzew binarnych i programowania dynamicznego. Każdy algorytm z analizą złożoności O-notation.',
+        'likes' => 318,
+        'views' => 5300,
+        'downloads' => 2100,
+        'rating' => '5.0',
+        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Michal'
+    ],
+    [
+        'id' => 12,
+        'title' => 'Algebra liniowa - Macierze, wektory i przekształcenia',
+        'author' => 'Ewa Jabłońska',
+        'university' => 'Uniwersytet im. Adama Mickiewicza',
+        'category' => 'Matematyka',
+        'category_class' => 'bg-cyan-100 text-cyan-800 dark:bg-cyan-950/30 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-900/30',
+        'excerpt' => 'Streszczenie działań na macierzach, wyznacznikach, przestrzeniach wektorowych i wartościach własnych. Zawiera schematy do typowych zadań egzaminacyjnych.',
+        'likes' => 183,
+        'views' => 3020,
+        'downloads' => 1120,
+        'rating' => '4.8',
+        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Ewa'
+    ],
 ];
 @endphp
 @include('shared.navbar')
@@ -153,6 +237,9 @@ $dummyNotes = [
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
+        cursor: pointer;
+        font-size: 0.875rem;
+        font-family: inherit;
     }
 
     .category-pill:hover, .category-pill.active {
@@ -212,6 +299,24 @@ $dummyNotes = [
         background-color: var(--color-card-bg);
         border: 1px solid var(--color-border);
     }
+
+    /* Note card wrapper - animated hide/show */
+    .note-item {
+        display: flex;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .note-item.hidden-card {
+        display: none;
+    }
+
+    /* Empty state for filtered view */
+    #catalog-empty-state {
+        display: none;
+    }
+    #catalog-empty-state.visible {
+        display: flex;
+    }
 </style>
 
 <!-- SEKCJA HERO: DUŻE WYSZUKIWANIE + PŁYWAJĄCY BOKS VINTED -->
@@ -228,15 +333,17 @@ $dummyNotes = [
                 </p>
 
                 <!-- Formularz wyszukiwania -->
-                <form action="{{ route('notes.search') }}" method="GET" class="mb-6">
+                <form id="heroSearchForm" class="mb-6" onsubmit="return false;">
                     <div class="flex shadow-2xl rounded-2xl overflow-hidden bg-white dark:bg-slate-800 p-1.5 border border-white/10 max-w-2xl mx-auto lg:mx-0">
                         <span class="inline-flex items-center px-4 text-slate-400 bg-transparent">
                             <i class="bi bi-search text-xl"></i>
                         </span>
-                        <input type="text" name="search" class="w-full px-3 py-3 bg-transparent text-slate-900 dark:text-white border-0 focus:ring-0 focus:outline-none placeholder-slate-400 text-base" 
-                               placeholder="Czego się dzisiaj nauczysz? Wpisz przedmiot, tag..." 
-                               aria-label="Wyszukaj notatki">
-                        <button class="bg-primary hover:bg-primary-hover text-white px-6 py-3 rounded-xl font-bold shadow-md transition-colors cursor-pointer" type="submit">Szukaj</button>
+                        <input type="text" id="heroSearchInput" name="search"
+                               class="w-full px-3 py-3 bg-transparent text-slate-900 dark:text-white border-0 focus:ring-0 focus:outline-none placeholder-slate-400 text-base"
+                               placeholder="Wpisz tytu&#322; notatki..."
+                               aria-label="Wyszukaj notatki"
+                               autocomplete="off">
+                        <button class="bg-primary hover:bg-primary-hover text-white px-6 py-3 rounded-xl font-bold shadow-md transition-colors cursor-pointer" type="submit" id="heroSearchBtn">Szukaj</button>
                     </div>
                 </form>
 
@@ -282,42 +389,48 @@ $dummyNotes = [
         <!-- Pasek filtrów kategorii w stylu Vinted -->
         <div class="mb-8">
             <h5 class="text-base font-bold mb-4">Przeglądaj według kategorii:</h5>
-            <div class="category-scroll-container">
-                <a href="{{ route('home') }}" class="category-pill active">
+            <div class="category-scroll-container" id="categoryBar">
+                <button type="button" class="category-pill active" data-filter="all">
                     <i class="bi bi-grid-fill"></i> Wszystkie
-                </a>
-                <a href="{{ route('categories.show', 'Informatyka') }}" class="category-pill">
+                </button>
+                <button type="button" class="category-pill" data-filter="Informatyka">
                     <i class="bi bi-laptop-fill"></i> Informatyka
-                </a>
-                <a href="{{ route('categories.show', 'Medycyna') }}" class="category-pill">
+                </button>
+                <button type="button" class="category-pill" data-filter="Medycyna">
                     <i class="bi bi-heart-pulse-fill"></i> Medycyna
-                </a>
-                <a href="{{ route('categories.show', 'Prawo') }}" class="category-pill">
+                </button>
+                <button type="button" class="category-pill" data-filter="Prawo">
                     <i class="bi bi-bank2"></i> Prawo
-                </a>
-                <a href="{{ route('categories.show', 'Matematyka') }}" class="category-pill">
+                </button>
+                <button type="button" class="category-pill" data-filter="Matematyka">
                     <i class="bi bi-calculator-fill"></i> Matematyka
-                </a>
-                <a href="{{ route('categories.show', 'Ekonomia') }}" class="category-pill">
+                </button>
+                <button type="button" class="category-pill" data-filter="Ekonomia">
                     <i class="bi bi-graph-up-arrow"></i> Ekonomia
-                </a>
-                <a href="{{ route('categories.show', 'Języki Obce') }}" class="category-pill">
+                </button>
+                <button type="button" class="category-pill" data-filter="Języki Obce">
                     <i class="bi bi-translate"></i> Języki Obce
-                </a>
+                </button>
+                <button type="button" class="category-pill" data-filter="Fizyka">
+                    <i class="bi bi-lightning-charge-fill"></i> Fizyka
+                </button>
+                <button type="button" class="category-pill" data-filter="Chemia">
+                    <i class="bi bi-droplet-fill"></i> Chemia
+                </button>
             </div>
         </div>
 
         <!-- Tytuł Katalogu -->
         <div class="flex items-center justify-between mb-6">
-            <h4 class="text-xl font-extrabold">Najnowsze publiczne notatki</h4>
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">{{ count($dummyNotes) }} pozycji</span>
+            <h4 class="text-xl font-extrabold" id="catalogTitle">Najnowsze publiczne notatki</h4>
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="catalogCount">{{ count($dummyNotes) }} pozycji</span>
         </div>
 
         <!-- Siatka notatek (Vinted Grid) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="notesGrid">
             
             @forelse ($dummyNotes as $note)
-                <div class="flex">
+                <div class="note-item" data-category="{{ $note['category'] }}">
                     <div class="catalog-card flex-grow flex flex-col justify-between">
                         <!-- Header karty: Kategoria i Polubienie -->
                         <div class="px-5 pt-5 pb-2 flex justify-between items-center bg-transparent border-0">
@@ -403,8 +516,110 @@ $dummyNotes = [
                 </div>
             @endforelse
         </div>
+
+        <!-- Stan pusty (gdy filtr nie zwraca wyników) -->
+        <div class="col-span-full flex-col items-center justify-center py-16 text-center" id="catalog-empty-state">
+            <div class="w-16 h-16 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center mx-auto mb-4">
+                <i class="bi bi-search text-2xl text-slate-400"></i>
+            </div>
+            <h5 class="text-lg font-bold mb-2">Brak notatek w tej kategorii</h5>
+            <p class="text-slate-500 dark:text-slate-400 text-sm max-w-sm mx-auto">Nie znaleziono notatek w wybranej kategorii. Wróć do wszystkich lub bądź pierwszy, kto doda notatki!</p>
+            <button type="button" class="mt-6 px-6 py-2.5 bg-primary hover:bg-primary-hover text-white font-semibold rounded-xl text-sm transition-all" id="resetFilterBtn">
+                Pokaż wszystkie notatki
+            </button>
+        </div>
     </div>
 </section>
+
+<script>
+(function () {
+    const pills       = document.querySelectorAll('.category-pill');
+    const cards       = document.querySelectorAll('.note-item');
+    const countEl     = document.getElementById('catalogCount');
+    const titleEl     = document.getElementById('catalogTitle');
+    const emptyEl     = document.getElementById('catalog-empty-state');
+    const resetBtn    = document.getElementById('resetFilterBtn');
+    const searchInput = document.getElementById('heroSearchInput');
+    const searchForm  = document.getElementById('heroSearchForm');
+    const catalogSec  = document.querySelector('section.py-12');
+
+    let activeFilter = 'all';
+
+    // Core filter: combines category + title search
+    function applyFilters() {
+        const query = searchInput.value.trim().toLowerCase();
+        let visible = 0;
+
+        cards.forEach(function (card) {
+            const cat       = card.getAttribute('data-category');
+            const titleEl2  = card.querySelector('h5 a');
+            const title     = titleEl2 ? titleEl2.textContent.trim().toLowerCase() : '';
+
+            const categoryMatch = (activeFilter === 'all' || cat === activeFilter);
+            const searchMatch   = (query === '' || title.includes(query));
+
+            if (categoryMatch && searchMatch) {
+                card.classList.remove('hidden-card');
+                visible++;
+            } else {
+                card.classList.add('hidden-card');
+            }
+        });
+
+        // Counter
+        countEl.textContent = visible + ' ' + (visible === 1 ? 'pozycja' : 'pozycji');
+
+        // Heading
+        var q = searchInput.value.trim();
+        if (q !== '' && activeFilter === 'all') {
+            titleEl.textContent = 'Wyniki: \u201e' + q + '\u201d';
+        } else if (q !== '' && activeFilter !== 'all') {
+            titleEl.textContent = activeFilter + ' \u00b7 \u201e' + q + '\u201d';
+        } else if (activeFilter !== 'all') {
+            titleEl.textContent = 'Notatki: ' + activeFilter;
+        } else {
+            titleEl.textContent = 'Najnowsze publiczne notatki';
+        }
+
+        // Empty state
+        emptyEl.classList.toggle('visible', visible === 0);
+    }
+
+    // Category pills
+    pills.forEach(function (pill) {
+        pill.addEventListener('click', function () {
+            pills.forEach(function (p) { p.classList.remove('active'); });
+            pill.classList.add('active');
+            activeFilter = pill.getAttribute('data-filter');
+            applyFilters();
+        });
+    });
+
+    // Live search while typing
+    searchInput.addEventListener('input', function () {
+        applyFilters();
+        if (searchInput.value.length === 1) {
+            catalogSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+
+    // "Szukaj" button / Enter - scroll to results
+    searchForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        applyFilters();
+        catalogSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Reset button (empty state)
+    resetBtn.addEventListener('click', function () {
+        searchInput.value = '';
+        pills.forEach(function (p) { p.classList.remove('active'); });
+        document.querySelector('[data-filter="all"]').classList.add('active');
+        activeFilter = 'all';
+        applyFilters();
+    });
+})();
+</script>
 
 @include('shared.footer')
 @endsection
