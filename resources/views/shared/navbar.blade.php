@@ -5,17 +5,17 @@
             <div class="flex items-center">
                 <a class="flex items-center text-xl font-extrabold text-text-body" href="{{ url('/') }}">
                     <span class="text-2xl mr-2">📚</span>
-                    <span class="bg-gradient-to-r from-primary to-amber-500 bg-clip-text text-transparent">Notet</span>
+                    <span class="bg-gradient-to-r from-primary to-amber-500 bg-clip-text text-transparent">Noted</span>
                 </a>
                 <div class="hidden md:flex ml-10 items-baseline space-x-2">
                     <a class="px-3 py-2 rounded-xl text-sm font-medium transition-colors @if (request()->is('/')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ url('/') }}">
-                        <i class="bi bi-house-door mr-1.5"></i> Panel Główny
+                        <i class="bi bi-house-door mr-1.5"></i> Strona Główna
                     </a>
-                    <a class="px-3 py-2 rounded-xl text-sm font-medium transition-colors @if (str_contains(request()->path(), 'trips')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('trips') }}">
-                        <i class="bi bi-journal-text mr-1.5"></i> Baza Notatek
+                    <a class="px-3 py-2 rounded-xl text-sm font-medium transition-colors @if (request()->is('o-nas')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('about') }}">
+                        <i class="bi bi-people mr-1.5"></i> O nas
                     </a>
-                    <a class="px-3 py-2 rounded-xl text-sm font-medium transition-colors @if (str_contains(request()->path(), 'countries')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('countries') }}">
-                        <i class="bi bi-mortarboard mr-1.5"></i> Przedmioty
+                    <a class="px-3 py-2 rounded-xl text-sm font-medium transition-colors @if (request()->is('kontakt')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('contact') }}">
+                        <i class="bi bi-envelope mr-1.5"></i> Kontakt
                     </a>
                 </div>
             </div>
@@ -58,7 +58,10 @@
                         <div class="hidden absolute right-0 mt-2 w-48 rounded-xl shadow-lg bg-card-bg border border-border ring-1 ring-black/5 z-50 focus:outline-none" id="userDropdownMenu">
                             <div class="py-1.5 px-1.5">
                                 <a class="flex items-center w-full px-3 py-2 rounded-lg text-sm text-text-body hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors" href="{{ route('dashboard') }}">
-                                    <i class="bi bi-speedometer2 mr-2.5 opacity-70"></i> Panel roboczy
+                                    <i class="bi bi-person-vcard mr-2.5 opacity-70"></i> Mój profil
+                                </a>
+                                <a class="flex items-center w-full px-3 py-2 rounded-lg text-sm text-text-body hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors" href="{{ route('notes.create') }}">
+                                    <i class="bi bi-plus-circle mr-2.5 opacity-70"></i> Dodaj notatkę
                                 </a>
                                 <div class="border-t border-border my-1.5"></div>
                                 <form action="{{ route('logout') }}" method="POST" class="m-0">
@@ -94,13 +97,13 @@
     <!-- Mobile menu, show/hide based on menu state. -->
     <div class="hidden md:hidden border-t border-border px-4 pt-2 pb-4 space-y-1 bg-card-bg" id="mobile-menu">
         <a class="block px-3 py-2 rounded-xl text-base font-medium @if (request()->is('/')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ url('/') }}">
-            <i class="bi bi-house-door mr-2"></i> Panel Główny
+            <i class="bi bi-house-door mr-2"></i> Strona Główna
         </a>
-        <a class="block px-3 py-2 rounded-xl text-base font-medium @if (str_contains(request()->path(), 'trips')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('trips') }}">
-            <i class="bi bi-journal-text mr-2"></i> Baza Notatek
+        <a class="block px-3 py-2 rounded-xl text-base font-medium @if (request()->is('o-nas')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('about') }}">
+            <i class="bi bi-people mr-2"></i> O nas
         </a>
-        <a class="block px-3 py-2 rounded-xl text-base font-medium @if (str_contains(request()->path(), 'countries')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('countries') }}">
-            <i class="bi bi-mortarboard mr-2"></i> Przedmioty
+        <a class="block px-3 py-2 rounded-xl text-base font-medium @if (request()->is('kontakt')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('contact') }}">
+            <i class="bi bi-envelope mr-2"></i> Kontakt
         </a>
         <div class="border-t border-border my-3"></div>
         <div class="flex items-center justify-between px-3 py-2">
@@ -117,7 +120,10 @@
             <div class="px-3 py-2">
                 <div class="text-base font-bold text-text-body mb-2"><i class="bi bi-person-circle mr-2 text-primary"></i>{{ Auth::user()->name }}</div>
                 <a class="block py-2 text-sm text-slate-600 dark:text-slate-300 hover:text-primary" href="{{ route('dashboard') }}">
-                    <i class="bi bi-speedometer2 mr-2"></i> Panel roboczy
+                    <i class="bi bi-person-vcard mr-2"></i> Mój profil
+                </a>
+                <a class="block py-2 text-sm text-slate-600 dark:text-slate-300 hover:text-primary" href="{{ route('notes.create') }}">
+                    <i class="bi bi-plus-circle mr-2"></i> Dodaj notatkę
                 </a>
                 <form action="{{ route('logout') }}" method="POST" class="mt-3">
                     @csrf

@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Favorite;
 use App\Models\Note;
+use App\Models\NoteFile;
 use App\Models\Purchase;
 use App\Models\Review;
 use App\Models\User;
@@ -13,8 +15,10 @@ class NoteSeeder extends Seeder
 {
     public function run(): void
     {
+        Favorite::query()->delete();
         Review::query()->delete();
         Purchase::query()->delete();
+        NoteFile::query()->delete();
         Note::query()->delete();
 
         // Czyścimy wcześniej wygenerowane podglądy demonstracyjne
@@ -54,25 +58,34 @@ class NoteSeeder extends Seeder
 
         foreach ($samples as $i => [$title, $category, $university, $price, $description]) {
             $authorId = $userIds[$i % count($userIds)];
-
-            $svg  = $this->buildPreviewSvg($title, $category, $colors[$category] ?? '#3b82f6', $i + 1);
-            $path = "notes/seed-" . ($i + 1) . ".svg";
-            Storage::disk('local')->put($path, $svg);
+            $color    = $colors[$category] ?? '#3b82f6';
 
             $note = Note::create([
-                'user_id'       => $authorId,
-                'title'         => $title,
-                'description'   => $description,
-                'category'      => $category,
-                'university'    => $university,
-                'price'         => $price,
-                'file_path'     => $path,
-                'file_type'     => 'image',
-                'original_name' => 'podglad-notatki.svg',
-                'page_count'    => 1,
-                'views'         => rand(800, 5200),
-                'downloads'     => rand(120, 2100),
+                'user_id'     => $authorId,
+                'title'       => $title,
+                'description' => $description,
+                'category'    => $category,
+                'university'  => $university,
+                'price'       => $price,
+                'views'       => rand(800, 5200),
+                'downloads'   => rand(120, 2100),
             ]);
+
+            // Kilka "stron" (plików) — pierwsza jest zdjęciem głównym (okładką)
+            $pageCount = rand(2, 4);
+            for ($p = 1; $p <= $pageCount; $p++) {
+                $svg  = $this->buildPreviewSvg($title, $category, $color, $p);
+                $path = "notes/seed-{$note->id}-{$p}.svg";
+                Storage::disk('local')->put($path, $svg);
+
+                $note->files()->create([
+                    'path'          => $path,
+                    'file_type'     => 'image',
+                    'original_name' => "strona-{$p}.svg",
+                    'is_main'       => $p === 1,
+                    'position'      => $p - 1,
+                ]);
+            }
 
             $createdNotes[] = $note;
         }
@@ -87,8 +100,7 @@ class NoteSeeder extends Seeder
         ];
 
         foreach ($createdNotes as $idx => $note) {
-            // 1-3 oceny od użytkowników innych niż autor
-            $buyers = collect($userIds)->reject(fn ($id) => $id === $note->user_id)->values();
+            $buyers  = collect($userIds)->reject(fn ($id) => $id === $note->user_id)->values();
             $howMany = min(rand(1, 3), $buyers->count());
 
             foreach ($buyers->take($howMany) as $j => $buyerId) {
@@ -110,12 +122,20 @@ class NoteSeeder extends Seeder
                 ]);
             }
         }
+
+        // Przykładowe ulubione — każdy użytkownik dodaje kilka cudzych notatek do ulubionych
+        foreach ($userIds as $uid) {
+            $candidates = collect($createdNotes)->reject(fn ($n) => $n->user_id === $uid)->shuffle()->take(rand(2, 4));
+            foreach ($candidates as $note) {
+                Favorite::firstOrCreate(['user_id' => $uid, 'note_id' => $note->id]);
+            }
+        }
     }
 
     /**
-     * Buduje prosty podgląd "pierwszej strony" w formacie SVG (bez bibliotek graficznych).
+     * Buduje prosty podgląd strony w formacie SVG (bez bibliotek graficznych).
      */
-    private function buildPreviewSvg(string $title, string $category, string $color, int $num): string
+    private function buildPreviewSvg(string $title, string $category, string $color, int $pageNum): string
     {
         $safeTitle = htmlspecialchars($title, ENT_QUOTES | ENT_XML1, 'UTF-8');
         $safeCat   = htmlspecialchars($category, ENT_QUOTES | ENT_XML1, 'UTF-8');
@@ -135,8 +155,19 @@ class NoteSeeder extends Seeder
         $lines[] = trim($current);
         $lines = array_slice($lines, 0, 3);
 
+        $heading = $pageNum === 1 ? $safeTitle : "{$safeTitle} — strona {$pageNum}";
+        $hWords  = explode(' ', $heading);
+        $hLines  = [];
+        $cur = '';
+        foreach ($hWords as $word) {
+            if (mb_strlen($cur . ' ' . $word) > 28) { $hLines[] = trim($cur); $cur = $word; }
+            else { $cur .= ' ' . $word; }
+        }
+        $hLines[] = trim($cur);
+        $hLines = array_slice($hLines, 0, 3);
+
         $titleTspans = '';
-        foreach ($lines as $k => $line) {
+        foreach ($hLines as $k => $line) {
             $y = 150 + ($k * 34);
             $titleTspans .= "<text x='60' y='{$y}' font-family='Segoe UI, Arial, sans-serif' font-size='26' font-weight='700' fill='#0f172a'>{$line}</text>";
         }
@@ -145,7 +176,7 @@ class NoteSeeder extends Seeder
         $bodyLines = '';
         for ($l = 0; $l < 14; $l++) {
             $y = 280 + ($l * 26);
-            $w = [420, 460, 380, 440, 300][$l % 5];
+            $w = [420, 460, 380, 440, 300][($l + $pageNum) % 5];
             $bodyLines .= "<rect x='60' y='{$y}' width='{$w}' height='9' rx='4.5' fill='#e2e8f0'/>";
         }
 
@@ -158,7 +189,7 @@ class NoteSeeder extends Seeder
   {$titleTspans}
   <rect x="60" y="230" width="475" height="2" fill="#cbd5e1"/>
   {$bodyLines}
-  <text x="297" y="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#94a3b8">Notet — strona 1 · podgląd</text>
+  <text x="297" y="800" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#94a3b8">Noted — strona {$pageNum} · podgląd</text>
 </svg>
 SVG;
     }

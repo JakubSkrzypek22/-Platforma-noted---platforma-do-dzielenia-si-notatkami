@@ -20,6 +20,10 @@ use App\Http\Controllers\NoteController;
 // Główna strona katalogu notatek (strona startowa)
 Route::get('/', [NoteController::class, 'index'])->name('home');
 
+// Strony informacyjne
+Route::view('/o-nas', 'pages.about')->name('about');
+Route::view('/kontakt', 'pages.contact')->name('contact');
+
 // Wyszukiwanie notatek
 Route::get('/search', function () {
     return "Wyniki wyszukiwania...";
@@ -49,24 +53,31 @@ Route::middleware('auth')->group(function () {
     // Wylogowanie
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Panel użytkownika (Dashboard)
+    // Profil użytkownika (notatki / zakupy / ulubione)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Tworzenie notatki (formularz + zapis pliku)
+    // Tworzenie i zarządzanie notatkami
     Route::get('/notes/create', [NoteController::class, 'create'])->name('notes.create');
     Route::post('/notes', [NoteController::class, 'store'])->name('notes.store');
+    Route::get('/notes/{note}/edit', [NoteController::class, 'edit'])->whereNumber('note')->name('notes.edit');
+    Route::put('/notes/{note}', [NoteController::class, 'update'])->whereNumber('note')->name('notes.update');
+    Route::delete('/notes/{note}', [NoteController::class, 'destroy'])->whereNumber('note')->name('notes.destroy');
+    Route::delete('/notes/{note}/files/{file}', [NoteController::class, 'destroyFile'])->name('notes.files.destroy');
+
+    // Ulubione
+    Route::post('/notes/{note}/favorite', [NoteController::class, 'toggleFavorite'])->name('notes.favorite');
 
     // Proces zakupu (symulowana płatność)
     Route::get('/notes/{note}/checkout', [NoteController::class, 'checkout'])->name('notes.checkout');
     Route::post('/notes/{note}/checkout', [NoteController::class, 'processPayment'])->name('notes.payment');
 
-    // Pobranie pełnego pliku (po zakupie / autor / darmowe)
+    // Pobranie pełnej zawartości (po zakupie / autor / darmowe)
     Route::get('/notes/{note}/download', [NoteController::class, 'download'])->name('notes.download');
 
     // Ocena sprzedawcy po zakupie
     Route::post('/notes/{note}/reviews', [NoteController::class, 'storeReview'])->name('notes.reviews.store');
 
-    // Zaplecze geograficzne (Istniejące trasy z layoutu)
+    // Zaplecze geograficzne (pozostałości z poprzedniego projektu — niewidoczne w nawigacji)
     Route::get('/countries', [CountryController::class, 'index'])->name('countries');
     Route::get('/trips', [TripController::class, 'index'])->name('trips');
 
@@ -77,11 +88,14 @@ Route::middleware('auth')->group(function () {
 
 
 // ==========================================
-// PODGLĄD I SZCZEGÓŁY NOTATKI (publiczne, na końcu z uwagi na {note})
+// PODGLĄD / PLIKI / SZCZEGÓŁY NOTATKI (publiczne — na końcu z uwagi na {note})
 // ==========================================
 
-// Podgląd 1. strony (dla gościa rozmyty po stronie widoku)
+// Podgląd okładki (dla gościa rozmyty po stronie widoku)
 Route::get('/notes/{note}/preview', [NoteController::class, 'preview'])->name('notes.preview');
+
+// Streamowanie konkretnego pliku (dostęp kontrolowany w kontrolerze)
+Route::get('/notes/{note}/files/{file}', [NoteController::class, 'file'])->name('notes.files.show');
 
 // Szczegóły konkretnej notatki
 Route::get('/notes/{note}', [NoteController::class, 'show'])->whereNumber('note')->name('notes.show');

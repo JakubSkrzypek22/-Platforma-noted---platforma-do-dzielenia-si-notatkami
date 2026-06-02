@@ -8,6 +8,11 @@
     $count = $note->reviewsCount();
     $sellerRating = $note->author?->sellerRating() ?? 0;
     $sellerCount  = $note->author?->sellerReviewsCount() ?? 0;
+    $main = $note->mainFile();
+    $fileSources = $note->files->map(fn ($f) => [
+        'type' => $f->file_type,
+        'url'  => route('notes.files.show', [$note, $f]),
+    ])->values();
 @endphp
 
 <style>
@@ -22,12 +27,7 @@
         justify-content: center;
     }
     .preview-stage canvas,
-    .preview-stage img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-    }
-    /* Rozmycie podglądu dla gościa */
+    .preview-stage img { max-width: 100%; height: auto; display: block; }
     .preview-locked .preview-media {
         filter: blur(14px);
         transform: scale(1.05);
@@ -35,19 +35,21 @@
         user-select: none;
     }
     .preview-overlay {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
         text-align: center;
         background: rgba(15, 23, 42, 0.55);
         backdrop-filter: blur(2px);
-        color: #fff;
-        padding: 1.5rem;
-        z-index: 5;
+        color: #fff; padding: 1.5rem; z-index: 5;
     }
+    .pager-btn {
+        width: 44px; height: 44px; border-radius: 9999px;
+        display: flex; align-items: center; justify-content: center;
+        background: var(--color-card-bg); border: 1px solid var(--color-border);
+        color: var(--color-text-body); transition: all 0.2s ease;
+    }
+    .pager-btn:hover:not(:disabled) { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+    .pager-btn:disabled { opacity: 0.4; cursor: not-allowed; }
     .star-input { cursor: pointer; transition: transform 0.15s ease; }
     .star-input:hover { transform: scale(1.2); }
 </style>
@@ -71,52 +73,74 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-            <!-- LEWA KOLUMNA: PODGLĄD PIERWSZEJ STRONY -->
+            <!-- LEWA KOLUMNA: PODGLĄD / PRZEGLĄDARKA STRON -->
             <div class="lg:col-span-7">
-                <div class="preview-stage @guest preview-locked @endguest"
-                     id="previewStage"
-                     data-type="{{ $note->file_type }}"
-                     data-url="{{ route('notes.preview', $note) }}">
 
-                    <div class="preview-media w-full flex items-center justify-center">
-                        @if ($note->isPdf())
-                            <canvas id="pdfPreview"></canvas>
-                            <div id="pdfLoading" class="text-slate-300 text-sm py-20">
-                                <i class="bi bi-arrow-repeat animate-spin"></i> Wczytywanie podglądu…
+                @if ($hasAccess)
+                    {{-- Pełny dostęp: przeglądarka kolejnych stron / plików --}}
+                    <div class="preview-stage" id="viewerStage">
+                        <div class="preview-media w-full flex items-center justify-center">
+                            <canvas id="viewerCanvas" style="display:none;"></canvas>
+                            <img id="viewerImage" style="display:none;" alt="Strona notatki">
+                            <div id="viewerLoading" class="text-slate-300 text-sm py-20">
+                                <i class="bi bi-arrow-repeat animate-spin"></i> Wczytywanie…
                             </div>
-                        @else
-                            <img src="{{ route('notes.preview', $note) }}" alt="Podgląd notatki">
-                        @endif
+                        </div>
                     </div>
 
-                    {{-- Nakładka dla gościa: całkowite rozmycie, brak podglądu kolejnych stron --}}
-                    @guest
-                        <div class="preview-overlay">
-                            <i class="bi bi-lock-fill text-4xl mb-3"></i>
-                            <h3 class="text-lg font-bold mb-1">Podgląd dostępny po zalogowaniu</h3>
-                            <p class="text-white/70 text-sm max-w-xs mb-5">
-                                Zaloguj się, aby zobaczyć pierwszą stronę tej notatki. Kolejne strony odblokujesz po zakupie.
-                            </p>
-                            <a href="{{ route('login') }}" class="bg-primary hover:bg-primary-hover text-white font-bold py-2.5 px-6 rounded-xl text-sm transition-colors">
-                                <i class="bi bi-box-arrow-in-right mr-1.5"></i> Zaloguj się
-                            </a>
-                        </div>
-                    @endguest
-                </div>
+                    <!-- Sterowanie stronami -->
+                    <div class="mt-4 flex items-center justify-center gap-4">
+                        <button class="pager-btn" id="prevPage" title="Poprzednia strona"><i class="bi bi-chevron-left"></i></button>
+                        <span class="text-sm font-semibold text-text-body">Strona <span id="curPage">1</span> z <span id="totalPages">…</span></span>
+                        <button class="pager-btn" id="nextPage" title="Następna strona"><i class="bi bi-chevron-right"></i></button>
+                    </div>
 
-                <!-- Informacja o zakresie podglądu -->
-                <div class="mt-4 flex items-start gap-3 p-4 rounded-xl bg-slate-100/60 dark:bg-slate-800/40 border border-border text-sm text-slate-500 dark:text-slate-400">
-                    @if ($hasAccess)
-                        <i class="bi bi-unlock-fill text-emerald-500 text-lg"></i>
-                        <span>Masz pełny dostęp do tej notatki. Pobierz kompletny plik za pomocą przycisku obok.</span>
-                    @elseif (auth()->check())
-                        <i class="bi bi-eye-fill text-primary text-lg"></i>
-                        <span>To podgląd <strong>tylko pierwszej strony</strong>. Kup notatkę, aby zobaczyć i pobrać wszystkie strony.</span>
-                    @else
-                        <i class="bi bi-lock-fill text-slate-400 text-lg"></i>
-                        <span>Podgląd pierwszej strony jest rozmyty dla niezalogowanych. Zaloguj się, aby go odblokować.</span>
-                    @endif
-                </div>
+                    <div class="mt-4 flex items-start gap-3 p-4 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40 text-sm text-emerald-700 dark:text-emerald-400">
+                        <i class="bi bi-unlock-fill text-lg"></i>
+                        <span>Masz pełny dostęp — przeglądaj wszystkie strony przyciskami i pobierz komplet plików obok.</span>
+                    </div>
+                @else
+                    {{-- Brak dostępu: tylko okładka (strona 1), rozmyta dla gościa --}}
+                    <div class="preview-stage @guest preview-locked @endguest"
+                         id="coverStage"
+                         data-type="{{ $main?->file_type }}"
+                         data-url="{{ route('notes.preview', $note) }}">
+
+                        <div class="preview-media w-full flex items-center justify-center">
+                            @if ($note->isPdf())
+                                <canvas id="coverCanvas"></canvas>
+                                <div id="coverLoading" class="text-slate-300 text-sm py-20">
+                                    <i class="bi bi-arrow-repeat animate-spin"></i> Wczytywanie podglądu…
+                                </div>
+                            @else
+                                <img src="{{ route('notes.preview', $note) }}" alt="Podgląd notatki">
+                            @endif
+                        </div>
+
+                        @guest
+                            <div class="preview-overlay">
+                                <i class="bi bi-lock-fill text-4xl mb-3"></i>
+                                <h3 class="text-lg font-bold mb-1">Podgląd dostępny po zalogowaniu</h3>
+                                <p class="text-white/70 text-sm max-w-xs mb-5">
+                                    Zaloguj się, aby zobaczyć pierwszą stronę. Kolejne strony odblokujesz po zakupie.
+                                </p>
+                                <a href="{{ route('login') }}" class="bg-primary hover:bg-primary-hover text-white font-bold py-2.5 px-6 rounded-xl text-sm transition-colors">
+                                    <i class="bi bi-box-arrow-in-right mr-1.5"></i> Zaloguj się
+                                </a>
+                            </div>
+                        @endguest
+                    </div>
+
+                    <div class="mt-4 flex items-start gap-3 p-4 rounded-xl bg-slate-100/60 dark:bg-slate-800/40 border border-border text-sm text-slate-500 dark:text-slate-400">
+                        @auth
+                            <i class="bi bi-eye-fill text-primary text-lg"></i>
+                            <span>To podgląd <strong>tylko pierwszej strony</strong>. Kup notatkę, aby przeglądać i pobierać wszystkie strony.</span>
+                        @else
+                            <i class="bi bi-lock-fill text-slate-400 text-lg"></i>
+                            <span>Podgląd pierwszej strony jest rozmyty dla niezalogowanych. Zaloguj się, aby go odblokować.</span>
+                        @endauth
+                    </div>
+                @endif
             </div>
 
             <!-- PRAWA KOLUMNA: SZCZEGÓŁY, CENA, ZAKUP -->
@@ -127,10 +151,22 @@
                         <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary">
                             {{ $note->category }}
                         </span>
-                        <div class="flex items-center gap-1 text-amber-500 text-sm font-bold">
-                            <i class="bi bi-star-fill"></i>
-                            <span class="text-text-body">{{ $count ? $avg : '—' }}</span>
-                            <span class="text-slate-400 font-normal">({{ $count }})</span>
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-1 text-amber-500 text-sm font-bold">
+                                <i class="bi bi-star-fill"></i>
+                                <span class="text-text-body">{{ $count ? $avg : '—' }}</span>
+                                <span class="text-slate-400 font-normal">({{ $count }})</span>
+                            </div>
+                            @auth
+                                <form action="{{ route('notes.favorite', $note) }}" method="POST" class="m-0">
+                                    @csrf
+                                    <button type="submit" class="text-xl transition-transform hover:scale-110 {{ $isFavorited ? 'text-red-500' : 'text-slate-400 hover:text-red-500' }}" title="{{ $isFavorited ? 'Usuń z ulubionych' : 'Dodaj do ulubionych' }}">
+                                        <i class="bi {{ $isFavorited ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <a href="{{ route('login') }}" class="text-xl text-slate-400 hover:text-red-500" title="Zaloguj się, aby dodać do ulubionych"><i class="bi bi-heart"></i></a>
+                            @endauth
                         </div>
                     </div>
 
@@ -142,15 +178,13 @@
                         </p>
                     @endif
 
-                    <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-5">
-                        {{ $note->description }}
-                    </p>
+                    <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-5">{{ $note->description }}</p>
 
                     <!-- Statystyki -->
                     <div class="grid grid-cols-3 gap-2 text-center mb-6">
                         <div class="p-2 rounded-xl bg-slate-100/60 dark:bg-slate-800/40">
-                            <div class="text-lg font-bold text-text-body" id="statPages">{{ $note->isPdf() ? '—' : 1 }}</div>
-                            <div class="text-[11px] text-slate-400">stron</div>
+                            <div class="text-lg font-bold text-text-body">{{ $note->files->count() }}</div>
+                            <div class="text-[11px] text-slate-400">plików</div>
                         </div>
                         <div class="p-2 rounded-xl bg-slate-100/60 dark:bg-slate-800/40">
                             <div class="text-lg font-bold text-text-body">{{ number_format($note->views) }}</div>
@@ -171,14 +205,25 @@
                         @endif
                     </div>
 
-                    <!-- Akcja główna (zakup / pobranie / zaloguj) -->
+                    <!-- Akcja główna -->
                     @if ($hasAccess)
                         <a href="{{ route('notes.download', $note) }}"
                            class="w-full py-3.5 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-md transition-all mb-3">
-                            <i class="bi bi-cloud-arrow-down-fill text-lg"></i> Pobierz PDF / plik
+                            <i class="bi bi-cloud-arrow-down-fill text-lg"></i> Pobierz {{ $note->files->count() > 1 ? 'pliki (ZIP)' : 'plik' }}
                         </a>
                         @if ($isOwner)
-                            <p class="text-center text-xs text-slate-400"><i class="bi bi-person-badge"></i> To Twoja notatka.</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <a href="{{ route('notes.edit', $note) }}" class="py-2.5 border border-border hover:border-primary hover:text-primary text-text-body rounded-xl font-semibold text-sm flex items-center justify-center gap-1.5 transition-all">
+                                    <i class="bi bi-pencil"></i> Edytuj
+                                </a>
+                                <form action="{{ route('notes.destroy', $note) }}" method="POST" onsubmit="return confirm('Na pewno usunąć tę notatkę?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="w-full py-2.5 border border-red-200 dark:border-red-900/40 text-red-500 hover:bg-red-500/10 rounded-xl font-semibold text-sm flex items-center justify-center gap-1.5 transition-all">
+                                        <i class="bi bi-trash3"></i> Usuń
+                                    </button>
+                                </form>
+                            </div>
                         @endif
                     @elseif (auth()->check())
                         <a href="{{ route('notes.checkout', $note) }}"
@@ -194,11 +239,11 @@
                         <p class="text-center text-xs text-slate-400">Nie masz konta? <a href="{{ route('register') }}" class="text-primary font-semibold">Zarejestruj się</a></p>
                     @endif
 
-                    <!-- Autor / sprzedawca -->
+                    <!-- Sprzedawca -->
                     <div class="border-t border-border mt-6 pt-5">
                         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Sprzedawca</h4>
                         <div class="flex items-center gap-3">
-                            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed={{ urlencode($note->author->name ?? 'Notet') }}"
+                            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed={{ urlencode($note->author->name ?? 'Noted') }}"
                                  alt="{{ $note->author->name ?? '' }}"
                                  class="w-11 h-11 rounded-full border border-border bg-card-bg">
                             <div>
@@ -218,11 +263,9 @@
         <!-- SEKCJA OCEN -->
         <div class="mt-12 max-w-4xl">
             <h2 class="text-xl font-extrabold text-text-body mb-6">
-                Oceny i opinie
-                <span class="text-slate-400 font-normal text-base">({{ $count }})</span>
+                Oceny i opinie <span class="text-slate-400 font-normal text-base">({{ $count }})</span>
             </h2>
 
-            <!-- Formularz oceny (tylko dla kupujących, którzy jeszcze nie ocenili) -->
             @if ($canReview)
                 <div class="bg-card-bg border border-border rounded-2xl p-6 mb-8">
                     <h3 class="font-bold text-text-body mb-1">Oceń sprzedawcę</h3>
@@ -233,17 +276,14 @@
                     <form action="{{ route('notes.reviews.store', $note) }}" method="POST">
                         @csrf
                         <input type="hidden" name="rating" id="ratingValue" value="{{ old('rating', 5) }}">
-
                         <div class="flex items-center gap-1 mb-4 text-3xl text-slate-300" id="starPicker">
                             @for ($i = 1; $i <= 5; $i++)
                                 <i class="bi bi-star-fill star-input" data-value="{{ $i }}"></i>
                             @endfor
                         </div>
-
                         <textarea name="comment" rows="3" maxlength="1000"
                                   class="w-full px-3 py-2.5 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm placeholder-slate-400 resize-none mb-4"
                                   placeholder="Napisz kilka słów o jakości notatki i kontakcie ze sprzedawcą…">{{ old('comment') }}</textarea>
-
                         <button type="submit" class="px-6 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold text-sm transition-colors">
                             <i class="bi bi-send-fill mr-1.5"></i> Wyślij ocenę
                         </button>
@@ -251,14 +291,12 @@
                 </div>
             @endif
 
-            <!-- Lista ocen -->
             <div class="flex flex-col gap-4">
                 @forelse ($note->reviews->sortByDesc('created_at') as $review)
                     <div class="bg-card-bg border border-border rounded-2xl p-5">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-3">
-                                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed={{ urlencode($review->reviewer->name ?? 'U') }}"
-                                     class="w-9 h-9 rounded-full border border-border" alt="">
+                                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed={{ urlencode($review->reviewer->name ?? 'U') }}" class="w-9 h-9 rounded-full border border-border" alt="">
                                 <div>
                                     <div class="font-bold text-text-body text-sm">{{ $review->reviewer->name ?? 'Użytkownik' }}</div>
                                     <div class="text-xs text-slate-400">{{ $review->created_at->diffForHumans() }}</div>
@@ -285,63 +323,120 @@
     </div>
 </main>
 
-@if ($note->isPdf())
+@php $needsPdfJs = $hasAccess ? $note->files->contains(fn ($f) => $f->file_type === 'pdf') : $note->isPdf(); @endphp
+
+@if ($needsPdfJs || $hasAccess)
 <script type="module">
     import * as pdfjsLib from 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.5.136/build/pdf.min.mjs';
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.5.136/build/pdf.worker.min.mjs';
 
-    const stage   = document.getElementById('previewStage');
-    const canvas  = document.getElementById('pdfPreview');
-    const loading = document.getElementById('pdfLoading');
-    const statPages = document.getElementById('statPages');
+    @if ($hasAccess)
+        // ====== PRZEGLĄDARKA WSZYSTKICH STRON ======
+        const sources = @json($fileSources);
+        const stage   = document.getElementById('viewerStage');
+        const canvas  = document.getElementById('viewerCanvas');
+        const image   = document.getElementById('viewerImage');
+        const loading = document.getElementById('viewerLoading');
+        const curEl   = document.getElementById('curPage');
+        const totalEl = document.getElementById('totalPages');
+        const prevBtn = document.getElementById('prevPage');
+        const nextBtn = document.getElementById('nextPage');
 
-    (async () => {
-        try {
-            const pdf = await pdfjsLib.getDocument(stage.dataset.url).promise;
-            if (statPages) statPages.textContent = pdf.numPages;
+        let slides = [];
+        let index  = 0;
 
-            // Renderujemy WYŁĄCZNIE pierwszą stronę (kolejne pozostają niedostępne w podglądzie).
-            const page = await pdf.getPage(1);
-            const containerWidth = stage.clientWidth || 600;
-            const baseViewport = page.getViewport({ scale: 1 });
-            const scale = Math.min(containerWidth / baseViewport.width, 2);
-            const viewport = page.getViewport({ scale });
-
-            const ctx = canvas.getContext('2d');
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
-
-            await page.render({ canvasContext: ctx, viewport }).promise;
-            if (loading) loading.style.display = 'none';
-        } catch (e) {
-            if (loading) loading.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Nie udało się wczytać podglądu.';
-            console.error(e);
+        async function build() {
+            for (const src of sources) {
+                if (src.type === 'pdf') {
+                    try {
+                        const pdf = await pdfjsLib.getDocument(src.url).promise;
+                        for (let p = 1; p <= pdf.numPages; p++) {
+                            slides.push({ type: 'pdf', pdf, pageNum: p });
+                        }
+                    } catch (e) { console.error(e); }
+                } else {
+                    slides.push({ type: 'image', url: src.url });
+                }
+            }
+            if (slides.length === 0) {
+                loading.textContent = 'Brak stron do wyświetlenia.';
+                return;
+            }
+            totalEl.textContent = slides.length;
+            render();
         }
-    })();
+
+        async function render() {
+            const slide = slides[index];
+            curEl.textContent = index + 1;
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === slides.length - 1;
+            loading.style.display = 'none';
+
+            if (slide.type === 'image') {
+                canvas.style.display = 'none';
+                image.style.display = 'block';
+                image.src = slide.url;
+            } else {
+                image.style.display = 'none';
+                canvas.style.display = 'block';
+                const page = await slide.pdf.getPage(slide.pageNum);
+                const containerWidth = stage.clientWidth || 600;
+                const base = page.getViewport({ scale: 1 });
+                const scale = Math.min(containerWidth / base.width, 2);
+                const viewport = page.getViewport({ scale });
+                const ctx = canvas.getContext('2d');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                await page.render({ canvasContext: ctx, viewport }).promise;
+            }
+        }
+
+        prevBtn.addEventListener('click', () => { if (index > 0) { index--; render(); } });
+        nextBtn.addEventListener('click', () => { if (index < slides.length - 1) { index++; render(); } });
+        build();
+    @else
+        // ====== OKŁADKA: TYLKO STRONA 1 (dla PDF) ======
+        const stage   = document.getElementById('coverStage');
+        const canvas  = document.getElementById('coverCanvas');
+        const loading = document.getElementById('coverLoading');
+        (async () => {
+            try {
+                const pdf = await pdfjsLib.getDocument(stage.dataset.url).promise;
+                const page = await pdf.getPage(1);
+                const containerWidth = stage.clientWidth || 600;
+                const base = page.getViewport({ scale: 1 });
+                const scale = Math.min(containerWidth / base.width, 2);
+                const viewport = page.getViewport({ scale });
+                const ctx = canvas.getContext('2d');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                await page.render({ canvasContext: ctx, viewport }).promise;
+                if (loading) loading.style.display = 'none';
+            } catch (e) {
+                if (loading) loading.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Nie udało się wczytać podglądu.';
+                console.error(e);
+            }
+        })();
+    @endif
 </script>
 @endif
 
 <script>
-    // Interaktywny wybór gwiazdek w formularzu oceny
     (function () {
         const picker = document.getElementById('starPicker');
         if (!picker) return;
         const input = document.getElementById('ratingValue');
         const stars = picker.querySelectorAll('.star-input');
-
         function paint(value) {
             stars.forEach(s => {
                 s.classList.toggle('text-amber-500', s.dataset.value <= value);
                 s.classList.toggle('text-slate-300', s.dataset.value > value);
             });
         }
-
         stars.forEach(star => {
             star.addEventListener('mouseenter', () => paint(star.dataset.value));
-            star.addEventListener('click', () => {
-                input.value = star.dataset.value;
-                paint(star.dataset.value);
-            });
+            star.addEventListener('click', () => { input.value = star.dataset.value; paint(star.dataset.value); });
         });
         picker.addEventListener('mouseleave', () => paint(input.value));
         paint(input.value);

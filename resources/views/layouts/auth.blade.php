@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex items-center justify-center min-h-screen py-12">
+@include('shared.navbar')
+
+<main class="flex-grow flex items-center justify-center py-12">
     <div class="w-full max-w-[440px] px-5">
         <div class="text-center mb-6">
             <span class="text-4xl block mb-2">📚</span>
@@ -17,6 +19,14 @@
                 @yield('auth-content')
             </div>
         </div>
+
+        <p class="text-center text-sm text-slate-500 dark:text-slate-400 mt-6">
+            <a href="{{ route('home') }}" class="hover:text-primary font-medium">
+                <i class="bi bi-arrow-left mr-1"></i> Wróć do strony głównej
+            </a>
+        </p>
     </div>
-</div>
+</main>
+
+@include('shared.footer')
 @endsection

@@ -33,14 +33,44 @@ class Note extends Model
         return $this->hasMany(Review::class);
     }
 
+    public function files(): HasMany
+    {
+        return $this->hasMany(NoteFile::class)->orderBy('position')->orderBy('id');
+    }
+
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    /**
+     * Plik główny (okładka / zdjęcie główne). Dla PDF okładką jest jego 1. strona.
+     */
+    public function mainFile(): ?NoteFile
+    {
+        return $this->files->firstWhere('is_main', true) ?? $this->files->first();
+    }
+
     public function isFree(): bool
     {
         return (float) $this->price <= 0;
     }
 
+    /**
+     * Czy okładka (plik główny) jest PDF-em.
+     */
     public function isPdf(): bool
     {
-        return $this->file_type === 'pdf';
+        return $this->mainFile()?->file_type === 'pdf';
+    }
+
+    public function isFavoritedBy(?User $user): bool
+    {
+        if (! $user) {
+            return false;
+        }
+
+        return $this->favorites()->where('user_id', $user->id)->exists();
     }
 
     /**

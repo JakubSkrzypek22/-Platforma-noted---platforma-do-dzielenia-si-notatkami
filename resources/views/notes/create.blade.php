@@ -12,7 +12,7 @@
 
         <div class="bg-card-bg border border-border rounded-2xl p-6 sm:p-8 shadow-sm">
             <h1 class="text-2xl font-extrabold text-text-body mb-1">Wystaw nową notatkę</h1>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Wgraj plik (PDF, JPG lub PNG). Pierwsza strona posłuży jako podgląd dla kupujących.</p>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Możesz dodać kilka plików (PDF, JPG lub PNG) i wybrać, który będzie zdjęciem głównym. Dla pliku PDF okładką jest jego pierwsza strona.</p>
 
             @include('shared.validation-error')
 
@@ -59,14 +59,19 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-text-body mb-1.5">Plik notatki</label>
-                    <label for="file" id="dropArea"
+                    <label class="block text-xs font-bold text-text-body mb-1.5">Pliki notatki</label>
+                    <label for="files" id="dropArea"
                            class="flex flex-col items-center justify-center gap-2 w-full p-8 border-2 border-dashed border-border rounded-xl cursor-pointer hover:border-primary hover:bg-primary/5 transition-colors text-center">
                         <i class="bi bi-cloud-arrow-up text-3xl text-primary"></i>
-                        <span class="text-sm font-semibold text-text-body" id="fileLabel">Kliknij, aby wybrać plik</span>
-                        <span class="text-xs text-slate-400">PDF, JPG lub PNG · maks. 20 MB</span>
-                        <input type="file" name="file" id="file" accept=".pdf,.jpg,.jpeg,.png" class="hidden" required>
+                        <span class="text-sm font-semibold text-text-body">Kliknij, aby wybrać pliki</span>
+                        <span class="text-xs text-slate-400">PDF, JPG lub PNG · można zaznaczyć wiele · maks. 20 MB / plik</span>
+                        <input type="file" name="files[]" id="files" accept=".pdf,.jpg,.jpeg,.png" class="hidden" multiple required>
                     </label>
+
+                    <!-- Lista wybranych plików z wyborem głównego -->
+                    <div id="fileList" class="mt-3 flex flex-col gap-2"></div>
+                    <input type="hidden" name="main_index" id="mainIndex" value="0">
+                    <p id="mainHint" class="hidden text-xs text-slate-400 mt-2"><i class="bi bi-info-circle"></i> Zaznacz, który plik ma być zdjęciem głównym (okładką).</p>
                 </div>
 
                 <button type="submit" class="w-full py-3.5 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-md transition-all">
@@ -79,11 +84,44 @@
 
 <script>
     (function () {
-        const input = document.getElementById('file');
-        const label = document.getElementById('fileLabel');
-        if (!input) return;
+        const input    = document.getElementById('files');
+        const list     = document.getElementById('fileList');
+        const mainIdx  = document.getElementById('mainIndex');
+        const mainHint = document.getElementById('mainHint');
+
+        function iconFor(name) {
+            return name.toLowerCase().endsWith('.pdf') ? 'bi-file-earmark-pdf-fill' : 'bi-file-earmark-image-fill';
+        }
+
         input.addEventListener('change', () => {
-            label.textContent = input.files.length ? input.files[0].name : 'Kliknij, aby wybrać plik';
+            list.innerHTML = '';
+            const files = Array.from(input.files);
+
+            if (files.length === 0) {
+                mainHint.classList.add('hidden');
+                return;
+            }
+            mainHint.classList.remove('hidden');
+            mainIdx.value = '0';
+
+            files.forEach((file, i) => {
+                const row = document.createElement('label');
+                row.className = 'flex items-center justify-between gap-3 p-3 rounded-xl border border-border bg-card-bg cursor-pointer';
+                row.innerHTML = `
+                    <span class="flex items-center gap-2 min-w-0">
+                        <i class="bi ${iconFor(file.name)} text-primary text-lg"></i>
+                        <span class="text-sm text-text-body truncate">${file.name}</span>
+                    </span>
+                    <span class="flex items-center gap-1.5 text-xs font-semibold text-slate-500 whitespace-nowrap">
+                        <input type="radio" name="mainPick" value="${i}" ${i === 0 ? 'checked' : ''} class="text-primary focus:ring-primary">
+                        Główny
+                    </span>`;
+                list.appendChild(row);
+            });
+
+            list.querySelectorAll('input[name="mainPick"]').forEach(radio => {
+                radio.addEventListener('change', () => { mainIdx.value = radio.value; });
+            });
         });
     })();
 </script>

@@ -132,6 +132,16 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
         transform: scale(1.1);
     }
 
+    /* Serce na okładce — stały, czytelny kolor niezależnie od motywu (jasne tło) */
+    .fav-btn {
+        background: rgba(255, 255, 255, 0.9);
+        color: #475569;
+        opacity: 1;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    }
+    .fav-btn:hover { background: #ffffff; color: #ef4444; }
+    .fav-btn.is-fav { color: #ef4444; }
+
     /* User Profile Info */
     .author-avatar {
         width: 32px;
@@ -274,11 +284,38 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
                 @php
                     $catClass = $categoryClasses[$note->category] ?? $defaultCategoryClass;
                     $avgRating = $note->reviews_avg_rating ? number_format($note->reviews_avg_rating, 1) : null;
+                    $main = $note->mainFile();
+                    $favorited = auth()->check() ? $note->isFavoritedBy(auth()->user()) : false;
                 @endphp
                 <div class="note-item" data-category="{{ $note->category }}">
                     <div class="catalog-card flex-grow flex flex-col justify-between">
+                        <!-- Okładka (zdjęcie główne) -->
+                        <div class="relative">
+                            <a href="{{ route('notes.show', $note) }}" class="block">
+                                @if ($main && $main->file_type === 'image')
+                                    <img src="{{ route('notes.preview', $note) }}" alt="{{ $note->title }}" class="w-full h-44 object-cover bg-slate-100 dark:bg-slate-800">
+                                @else
+                                    <div class="w-full h-44 flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 text-slate-400">
+                                        <i class="bi bi-file-earmark-pdf text-5xl"></i>
+                                    </div>
+                                @endif
+                            </a>
+                            @auth
+                                <form action="{{ route('notes.favorite', $note) }}" method="POST" class="fav-form absolute top-3 right-3 m-0">
+                                    @csrf
+                                    <button type="submit" class="btn-like fav-btn cursor-pointer {{ $favorited ? 'is-fav' : '' }}" title="{{ $favorited ? 'Usuń z ulubionych' : 'Dodaj do ulubionych' }}">
+                                        <i class="bi {{ $favorited ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <a href="{{ route('login') }}" class="btn-like fav-btn absolute top-3 right-3" title="Zaloguj się, aby zapisać">
+                                    <i class="bi bi-heart"></i>
+                                </a>
+                            @endauth
+                        </div>
+
                         <!-- Header karty: Kategoria i Cena -->
-                        <div class="px-5 pt-5 pb-2 flex justify-between items-center bg-transparent border-0">
+                        <div class="px-5 pt-4 pb-2 flex justify-between items-center bg-transparent border-0">
                             <span class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-semibold {{ $catClass }}">
                                 {{ $note->category }}
                             </span>
@@ -321,7 +358,7 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
 
                             <!-- Autor z awatarem -->
                             <div class="flex items-center gap-2.5 border-t border-border pt-4 mt-auto">
-                                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed={{ urlencode($note->author->name ?? 'Notet') }}" alt="{{ $note->author->name ?? '' }}" class="author-avatar">
+                                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed={{ urlencode($note->author->name ?? 'Noted') }}" alt="{{ $note->author->name ?? '' }}" class="author-avatar">
                                 <div class="text-xs">
                                     <span class="font-bold block text-text-body leading-none">{{ $note->author->name ?? 'Nieznany' }}</span>
                                     <small class="text-slate-400">{{ $note->created_at?->diffForHumans() ?? 'Dodano niedawno' }}</small>
@@ -461,6 +498,44 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
             searchInput.focus();
             applyFilters();
             catalogSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+})();
+</script>
+
+<script>
+// Dodawanie/usuwanie z ulubionych bez przeładowania strony
+(function () {
+    document.querySelectorAll('form.fav-form').forEach(function (form) {
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const btn  = form.querySelector('button');
+            const icon = btn.querySelector('i');
+            btn.disabled = true;
+            try {
+                const res = await fetch(form.action, {
+                    method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
+                    body: new FormData(form),
+                });
+                if (!res.ok) throw new Error('fail');
+                const data = await res.json();
+                if (data.favorited) {
+                    btn.classList.add('is-fav');
+                    icon.classList.remove('bi-heart');
+                    icon.classList.add('bi-heart-fill');
+                    btn.title = 'Usuń z ulubionych';
+                } else {
+                    btn.classList.remove('is-fav');
+                    icon.classList.remove('bi-heart-fill');
+                    icon.classList.add('bi-heart');
+                    btn.title = 'Dodaj do ulubionych';
+                }
+            } catch (err) {
+                form.submit(); // awaryjnie: zwykłe wysłanie formularza
+            } finally {
+                btn.disabled = false;
+            }
         });
     });
 })();

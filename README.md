@@ -1,14 +1,14 @@
-# 📚 Notet — Drugie życie Twoich notatek akademickich! ✨
+# 📚 Noted — Drugie życie Twoich notatek akademickich! ✨
 
-> **Notet** to innowacyjna platforma społecznościowo-handlowa stworzona przez studentów dla studentów. Wyobraź sobie **Vinted**, ale zamiast ubrań wymieniasz się, kupujesz i sprzedajesz **notatki, opracowania, ściągi oraz materiały naukowe**! 
+> **Noted** to innowacyjna platforma społecznościowo-handlowa stworzona przez studentów dla studentów. Wyobraź sobie **Vinted**, ale zamiast ubrań wymieniasz się, kupujesz i sprzedajesz **notatki, opracowania, ściągi oraz materiały naukowe**! 
 
 ---
 
-## 🎯 Czym jest Notet?
+## 🎯 Czym jest Noted?
 
-Notet powstał, aby rozwiązać odwieczny problem każdego studenta: *„Skąd wziąć dobre materiały na kolokwium?”* oraz *„Co zrobić z setkami stron świetnych notatek po zdanym egzaminie?”*. 
+Noted powstał, aby rozwiązać odwieczny problem każdego studenta: *„Skąd wziąć dobre materiały na kolokwium?”* oraz *„Co zrobić z setkami stron świetnych notatek po zdanym egzaminie?”*. 
 
-Dzięki Notet studenci mogą w łatwy sposób monetyzować swoją ciężką pracę z całego semestru, a inni mogą błyskawicznie zyskać dostęp do sprawdzonych, wysokiej jakości materiałów dydaktycznych.
+Dzięki Noted studenci mogą w łatwy sposób monetyzować swoją ciężką pracę z całego semestru, a inni mogą błyskawicznie zyskać dostęp do sprawdzonych, wysokiej jakości materiałów dydaktycznych.
 
 ---
 
@@ -41,7 +41,7 @@ Platforma została zaprojektowana z myślą o szybkości działania, bezpieczeń
 
 ---
 
-## 💡 Dlaczego warto dołączyć do Notet?
+## 💡 Dlaczego warto dołączyć do Noted?
 
 * **Dla Twórców:** Twój wysiłek włożony w pisanie schludnych notatek wreszcie się opłaci. Wykład, który starannie spisałeś, może stać się Twoim stałym źródłem dochodu!
 * **Dla Kupujących:** Oszczędzasz dziesiątki godzin na szukaniu informacji w Internecie. Otrzymujesz skondensowaną, sprawdzoną wiedzę od starszych roczników.
@@ -49,4 +49,4 @@ Platforma została zaprojektowana z myślą o szybkości działania, bezpieczeń
 
 ---
 
-*Notet — Ucz się mądrzej, nie ciężej! 🎓*
+*Noted — Ucz się mądrzej, nie ciężej! 🎓*
