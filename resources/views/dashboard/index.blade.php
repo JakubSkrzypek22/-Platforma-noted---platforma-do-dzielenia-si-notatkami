@@ -4,13 +4,10 @@
     <!-- Custom Styling for Premium Aesthetics -->
     <style>
         .hero-banner {
-            background: linear-gradient(135deg, var(--bs-primary) 0%, #818cf8 100%);
+            background: linear-gradient(135deg, var(--color-primary) 0%, #818cf8 100%);
             color: white;
             position: relative;
             overflow: hidden;
-        }
-        [data-bs-theme="beige"] .hero-banner {
-            background: linear-gradient(135deg, #c2593f 0%, #dd8068 100%);
         }
         .hero-banner::after {
             content: '';
@@ -24,17 +21,17 @@
             pointer-events: none;
         }
         .premium-card {
-            border: 1px solid var(--bs-border-color);
+            border: 1px solid var(--color-border);
             border-radius: 16px;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            background-color: var(--bs-card-bg);
+            background-color: var(--color-card-bg);
             overflow: hidden;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
         }
         .premium-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 20px -8px rgba(0, 0, 0, 0.1);
-            border-color: var(--bs-primary);
+            border-color: var(--color-primary);
         }
         .heart-btn {
             font-size: 1.3rem;
@@ -65,148 +62,131 @@
             font-family: Georgia, serif;
             font-size: 1.3rem;
             font-style: italic;
-            border-left: 4px solid var(--bs-primary);
+            border-left: 4px solid var(--color-primary);
             padding-left: 20px;
-            color: var(--bs-primary);
-        }
-        .accordion-button:not(.collapsed) {
-            background-color: var(--bs-primary-bg-subtle);
-            color: var(--bs-primary);
-        }
-        .empty-state {
-            border: 2px dashed var(--bs-border-color);
-            border-radius: 16px;
-            padding: 4rem 2rem;
-            text-align: center;
-            background-color: var(--bs-card-bg);
+            color: var(--color-primary);
         }
     </style>
 
-    <!-- Native Bootstrap 5 Navigation Tabs -->
-    <ul class="nav nav-tabs mb-5 border-bottom-0 gap-2" id="notetTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active px-4 py-2.5 rounded-3 fw-bold d-flex align-items-center shadow-sm" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-pane" type="button" role="tab" aria-controls="home-pane" aria-selected="true">
-                <i class="bi bi-house-door me-2 fs-5"></i> Strona Główna
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link px-4 py-2.5 rounded-3 fw-bold d-flex align-items-center shadow-sm" id="idea-tab" data-bs-toggle="tab" data-bs-target="#idea-pane" type="button" role="tab" aria-controls="idea-pane" aria-selected="false">
-                <i class="bi bi-lightbulb me-2 fs-5"></i> Idea Strony
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link px-4 py-2.5 rounded-3 fw-bold d-flex align-items-center shadow-sm" id="basket-tab" data-bs-toggle="tab" data-bs-target="#basket-pane" type="button" role="tab" aria-controls="basket-pane" aria-selected="false">
-                <i class="bi bi-cart3 me-2 fs-5"></i> Koszyk (Notatki)
-            </button>
-        </li>
-    </ul>
+    <!-- Tab Navigation buttons -->
+    <div class="flex flex-wrap gap-3 mb-8" id="notetTabs">
+        <button onclick="showTab('home-pane')" class="tab-btn bg-primary text-white shadow-md px-5 py-3 rounded-xl font-bold flex items-center transition-all cursor-pointer" id="home-tab">
+            <i class="bi bi-house-door mr-2 text-lg"></i> Strona Główna
+        </button>
+        <button onclick="showTab('idea-pane')" class="tab-btn bg-card-bg text-text-body border border-border px-5 py-3 rounded-xl font-bold flex items-center transition-all cursor-pointer" id="idea-tab">
+            <i class="bi bi-lightbulb mr-2 text-lg"></i> Idea Strony
+        </button>
+        <button onclick="showTab('basket-pane')" class="tab-btn bg-card-bg text-text-body border border-border px-5 py-3 rounded-xl font-bold flex items-center transition-all cursor-pointer" id="basket-tab">
+            <i class="bi bi-cart3 mr-2 text-lg"></i> Koszyk (Notatki)
+        </button>
+    </div>
 
     <!-- Tab Content Pane Wrapper -->
-    <div class="tab-content" id="notetTabsContent">
+    <div id="notetTabsContent">
 
         <!-- TAB 1: STRONA GŁÓWNA (Pulpit użytkownika) -->
-        <div class="tab-pane fade show active" id="home-pane" role="tabpanel" aria-labelledby="home-tab">
-            <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="tab-pane block" id="home-pane">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
-                    <h2 class="fw-bold mb-1 text-body">Pulpit</h2>
-                    <p class="text-secondary mb-0">Podsumowanie Twojej aktywności w serwisie</p>
+                    <h2 class="text-2xl font-bold text-text-body mb-1">Pulpit</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">Podsumowanie Twojej aktywności w serwisie</p>
                 </div>
-                <div class="d-none d-sm-flex">
-                    <a href="{{ route('trips') }}" class="btn btn-outline-primary px-4 py-2.5 rounded-3 fw-bold d-flex align-items-center shadow-sm">
-                        <i class="bi bi-journal-text me-2 fs-5"></i> Moje Notatki
+                <div class="hidden sm:flex">
+                    <a href="{{ route('trips') }}" class="border border-primary text-primary hover:bg-primary hover:text-white px-5 py-2.5 rounded-xl font-bold flex items-center transition-all shadow-sm">
+                        <i class="bi bi-journal-text mr-2 text-lg"></i> Moje Notatki
                     </a>
                 </div>
             </div>
 
             <!-- Stats Grid -->
-            <div class="row g-4 mb-5">
-                <div class="col-md-6 col-lg-4">
-                    <div class="card premium-card p-4 h-100">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <h3 class="h6 text-secondary fw-bold mb-0">Aktywne oferty</h3>
-                            <div class="w-10 h-10 rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center text-primary" style="width: 40px; height: 40px;">
-                                <i class="bi bi-files fs-5"></i>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div class="premium-card p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm text-slate-500 dark:text-slate-400 font-bold mb-0">Aktywne oferty</h3>
+                            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                                <i class="bi bi-files text-lg"></i>
                             </div>
                         </div>
-                        <div class="fs-2 fw-bold mb-1 text-body">12</div>
-                        <div class="text-secondary small">
-                            2 sprzedane, 1 oczekująca na ocenę
-                        </div>
+                        <div class="text-3xl font-extrabold text-text-body mb-1">12</div>
+                    </div>
+                    <div class="text-slate-400 text-xs mt-3">
+                        2 sprzedane, 1 oczekująca na ocenę
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-4">
-                    <div class="card premium-card p-4 h-100">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <h3 class="h6 text-secondary fw-bold mb-0">Przeglądane przedmioty</h3>
-                            <div class="w-10 h-10 rounded-circle bg-info bg-opacity-10 d-flex align-items-center justify-content-center text-info" style="width: 40px; height: 40px;">
-                                <i class="bi bi-mortarboard fs-5"></i>
+                <div class="premium-card p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm text-slate-500 dark:text-slate-400 font-bold mb-0">Przeglądane przedmioty</h3>
+                            <div class="w-10 h-10 rounded-full bg-cyan-500/10 flex items-center justify-center text-cyan-500">
+                                <i class="bi bi-mortarboard text-lg"></i>
                             </div>
                         </div>
-                        <div class="fs-2 fw-bold mb-1 text-body">8</div>
-                        <div class="text-secondary small">z 3 różnych wydziałów</div>
+                        <div class="text-3xl font-extrabold text-text-body mb-1">8</div>
                     </div>
+                    <div class="text-slate-400 text-xs mt-3">z 3 różnych wydziałów</div>
                 </div>
 
-                <div class="col-md-6 col-lg-4">
-                    <div class="card premium-card p-4 h-100">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <h3 class="h6 text-secondary fw-bold mb-0">Twój Ranking</h3>
-                            <div class="w-10 h-10 rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center text-success" style="width: 40px; height: 40px;">
-                                <i class="bi bi-award fs-5"></i>
+                <div class="premium-card p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm text-slate-500 dark:text-slate-400 font-bold mb-0">Twój Ranking</h3>
+                            <div class="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                                <i class="bi bi-award text-lg"></i>
                             </div>
                         </div>
-                        <div class="fs-2 fw-bold mb-1 text-body">Średnia: 4.8</div>
-                        <div class="text-success small d-flex align-items-center gap-1 mt-1">
-                            <i class="bi bi-star-fill text-warning"></i>
-                            <i class="bi bi-star-fill text-warning"></i>
-                            <i class="bi bi-star-fill text-warning"></i>
-                            <i class="bi bi-star-fill text-warning"></i>
-                            <i class="bi bi-star-half text-warning"></i>
-                            <span class="text-secondary ms-1 small">12 opinii</span>
-                        </div>
+                        <div class="text-3xl font-extrabold text-text-body mb-1">Średnia: 4.8</div>
+                    </div>
+                    <div class="flex items-center gap-1 mt-3">
+                        <i class="bi bi-star-fill text-amber-500 text-xs"></i>
+                        <i class="bi bi-star-fill text-amber-500 text-xs"></i>
+                        <i class="bi bi-star-fill text-amber-500 text-xs"></i>
+                        <i class="bi bi-star-fill text-amber-500 text-xs"></i>
+                        <i class="bi bi-star-half text-amber-500 text-xs"></i>
+                        <span class="text-slate-400 text-xs ml-1">12 opinii</span>
                     </div>
                 </div>
             </div>
 
             <!-- Quick Actions & Info -->
-            <div class="row g-4 mb-4">
-                <div class="col-lg-6">
-                    <div class="card premium-card p-4 h-100">
-                        <h3 class="h5 fw-bold mb-4 text-body"><i class="bi bi-lightning-charge-fill text-primary me-2"></i>Ostatnia Aktywność</h3>
-                        <div class="d-flex flex-column gap-3">
-                            <div class="d-flex align-items-center p-3 rounded-3 bg-body-secondary bg-opacity-50">
-                                <div class="w-10 h-10 rounded-circle bg-warning bg-opacity-10 d-flex align-items-center justify-content-center me-3 text-warning" style="width: 40px; height: 40px; flex-shrink: 0;">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <div>
+                    <div class="premium-card p-6 h-full">
+                        <h3 class="text-lg font-bold mb-4 text-text-body flex items-center"><i class="bi bi-lightning-charge-fill text-primary mr-2"></i>Ostatnia Aktywność</h3>
+                        <div class="flex flex-col gap-4">
+                            <div class="flex items-center p-4 rounded-xl bg-slate-100/50 dark:bg-slate-800/30">
+                                <div class="w-10 h-10 rounded-full bg-amber-500/15 flex items-center justify-center mr-3 text-amber-500 flex-shrink-0">
                                     <i class="bi bi-star-fill"></i>
                                 </div>
                                 <div>
-                                    <p class="mb-0 fw-bold text-body">Otrzymano 5★ ocenę!</p>
-                                    <p class="mb-0 text-secondary small">od Marta Z. za "Makroekonomia - Ćwiczenia"</p>
+                                    <p class="mb-0.5 font-bold text-sm text-text-body">Otrzymano 5★ ocenę!</p>
+                                    <p class="mb-0 text-slate-500 dark:text-slate-400 text-xs">od Marta Z. za "Makroekonomia - Ćwiczenia"</p>
                                 </div>
                             </div>
 
-                            <div class="d-flex align-items-center p-3 rounded-3 bg-body-secondary bg-opacity-50">
-                                <div class="w-10 h-10 rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center me-3 text-success" style="width: 40px; height: 40px; flex-shrink: 0;">
+                            <div class="flex items-center p-4 rounded-xl bg-slate-100/50 dark:bg-slate-800/30">
+                                <div class="w-10 h-10 rounded-full bg-emerald-500/15 flex items-center justify-center mr-3 text-emerald-500 flex-shrink-0">
                                     <i class="bi bi-cash-stack"></i>
                                 </div>
                                 <div>
-                                    <p class="mb-0 fw-bold text-body">Sprzedano materiał!</p>
-                                    <p class="mb-0 text-secondary small">"Fizyka Kwantowa" kupiona przez Paweł P.</p>
+                                    <p class="mb-0.5 font-bold text-sm text-text-body">Sprzedano materiał!</p>
+                                    <p class="mb-0 text-slate-500 dark:text-slate-400 text-xs">"Fizyka Kwantowa" kupiona przez Paweł P.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-6">
-                    <div class="card premium-card p-5 h-100 hero-banner shadow-lg text-white d-flex flex-column justify-content-between">
+                <div>
+                    <div class="premium-card p-6 h-full hero-banner shadow-lg text-white flex flex-col justify-between">
                         <div>
-                            <span class="badge bg-white text-primary fw-bold px-3 py-2 mb-3 rounded-pill text-uppercase" style="letter-spacing: 1px;">Zarabiaj na Wiedzy</span>
-                            <h3 class="display-6 fw-bold mb-3">Wystaw nową notatkę!</h3>
-                            <p class="mb-4 text-white-50">Wgrywaj swoje skrupulatnie przygotowane opracowania naukowe, wspieraj społeczność akademicką i generuj pasywny dochód.</p>
+                            <span class="inline-flex bg-white text-primary font-bold px-3 py-1 mb-4 rounded-full text-xs uppercase tracking-wider">Zarabiaj na Wiedzy</span>
+                            <h3 class="text-2xl font-extrabold mb-3">Wystaw nową notatkę!</h3>
+                            <p class="mb-6 text-white/70 text-sm leading-relaxed">Wgrywaj swoje skrupulatnie przygotowane opracowania naukowe, wspieraj społeczność akademicką i generuj pasywny dochód.</p>
                         </div>
-                        <a href="{{ route('trips') }}" class="btn btn-light btn-lg px-4 py-2.5 rounded-3 fw-bold text-primary align-self-start shadow-sm mt-3">
-                            Dodaj Materiał <i class="bi bi-arrow-right ms-2"></i>
+                        <a href="{{ route('trips') }}" class="bg-white hover:bg-slate-100 text-primary font-bold px-5 py-2.5 rounded-xl text-sm flex items-center shadow-md self-start transition-all cursor-pointer">
+                            Dodaj Materiał <i class="bi bi-arrow-right ml-2"></i>
                         </a>
                     </div>
                 </div>
@@ -214,31 +194,31 @@
         </div>
 
         <!-- TAB 2: IDEA STRONY (BOGATY KONTENT BEZ GEOGRAFII) -->
-        <div class="tab-pane fade" id="idea-pane" role="tabpanel" aria-labelledby="idea-tab">
+        <div class="tab-pane hidden" id="idea-pane">
             <div class="editorial-wrapper py-3">
 
                 <!-- Header Jumbotron -->
-                <div class="text-center mb-5">
-                    <span class="text-primary fw-bold text-uppercase tracking-widest fs-7">Filozofia Projektu</span>
-                    <h2 class="display-5 fw-bold mt-2 text-body">Ekosystem Cyfrowej Synergii Akademickiej</h2>
-                    <p class="lead text-secondary mt-3">Jak unowocześniamy obieg wiedzy bez barier, kształtując zrównoważoną przestrzeń wymiany myśli w środowisku naukowym.</p>
+                <div class="text-center mb-12">
+                    <span class="text-primary font-bold text-uppercase tracking-widest text-xs">Filozofia Projektu</span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold mt-2 text-text-body">Ekosystem Cyfrowej Synergii Akademickiej</h2>
+                    <p class="text-base text-slate-500 dark:text-slate-400 mt-4 leading-relaxed max-w-2xl mx-auto">Jak unowocześniamy obieg wiedzy bez barier, kształtując zrównoważoną przestrzeń wymiany myśli w środowisku naukowym.</p>
                 </div>
 
                 <!-- Editorial Introduction -->
-                <div class="row g-5 align-items-center mb-5">
-                    <div class="col-md-7">
-                        <h3 class="fw-bold mb-3 text-body">Nowy Wymiar Dzielenia Się Wiedzą</h3>
-                        <p class="text-secondary" style="text-align: justify; line-height: 1.7;">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center mb-10">
+                    <div class="md:col-span-7">
+                        <h3 class="text-xl font-bold mb-3 text-text-body">Nowy Wymiar Dzielenia Się Wiedzą</h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4 text-justify">
                             Tradycyjne modele edukacyjne borykają się z ogromnym marnotrawstwem zasobów poznawczych. Prace pisane w pocie czoła, skrupulatnie prowadzone notatki z wykładów, szczegółowo rozpisane projekty semestralne lądują na dnie cyfrowych folderów po zdanym egzaminie. Jest to strata potencjału intelektualnego, który mógłby wielokrotnie służyć kolejnym rocznikom.
                         </p>
-                        <p class="text-secondary mb-0" style="text-align: justify; line-height: 1.7;">
+                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed text-justify">
                             Noted stawia czoła temu wyzwaniu. Przenosimy ideę gospodarki obiegu zamkniętego (<i>circular economy</i>) bezpośrednio na grunt akademicki. Dajemy drugie życie opracowaniom dydaktycznym, pozwalając autorom czerpać korzyści finansowe ze swojego trudu, a kupującym ułatwiając natychmiastowe dotarcie do syntetycznych i sprawdzonych źródeł wiedzy.
                         </p>
                     </div>
-                    <div class="col-md-5">
-                        <div class="p-4 rounded-4 bg-primary bg-opacity-10 border border-primary border-opacity-10 shadow-inner">
-                            <h4 class="fw-bold mb-3 text-primary"><i class="bi bi-lightbulb-fill me-2"></i>Wizja Noted</h4>
-                            <p class="text-secondary small mb-0" style="line-height: 1.6;">
+                    <div class="md:col-span-5">
+                        <div class="p-6 rounded-2xl bg-primary/10 border border-primary/15">
+                            <h4 class="font-bold mb-3 text-primary flex items-center"><i class="bi bi-lightbulb-fill mr-2"></i>Wizja Noted</h4>
+                            <p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed text-justify">
                                 Wierzymy w pełną demokratyzację dostępu do materiałów naukowych. Wiedza nie powinna być zamknięta w ciasnych kręgach. Poprzez dynamiczne, zintegrowane mechanizmy oceny to studenci sami kreują standardy jakości dydaktycznej, filtrując i nagradzając najbardziej wartościowe i precyzyjne materiały.
                             </p>
                         </div>
@@ -246,72 +226,67 @@
                 </div>
 
                 <!-- Premium blockquote -->
-                <div class="my-5 p-4 rounded-3 bg-body-secondary bg-opacity-50">
-                    <div class="editorial-quote text-body">
+                <div class="my-10 p-6 rounded-2xl bg-slate-100/50 dark:bg-slate-800/30">
+                    <div class="editorial-quote text-text-body text-base">
                         "Czas spędzony na samodzielnej selekcji chaotycznych informacji z sieci to najkosztowniejsza część procesu edukacji. Optymalizacja tej ścieżki za pomocą zweryfikowanych streszczeń to fundament nowoczesnej nauki."
                     </div>
                 </div>
 
                 <!-- Rich Cards Grid -->
-                <h3 class="fw-bold text-center mb-4 text-body">Trzy Filary Naszej Architektury Ideowej</h3>
-                <div class="row g-4 mb-5">
-                    <div class="col-md-4">
-                        <div class="card premium-card h-100 p-4">
-                            <h5 class="fw-bold text-primary mb-3"><i class="bi bi-check-circle-fill me-2"></i>Mikroekonomia</h5>
-                            <p class="text-secondary small mb-0">Uczciwy system gratyfikacji finansowej dla autorów starannie sporządzonych materiałów. Praca intelektualna zyskuje realny ekwiwalent rynkowy.</p>
+                <h3 class="text-lg font-bold text-center mb-6 text-text-body">Trzy Filary Naszej Architektury Ideowej</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <div class="premium-card p-6 flex flex-col justify-between">
+                        <div>
+                            <h5 class="font-bold text-primary mb-3 flex items-center"><i class="bi bi-check-circle-fill mr-2"></i>Mikroekonomia</h5>
+                            <p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">Uczciwy system gratyfikacji finansowej dla autorów starannie sporządzonych materiałów. Praca intelektualna zyskuje realny ekwiwalent rynkowy.</p>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card premium-card h-100 p-4">
-                            <h5 class="fw-bold text-primary mb-3"><i class="bi bi-star-fill me-2"></i>Kuratela Jakości</h5>
-                            <p class="text-secondary small mb-0">Rygorystyczne, społecznościowe mechanizmy recenzowania materiałów chronią przed błędnymi, niekompletnymi informacjami.</p>
+                    <div class="premium-card p-6 flex flex-col justify-between">
+                        <div>
+                            <h5 class="font-bold text-primary mb-3 flex items-center"><i class="bi bi-star-fill mr-2"></i>Kuratela Jakości</h5>
+                            <p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">Rygorystyczne, społecznościowe mechanizmy recenzowania materiałów chronią przed błędnymi, niekompletnymi informacjami.</p>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card premium-card h-100 p-4">
-                            <h5 class="fw-bold text-primary mb-3"><i class="bi bi-sliders me-2"></i>Zgodność z Intuicją</h5>
-                            <p class="text-secondary small mb-0">Zintegrowany interfejs, w którym interakcja i zakupy przebiegają bez barier. Maksymalne skupienie na samym procesie przyswajania wiedzy.</p>
+                    <div class="premium-card p-6 flex flex-col justify-between">
+                        <div>
+                            <h5 class="font-bold text-primary mb-3 flex items-center"><i class="bi bi-sliders mr-2"></i>Zgodność z Intuicją</h5>
+                            <p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">Zintegrowany interfejs, w którym interakcja i zakupy przebiegają bez barier. Maksymalne skupienie na samym procesie przyswajania wiedzy.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Premium Accordion FAQ Section -->
-                <h3 class="fw-bold text-center mb-4 text-body">Innowacja Technologiczna i Rozwój</h3>
-                <div class="accordion accordion-flush premium-card shadow-sm mb-5" id="accordionIdea">
-                    <div class="accordion-item bg-transparent">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                🚀 Dynamiczne Dopasowywanie Treści
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionIdea">
-                            <div class="accordion-body text-secondary" style="line-height: 1.6;">
-                                Wykorzystujemy innowacyjne rozwiązania algorytmiczne do precyzyjnego kategoryzowania notatek na podstawie dziedzin naukowych, programów wykładowych oraz tagów semantycznych. Dzięki temu odnalezienie odpowiednich wzorów matematycznych lub streszczeń analitycznych zajmuje zaledwie ułamek sekundy, diametralnie skracając drogę poszukiwań.
-                            </div>
+                <h3 class="text-lg font-bold text-center mb-6 text-text-body">Innowacja Technologiczna i Rozwój</h3>
+                
+                <div class="border border-border bg-card-bg rounded-2xl overflow-hidden shadow-sm mb-12 divide-y divide-border">
+                    <!-- Accordion Item 1 -->
+                    <div>
+                        <button onclick="toggleAccordion('collapseOne')" class="w-full flex justify-between items-center p-5 text-left font-bold text-text-body bg-slate-50 dark:bg-slate-800/10 hover:bg-slate-100 dark:hover:bg-slate-800/30 transition-colors cursor-pointer focus:outline-none">
+                            <span>🚀 Dynamiczne Dopasowywanie Treści</span>
+                            <i class="bi bi-chevron-down transition-transform duration-200" id="collapseOne-icon" style="transform: rotate(180deg);"></i>
+                        </button>
+                        <div id="collapseOne" class="p-5 text-slate-500 dark:text-slate-400 text-sm leading-relaxed block">
+                            Wykorzystujemy innowacyjne rozwiązania algorytmiczne do precyzyjnego kategoryzowania notatek na podstawie dziedzin naukowych, programów wykładowych oraz tagów semantycznych. Dzięki temu odnalezienie odpowiednich wzorów matematycznych lub streszczeń analitycznych zajmuje zaledwie ułamek sekundy, diametralnie skracając drogę poszukiwań.
                         </div>
                     </div>
-                    <div class="accordion-item bg-transparent">
-                        <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                🛡️ Ochrona Praw Twórców i Weryfikacja Cyfrowa
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionIdea">
-                            <div class="accordion-body text-secondary" style="line-height: 1.6;">
-                                Bezpieczeństwo i uczciwość intelektualna to nasza absolutna dewiza. Wprowadzamy weryfikację antyplagiatową dla przesyłanych plików oraz dbamy o to, aby prawa autorskie do unikalnych materiałów dydaktycznych były skutecznie chronione. Każda transakcja podlega pełnemu zabezpieczeniu, a autor zachowuje pełną autonomię nad swoim dziełem.
-                            </div>
+                    <!-- Accordion Item 2 -->
+                    <div>
+                        <button onclick="toggleAccordion('collapseTwo')" class="w-full flex justify-between items-center p-5 text-left font-bold text-text-body hover:bg-slate-100 dark:hover:bg-slate-800/30 transition-colors cursor-pointer focus:outline-none">
+                            <span>🛡️ Ochrona Praw Twórców i Weryfikacja Cyfrowa</span>
+                            <i class="bi bi-chevron-down transition-transform duration-200" id="collapseTwo-icon"></i>
+                        </button>
+                        <div id="collapseTwo" class="p-5 text-slate-500 dark:text-slate-400 text-sm leading-relaxed hidden">
+                            Bezpieczeństwo i uczciwość intelektualna to nasza absolutna dewiza. Wprowadzamy weryfikację antyplagiatową dla przesyłanych plików oraz dbamy o to, aby prawa autorskie do unikalnych materiałów dydaktycznych były skutecznie chronione. Każda transakcja podlega pełnemu zabezpieczeniu, a autor zachowuje pełną autonomię nad swoim dziełem.
                         </div>
                     </div>
-                    <div class="accordion-item bg-transparent">
-                        <h2 class="accordion-header" id="headingThree">
-                            <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                🎨 Estetyka Poznawcza w Służbie Skupienia
-                            </button>
-                        </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionIdea">
-                            <div class="accordion-body text-secondary" style="line-height: 1.6;">
-                                Zasady projektowania interfejsu Noted opierają się na zaawansowanych badaniach nad percepcją wzrokową i ergonomią. Harmonijne schematy kolorystyczne (w tym innowacyjny motyw kremowy) eliminują zmęczenie oczu podczas całonocnych powtórek materiału, ułatwiając zapamiętywanie kluczowych pojęć w sprzyjającym, estetycznym środowisku.
-                            </div>
+                    <!-- Accordion Item 3 -->
+                    <div>
+                        <button onclick="toggleAccordion('collapseThree')" class="w-full flex justify-between items-center p-5 text-left font-bold text-text-body hover:bg-slate-100 dark:hover:bg-slate-800/30 transition-colors cursor-pointer focus:outline-none">
+                            <span>🎨 Estetyka Poznawcza w Służbie Skupienia</span>
+                            <i class="bi bi-chevron-down transition-transform duration-200" id="collapseThree-icon"></i>
+                        </button>
+                        <div id="collapseThree" class="p-5 text-slate-500 dark:text-slate-400 text-sm leading-relaxed hidden">
+                            Zasady projektowania interfejsu Noted opierają się na zaawansowanych badaniach nad percepcją wzrokową i ergonomią. Harmonijne schematy kolorystyczne (w tym innowacyjny motyw kremowy) eliminują zmęczenie oczu podczas całonocnych powtórek materiału, ułatwiając zapamiętywanie kluczowych pojęć w sprzyjającym, estetycznym środowisku.
                         </div>
                     </div>
                 </div>
@@ -319,109 +294,101 @@
             </div>
         </div>
 
-        <!-- TAB 3: KOSZYK (DYNAMICZNY CRUD NOTATEK W BOOTSTRAPIE) -->
-        <div class="tab-pane fade" id="basket-pane" role="tabpanel" aria-labelledby="basket-tab">
+        <!-- TAB 3: KOSZYK (DYNAMICZNY CRUD NOTATEK) -->
+        <div class="tab-pane hidden" id="basket-pane">
 
             <!-- Stats Counter Row -->
-            <div class="row g-4 mb-4 text-center">
-                <div class="col-6 col-md-3">
-                    <div class="card premium-card p-3 shadow-sm">
-                        <span class="text-secondary small text-uppercase fw-bold">Wszystkie Notatki</span>
-                        <h4 class="fw-bold mt-1 mb-0 text-primary" id="stats-total">0</h4>
-                    </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-center">
+                <div class="premium-card p-4">
+                    <span class="text-slate-400 text-xs uppercase font-bold tracking-wider">Wszystkie Notatki</span>
+                    <h4 class="text-2xl font-extrabold mt-1 text-primary" id="stats-total">0</h4>
                 </div>
-                <div class="col-6 col-md-3">
-                    <div class="card premium-card p-3 shadow-sm">
-                        <span class="text-secondary small text-uppercase fw-bold">Ulubione ❤️</span>
-                        <h4 class="fw-bold mt-1 mb-0 text-danger" id="stats-favorites">0</h4>
-                    </div>
+                <div class="premium-card p-4">
+                    <span class="text-slate-400 text-xs uppercase font-bold tracking-wider">Ulubione ❤️</span>
+                    <h4 class="text-2xl font-extrabold mt-1 text-red-500" id="stats-favorites">0</h4>
                 </div>
-                <div class="col-6 col-md-3">
-                    <div class="card premium-card p-3 shadow-sm">
-                        <span class="text-secondary small text-uppercase fw-bold">W Trakcie Zakupu</span>
-                        <h4 class="fw-bold mt-1 mb-0 text-warning" id="stats-pending">0</h4>
-                    </div>
+                <div class="premium-card p-4">
+                    <span class="text-slate-400 text-xs uppercase font-bold tracking-wider">W Trakcie</span>
+                    <h4 class="text-2xl font-extrabold mt-1 text-amber-500" id="stats-pending">0</h4>
                 </div>
-                <div class="col-6 col-md-3">
-                    <div class="card premium-card p-3 shadow-sm">
-                        <span class="text-secondary small text-uppercase fw-bold">Zakupione</span>
-                        <h4 class="fw-bold mt-1 mb-0 text-success" id="stats-purchased">0</h4>
-                    </div>
+                <div class="premium-card p-4">
+                    <span class="text-slate-400 text-xs uppercase font-bold tracking-wider">Zakupione</span>
+                    <h4 class="text-2xl font-extrabold mt-1 text-emerald-500" id="stats-purchased">0</h4>
                 </div>
             </div>
 
             <!-- Main Grid Row -->
-            <div class="row g-4">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
                 <!-- Left Panel: Create Form Card -->
-                <div class="col-lg-4">
-                    <div class="card premium-card p-4 shadow-sm position-sticky" style="top: 20px; z-index: 10;">
-                        <h4 class="fw-bold mb-3 d-flex align-items-center text-body">
-                            <i class="bi bi-plus-circle-fill text-primary me-2"></i>
+                <div class="lg:col-span-4">
+                    <div class="premium-card p-6 shadow-sm sticky top-5 z-10">
+                        <h4 class="text-lg font-bold mb-3 flex items-center text-text-body">
+                            <i class="bi bi-plus-circle-fill text-primary mr-2"></i>
                             Wystaw Nową Notatkę
                         </h4>
-                        <hr class="my-3 text-secondary border-opacity-10">
+                        <div class="border-t border-border my-4"></div>
 
-                        <form id="note-form" onsubmit="handleCreateNote(event)">
-                            <div class="mb-3">
-                                <label for="form-title" class="form-label small fw-bold text-body">Tytuł Opracowania</label>
-                                <input type="text" class="form-control" id="form-title" placeholder="np. Analiza Matematyczna - Całki" required>
+                        <form id="note-form" onsubmit="handleCreateNote(event)" class="flex flex-col gap-4">
+                            <div>
+                                <label for="form-title" class="block text-xs font-bold text-text-body mb-1.5">Tytuł Opracowania</label>
+                                <input type="text" class="w-full px-3 py-2 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm placeholder-slate-400" id="form-title" placeholder="np. Analiza Matematyczna - Całki" required>
                             </div>
-                            <div class="mb-3">
-                                <label for="form-content" class="form-label small fw-bold text-body">Treść / Opis Notatek</label>
-                                <textarea class="form-control" id="form-content" rows="4" placeholder="Opisz krótko zawartość, stopień szczegółowości i liczbę stron..." required></textarea>
+                            <div>
+                                <label for="form-content" class="block text-xs font-bold text-text-body mb-1.5">Treść / Opis Notatek</label>
+                                <textarea class="w-full px-3 py-2 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm placeholder-slate-400 resize-none" id="form-content" rows="4" placeholder="Opisz krótko zawartość, stopień szczegółowości i liczbę stron..." required></textarea>
                             </div>
-                            <div class="row g-3 mb-3">
-                                <div class="col-6">
-                                    <label for="form-price" class="form-label small fw-bold text-body">Cena (PLN)</label>
-                                    <input type="number" class="form-control" id="form-price" step="0.01" min="0" placeholder="0.00" required>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="form-price" class="block text-xs font-bold text-text-body mb-1.5">Cena (PLN)</label>
+                                    <input type="number" class="w-full px-3 py-2 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm" id="form-price" step="0.01" min="0" placeholder="0.00" required>
                                 </div>
-                                <div class="col-6">
-                                    <label for="form-status" class="form-label small fw-bold text-body">Status</label>
-                                    <select class="form-select" id="form-status" required>
+                                <div>
+                                    <label for="form-status" class="block text-xs font-bold text-text-body mb-1.5">Status</label>
+                                    <select class="w-full px-3 py-2 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm" id="form-status" required>
                                         <option value="w trakcie zakupu" selected>W trakcie</option>
                                         <option value="zakupione">Zakupione</option>
                                         <option value="zwrócone">Zwrócone</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="mb-4 form-check">
-                                <input type="checkbox" class="form-check-input" id="form-favorite">
-                                <label class="form-check-label small fw-bold text-body" for="form-favorite">Dodaj do ulubionych (❤️)</label>
+                            <div class="flex items-center my-1">
+                                <input type="checkbox" class="w-4 h-4 rounded border-border text-primary focus:ring-primary" id="form-favorite">
+                                <label class="ml-2 text-sm font-bold text-text-body" for="form-favorite">Dodaj do ulubionych (❤️)</label>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100 py-2.5 fw-bold shadow d-flex align-items-center justify-content-center">
-                                <i class="bi bi-plus-lg me-2"></i> Dodaj do Menedżera
+                            <button type="submit" class="w-full py-2.5 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all mt-2 cursor-pointer flex items-center justify-center">
+                                <i class="bi bi-plus-lg mr-2"></i> Dodaj do Menedżera
                             </button>
                         </form>
                     </div>
                 </div>
 
                 <!-- Right Panel: Note cards grid list & filters -->
-                <div class="col-lg-8">
+                <div class="lg:col-span-8">
 
                     <!-- Filter Pills & Search Input Row -->
-                    <div class="card premium-card p-3 mb-4 shadow-sm">
-                        <div class="row g-3 align-items-center">
-                            <div class="col-md-5">
-                                <div class="input-group">
-                                    <span class="input-group-text bg-transparent border-end-0 text-secondary"><i class="bi bi-search"></i></span>
-                                    <input type="text" class="form-control border-start-0 ps-0" id="search-input" placeholder="Szukaj po tytule lub opisie..." oninput="renderNotes()">
+                    <div class="premium-card p-4 mb-6">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div class="w-full md:max-w-xs">
+                                <div class="flex rounded-xl shadow-sm border border-border bg-card-bg overflow-hidden focus-within:ring-2 focus-within:ring-primary/30 focus-within:border-primary transition-all">
+                                    <span class="inline-flex items-center px-3 text-slate-400 bg-transparent border-r-0"><i class="bi bi-search"></i></span>
+                                    <input type="text" class="w-full px-3 py-2 bg-transparent text-text-body border-0 focus:ring-0 focus:outline-none placeholder-slate-400 text-sm" id="search-input" placeholder="Szukaj po tytule lub opisie..." oninput="renderNotes()">
                                 </div>
                             </div>
-                            <div class="col-md-7 text-md-end">
-                                <div class="d-flex flex-wrap gap-2 justify-content-md-end" id="filter-pills-container">
-                                    <button class="btn btn-sm btn-outline-primary active px-3 py-1.5 rounded-pill" id="pill-all" onclick="setFilter('all')">Wszystkie</button>
-                                    <button class="btn btn-sm btn-outline-primary px-3 py-1.5 rounded-pill" id="pill-pending" onclick="setFilter('w trakcie zakupu')">W trakcie</button>
-                                    <button class="btn btn-sm btn-outline-primary px-3 py-1.5 rounded-pill" id="pill-purchased" onclick="setFilter('zakupione')">Zakupione</button>
-                                    <button class="btn btn-sm btn-outline-primary px-3 py-1.5 rounded-pill" id="pill-returned" onclick="setFilter('zwrócone')">Zwrócone</button>
-                                    <button class="btn btn-sm btn-outline-danger px-3 py-1.5 rounded-pill" id="pill-favorites" onclick="setFilter('favorites')">❤️ Ulubione</button>
+                            <div class="w-full md:w-auto">
+                                <div class="flex flex-wrap gap-2 justify-start md:justify-end" id="filter-pills-container">
+                                    <button class="px-3.5 py-1.5 rounded-full text-xs font-semibold border border-primary bg-primary text-white transition-colors cursor-pointer" id="pill-all" onclick="setFilter('all')">Wszystkie</button>
+                                    <button class="px-3.5 py-1.5 rounded-full text-xs font-semibold border border-border text-slate-600 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors cursor-pointer" id="pill-pending" onclick="setFilter('w trakcie zakupu')">W trakcie</button>
+                                    <button class="px-3.5 py-1.5 rounded-full text-xs font-semibold border border-border text-slate-600 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors cursor-pointer" id="pill-purchased" onclick="setFilter('zakupione')">Zakupione</button>
+                                    <button class="px-3.5 py-1.5 rounded-full text-xs font-semibold border border-border text-slate-600 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors cursor-pointer" id="pill-returned" onclick="setFilter('zwrócone')">Zwrócone</button>
+                                    <button class="px-3.5 py-1.5 rounded-full text-xs font-semibold border border-border text-red-500 hover:border-red-500 hover:bg-red-500/5 transition-colors cursor-pointer" id="pill-favorites" onclick="setFilter('favorites')">❤️ Ulubione</button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Dynamic Cards Grid List -->
-                    <div class="row row-cols-1 row-cols-md-2 g-4" id="notes-container">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="notes-container">
                         <!-- Cards populated dynamically by script -->
                     </div>
 
@@ -434,17 +401,58 @@
 
     <!-- Interactive Javascript Logic (Tabs switcher API, dynamic Reactivity, persistent CRUD, Heart trigger) -->
     <script>
-        // --- 1. GENERAL TABS UTILITY DIRECT ROUTER ---
-        function switchTabDirect(tabButtonId) {
-            const btnEl = document.getElementById(tabButtonId);
-            if (btnEl) {
-                const tabInstance = new bootstrap.Tab(btnEl);
-                tabInstance.show();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+        // --- 1. TABS SYSTEM INTERACTIVE SWAP ---
+        function showTab(tabId) {
+            // Hide all tab panes
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.classList.remove('block');
+                pane.classList.add('hidden');
+            });
+            // Show current panel
+            const targetPane = document.getElementById(tabId);
+            if (targetPane) {
+                targetPane.classList.remove('hidden');
+                targetPane.classList.add('block');
+            }
+
+            // Deactivate all tab selectors
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn bg-card-bg text-text-body border border-border px-5 py-3 rounded-xl font-bold flex items-center transition-all cursor-pointer";
+            });
+
+            // Activate current selector btn
+            const btnPrefix = tabId.split('-')[0];
+            const activeBtn = document.getElementById(btnPrefix + '-tab');
+            if (activeBtn) {
+                activeBtn.className = "tab-btn bg-primary text-white shadow-md px-5 py-3 rounded-xl font-bold flex items-center transition-all cursor-pointer";
             }
         }
 
-        // --- 2. ADVANCED FRONTEND NOTES CRUD MOTOR ---
+        function switchTabDirect(tabButtonId) {
+            const paneId = tabButtonId.replace('-tab', '-pane');
+            showTab(paneId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- 2. ACCORDION FAQ SWAP ---
+        function toggleAccordion(collapseId) {
+            const panel = document.getElementById(collapseId);
+            const icon = document.getElementById(collapseId + '-icon');
+            if (panel) {
+                const isHidden = panel.classList.contains('hidden');
+                if (isHidden) {
+                    panel.classList.remove('hidden');
+                    panel.classList.add('block');
+                    if (icon) icon.style.transform = 'rotate(180deg)';
+                } else {
+                    panel.classList.remove('block');
+                    panel.classList.add('hidden');
+                    if (icon) icon.style.transform = '';
+                }
+            }
+        }
+
+        // --- 3. ADVANCED FRONTEND NOTES CRUD MOTOR ---
         const defaultNotes = [
             {
                 id: 1,
@@ -514,7 +522,9 @@
 
             // Handle active class updates
             const pills = document.querySelectorAll('#filter-pills-container button');
-            pills.forEach(pill => pill.classList.remove('active'));
+            pills.forEach(pill => {
+                pill.className = "px-3.5 py-1.5 rounded-full text-xs font-semibold border border-border text-slate-600 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors cursor-pointer";
+            });
 
             const pillMapping = {
                 'all': 'pill-all',
@@ -525,7 +535,13 @@
             };
 
             const targetPill = document.getElementById(pillMapping[filterType]);
-            if (targetPill) targetPill.classList.add('active');
+            if (targetPill) {
+                if (filterType === 'favorites') {
+                    targetPill.className = "px-3.5 py-1.5 rounded-full text-xs font-semibold border border-red-500 bg-red-500 text-white transition-colors cursor-pointer";
+                } else {
+                    targetPill.className = "px-3.5 py-1.5 rounded-full text-xs font-semibold border border-primary bg-primary text-white transition-colors cursor-pointer";
+                }
+            }
 
             renderNotes();
         }
@@ -651,7 +667,7 @@
             // Filter logic
             const filtered = notes.filter(n => {
                 const matchesSearch = n.title.toLowerCase().includes(searchQuery) ||
-                                      n.content.toLowerCase().includes(searchQuery);
+                                       n.content.toLowerCase().includes(searchQuery);
                 if (!matchesSearch) return false;
 
                 if (activeFilter === 'all') return true;
@@ -662,11 +678,11 @@
             // Empty State handling
             if (filtered.length === 0) {
                 container.innerHTML = `
-                    <div class="col-12">
-                        <div class="empty-state shadow-sm">
-                            <i class="bi bi-journal-x display-3 text-secondary opacity-50 mb-3 d-block"></i>
-                            <h4 class="fw-bold text-body">Brak Pasujących Materiałów</h4>
-                            <p class="text-secondary small mx-auto mb-0" style="max-width: 480px;">
+                    <div class="col-span-full text-center py-12">
+                        <div class="border-2 border-dashed border-border bg-card-bg rounded-2xl p-12 max-w-md mx-auto">
+                            <i class="bi bi-journal-x text-5xl text-slate-400 mb-3 block"></i>
+                            <h4 class="text-lg font-bold text-text-body mb-1">Brak Pasujących Materiałów</h4>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm">
                                 Nie odnaleźliśmy żadnych notatek spełniających wybrane kryteria wyszukiwania. Wpisz inny tytuł lub utwórz nową notatkę w lewym panelu!
                             </p>
                         </div>
@@ -679,38 +695,38 @@
             filtered.forEach(note => {
                 const isEditing = note.id === noteEditingId;
                 const col = document.createElement('div');
-                col.className = 'col';
+                col.className = 'w-full';
                 col.setAttribute('data-card-id', note.id);
 
                 if (isEditing) {
                     // RENDERING IN EDIT MODE
                     col.innerHTML = `
-                        <div class="card premium-card p-4 shadow-sm border-primary">
-                            <div class="mb-3">
-                                <label class="form-label small fw-bold text-body">Tytuł Opracowania</label>
-                                <input type="text" class="form-control form-control-sm edit-title-field" value="${escapeHtml(note.title)}" required>
+                        <div class="premium-card p-6 shadow-sm border-primary flex flex-col gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-text-body mb-1.5">Tytuł Opracowania</label>
+                                <input type="text" class="w-full px-3 py-2 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm edit-title-field" value="${escapeHtml(note.title)}" required>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label small fw-bold text-body">Treść</label>
-                                <textarea class="form-control form-control-sm edit-content-field" rows="3" required>${escapeHtml(note.content)}</textarea>
+                            <div>
+                                <label class="block text-xs font-bold text-text-body mb-1.5">Treść</label>
+                                <textarea class="w-full px-3 py-2 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm edit-content-field" rows="3" required>${escapeHtml(note.content)}</textarea>
                             </div>
-                            <div class="row g-2 mb-3">
-                                <div class="col-6">
-                                    <label class="form-label small fw-bold text-body">Cena (PLN)</label>
-                                    <input type="number" class="form-control form-control-sm edit-price-field" step="0.01" min="0" value="${note.price}">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-text-body mb-1.5">Cena (PLN)</label>
+                                    <input type="number" class="w-full px-3 py-2 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm edit-price-field" step="0.01" min="0" value="${note.price}">
                                 </div>
-                                <div class="col-6">
-                                    <label class="form-label small fw-bold text-body">Status</label>
-                                    <select class="form-select form-select-sm edit-status-field">
+                                <div>
+                                    <label class="block text-xs font-bold text-text-body mb-1.5">Status</label>
+                                    <select class="w-full px-3 py-2 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm edit-status-field">
                                         <option value="w trakcie zakupu" ${note.status === 'w trakcie zakupu' ? 'selected' : ''}>W trakcie</option>
                                         <option value="zakupione" ${note.status === 'zakupione' ? 'selected' : ''}>Zakupione</option>
                                         <option value="zwrócone" ${note.status === 'zwrócone' ? 'selected' : ''}>Zwrócone</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-end gap-2">
-                                <button class="btn btn-sm btn-outline-secondary" onclick="cancelInlineEdit()">Anuluj</button>
-                                <button class="btn btn-sm btn-primary" onclick="saveInlineEdit(${note.id})">Zapisz</button>
+                            <div class="flex justify-end gap-2 mt-2">
+                                <button class="px-3.5 py-1.5 border border-border rounded-xl text-xs font-semibold text-text-body hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors cursor-pointer" onclick="cancelInlineEdit()">Anuluj</button>
+                                <button class="px-3.5 py-1.5 bg-primary hover:bg-primary-hover text-white rounded-xl text-xs font-bold shadow-sm transition-colors cursor-pointer" onclick="saveInlineEdit(${note.id})">Zapisz</button>
                             </div>
                         </div>
                     `;
@@ -719,51 +735,51 @@
                     let statusBadgeClass = '';
                     let statusText = '';
                     if (note.status === 'zakupione') {
-                        statusBadgeClass = 'bg-success-subtle text-success-emphasis border border-success-subtle';
+                        statusBadgeClass = 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/30';
                         statusText = 'Kupiono';
                     } else if (note.status === 'w trakcie zakupu') {
-                        statusBadgeClass = 'bg-warning-subtle text-warning-emphasis border border-warning-subtle';
+                        statusBadgeClass = 'bg-amber-100 text-amber-800 dark:bg-amber-950/30 dark:text-amber-400 border border-amber-200 dark:border-amber-900/30';
                         statusText = 'Oczekuje';
                     } else {
-                        statusBadgeClass = 'bg-danger-subtle text-danger-emphasis border border-danger-subtle';
+                        statusBadgeClass = 'bg-red-100 text-red-800 dark:bg-red-950/30 dark:text-red-400 border border-red-200 dark:border-red-900/30';
                         statusText = 'Zwrócono';
                     }
 
                     col.innerHTML = `
-                        <div class="card premium-card h-100 d-flex flex-column justify-content-between p-4 shadow-sm">
+                        <div class="premium-card h-full flex flex-col justify-between p-6 shadow-sm">
                             <div>
-                                <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
-                                    <h4 class="h5 fw-bold mb-0 text-break text-body" style="line-height: 1.4;">${escapeHtml(note.title)}</h4>
+                                <div class="flex justify-between items-start gap-2 mb-3">
+                                    <h4 class="text-base font-bold text-text-body mb-0 leading-snug">${escapeHtml(note.title)}</h4>
                                     <button class="heart-btn ${note.favorite ? 'active' : ''}" onclick="toggleFavorite(${note.id}, event)" title="${note.favorite ? 'Usuń z ulubionych' : 'Dodaj do ulubionych'}">
                                         <i class="bi bi-heart fs-5"></i>
                                         <i class="bi bi-heart-fill fs-5"></i>
                                     </button>
                                 </div>
-                                <p class="text-secondary small text-break mb-4" style="line-height: 1.5;">${escapeHtml(note.content)}</p>
+                                <p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed mb-4 text-break">${escapeHtml(note.content)}</p>
                             </div>
 
                             <div>
-                                <hr class="my-3 text-secondary border-opacity-10">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="d-flex align-items-center text-primary fw-bold">
-                                        <i class="bi bi-tag-fill me-1.5 small"></i>
+                                <div class="border-t border-border my-4"></div>
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center text-primary font-bold text-sm">
+                                        <i class="bi bi-tag-fill mr-1.5 text-xs"></i>
                                         <span>${note.price.toFixed(2)} PLN</span>
                                     </div>
 
-                                    <select class="form-select form-select-sm w-auto py-1 border-0 fw-bold rounded-pill text-uppercase fs-8 ${statusBadgeClass}"
-                                            onchange="handleQuickStatusChange(${note.id}, this.value)" style="font-size: 0.72rem; cursor: pointer; padding-right: 1.8rem;">
+                                    <select class="form-select w-auto py-1 px-3.5 border-0 font-bold rounded-full text-uppercase text-[10px] ${statusBadgeClass} focus:ring-0 focus:outline-none cursor-pointer"
+                                            onchange="handleQuickStatusChange(${note.id}, this.value)" style="cursor: pointer;">
                                         <option value="w trakcie zakupu" ${note.status === 'w trakcie zakupu' ? 'selected' : ''}>Oczekuje</option>
                                         <option value="zakupione" ${note.status === 'zakupione' ? 'selected' : ''}>Kupiono</option>
                                         <option value="zwrócone" ${note.status === 'zwrócone' ? 'selected' : ''}>Zwrócono</option>
                                     </select>
                                 </div>
 
-                                <div class="d-flex justify-content-end gap-2 mt-3 pt-2">
-                                    <button class="btn btn-sm btn-light border d-flex align-items-center text-body" onclick="startInlineEdit(${note.id})">
-                                        <i class="bi bi-pencil me-1.5"></i> Edytuj
+                                <div class="flex justify-end gap-2 mt-4 pt-2">
+                                    <button class="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-text-body px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center transition-colors border border-border cursor-pointer" onclick="startInlineEdit(${note.id})">
+                                        <i class="bi bi-pencil mr-1.5"></i> Edytuj
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger d-flex align-items-center" onclick="handleDeleteNote(${note.id})">
-                                        <i class="bi bi-trash3 me-1.5"></i> Usuń
+                                    <button class="border border-red-200 hover:border-red-500 text-red-500 hover:bg-red-500/5 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center transition-colors cursor-pointer" onclick="handleDeleteNote(${note.id})">
+                                        <i class="bi bi-trash3 mr-1.5"></i> Usuń
                                     </button>
                                 </div>
                             </div>

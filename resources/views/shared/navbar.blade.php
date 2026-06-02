@@ -1,101 +1,190 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
-    <div class="container-fluid">
-      <a class="navbar-brand fw-extrabold d-flex align-items-center" href="{{ url('/') }}">
-        <span class="fs-4 me-2">📚</span>
-        <span class="fw-bold bg-gradient-to-r from-primary to-secondary bg-clip-text">Notet</span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-                <a class="nav-link @if (request()->is('/')) active @endif" href="{{ url('/') }}">
-                    <i class="bi bi-house-door me-1"></i> Panel Główny
+<nav class="bg-card-bg border-b border-border transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <!-- Logo and main menu -->
+            <div class="flex items-center">
+                <a class="flex items-center text-xl font-extrabold text-text-body" href="{{ url('/') }}">
+                    <span class="text-2xl mr-2">📚</span>
+                    <span class="bg-gradient-to-r from-primary to-amber-500 bg-clip-text text-transparent">Notet</span>
                 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link @if (str_contains(request()->path(), 'trips')) active @endif"
-                    href="{{ route('trips') }}">
-                    <i class="bi bi-journal-text me-1"></i> Baza Notatek
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link @if (str_contains(request()->path(), 'countries')) active @endif"
-                    href="{{ route('countries') }}">
-                    <i class="bi bi-mortarboard me-1"></i> Przedmioty
-                </a>
-            </li>
-        </ul>
-        <ul id="navbar-user" class="navbar-nav mb-2 mb-lg-0 align-items-lg-center">
-            <!-- Premium Theme Switcher Dropdown -->
-            <li class="nav-item dropdown me-3">
-                <button class="btn nav-link dropdown-toggle d-flex align-items-center" id="themeDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i id="theme-icon-active" class="bi bi-circle-half me-2"></i>
-                    <span id="theme-text-active">Motyw</span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end shadow border-1" aria-labelledby="themeDropdown">
-                    <li>
-                        <button class="dropdown-item d-flex align-items-center" data-theme-value="light" onclick="setTheme('light')">
-                            <i class="bi bi-sun-fill me-2"></i> Jasny
-                        </button>
-                    </li>
-                    <li>
-                        <button class="dropdown-item d-flex align-items-center" data-theme-value="dark" onclick="setTheme('dark')">
-                            <i class="bi bi-moon-stars-fill me-2"></i> Ciemny
-                        </button>
-                    </li>
-                    <li>
-                        <button class="dropdown-item d-flex align-items-center" data-theme-value="beige" onclick="setTheme('beige')">
-                            <i class="bi bi-palette-fill me-2"></i> Kremowy
-                        </button>
-                    </li>
-                    <li>
-                        <button class="dropdown-item d-flex align-items-center" data-theme-value="system" onclick="setTheme('system')">
-                            <i class="bi bi-laptop me-2"></i> Systemowy
-                        </button>
-                    </li>
-                </ul>
-            </li>
+                <div class="hidden md:flex ml-10 items-baseline space-x-2">
+                    <a class="px-3 py-2 rounded-xl text-sm font-medium transition-colors @if (request()->is('/')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ url('/') }}">
+                        <i class="bi bi-house-door mr-1.5"></i> Panel Główny
+                    </a>
+                    <a class="px-3 py-2 rounded-xl text-sm font-medium transition-colors @if (str_contains(request()->path(), 'trips')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('trips') }}">
+                        <i class="bi bi-journal-text mr-1.5"></i> Baza Notatek
+                    </a>
+                    <a class="px-3 py-2 rounded-xl text-sm font-medium transition-colors @if (str_contains(request()->path(), 'countries')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('countries') }}">
+                        <i class="bi bi-mortarboard mr-1.5"></i> Przedmioty
+                    </a>
+                </div>
+            </div>
 
-            <!-- Authentication Links -->
-            @if (Auth::check())
-                <li class="nav-item dropdown me-2">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center fw-bold" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person-circle fs-5 me-2"></i>
-                        {{ Auth::user()->name }}
+            <!-- Right menu (User auth & Theme switcher) -->
+            <div class="hidden md:flex items-center space-x-4">
+                <!-- Theme Switcher Dropdown -->
+                <div class="relative inline-block text-left" id="theme-dropdown-container">
+                    <button class="flex items-center px-3 py-2 rounded-xl text-sm font-semibold border border-border bg-card-bg text-text-body hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors cursor-pointer" id="themeDropdownBtn" type="button">
+                        <i id="theme-icon-active" class="bi bi-circle-half mr-2"></i>
+                        <span id="theme-text-active">Motyw</span>
+                        <i class="bi bi-chevron-down ml-1.5 text-xs opacity-70"></i>
+                    </button>
+                    <div class="hidden absolute right-0 mt-2 w-48 rounded-xl shadow-lg bg-card-bg border border-border ring-1 ring-black/5 divide-y divide-border z-50 focus:outline-none" id="themeDropdownMenu">
+                        <div class="py-1">
+                            <button class="flex items-center w-full px-4 py-2 text-sm text-text-body hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors cursor-pointer" data-theme-value="light" onclick="setTheme('light')">
+                                <i class="bi bi-sun-fill mr-2.5 text-amber-500"></i> Jasny
+                            </button>
+                            <button class="flex items-center w-full px-4 py-2 text-sm text-text-body hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors cursor-pointer" data-theme-value="dark" onclick="setTheme('dark')">
+                                <i class="bi bi-moon-stars-fill mr-2.5 text-indigo-400"></i> Ciemny
+                            </button>
+                            <button class="flex items-center w-full px-4 py-2 text-sm text-text-body hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors cursor-pointer" data-theme-value="beige" onclick="setTheme('beige')">
+                                <i class="bi bi-palette-fill mr-2.5 text-[#c2593f]"></i> Kremowy
+                            </button>
+                            <button class="flex items-center w-full px-4 py-2 text-sm text-text-body hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors cursor-pointer" data-theme-value="system" onclick="setTheme('system')">
+                                <i class="bi bi-circle-half mr-2.5 opacity-70"></i> Systemowy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Authentication Links -->
+                @if (Auth::check())
+                    <div class="relative inline-block text-left" id="user-dropdown-container">
+                        <button class="flex items-center px-3 py-2 rounded-xl text-sm font-semibold border border-border bg-card-bg text-text-body hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors cursor-pointer" id="userDropdownBtn" type="button">
+                            <i class="bi bi-person-circle text-lg mr-2 text-primary"></i>
+                            <span>{{ Auth::user()->name }}</span>
+                            <i class="bi bi-chevron-down ml-1.5 text-xs opacity-70"></i>
+                        </button>
+                        <div class="hidden absolute right-0 mt-2 w-48 rounded-xl shadow-lg bg-card-bg border border-border ring-1 ring-black/5 z-50 focus:outline-none" id="userDropdownMenu">
+                            <div class="py-1.5 px-1.5">
+                                <a class="flex items-center w-full px-3 py-2 rounded-lg text-sm text-text-body hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors" href="{{ route('dashboard') }}">
+                                    <i class="bi bi-speedometer2 mr-2.5 opacity-70"></i> Panel roboczy
+                                </a>
+                                <div class="border-t border-border my-1.5"></div>
+                                <form action="{{ route('logout') }}" method="POST" class="m-0">
+                                    @csrf
+                                    <button type="submit" class="flex items-center w-full px-3 py-2 rounded-lg text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 font-bold transition-colors cursor-pointer">
+                                        <i class="bi bi-box-arrow-right mr-2.5"></i> Wyloguj się
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <a class="px-4 py-2 border border-border rounded-xl text-sm font-semibold text-text-body hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors" href="{{ route('login') }}">
+                        Zaloguj się
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end shadow border-1" aria-labelledby="navbarUserDropdown">
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="{{ route('dashboard') }}">
-                                <i class="bi bi-speedometer2 me-2"></i> Panel roboczy
-                            </a>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <form action="{{ route('logout') }}" method="POST" class="px-2">
-                                @csrf
-                                <button type="submit" class="btn btn-danger btn-sm w-100 d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-box-arrow-right me-1"></i> Wyloguj się
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </li>
-            @else
-                <li class="nav-item me-2">
-                    <a class="btn btn-outline-primary btn-sm px-3 fw-semibold" href="{{ route('login') }}">
-                        <i class="bi bi-box-arrow-in-right me-1"></i> Zaloguj się
+                    <a class="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-xl text-sm font-bold shadow-sm transition-colors" href="{{ route('register') }}">
+                        Zarejestruj się
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-primary btn-sm px-3 fw-semibold text-white" href="{{ route('register') }}">
-                        <i class="bi bi-person-plus me-1"></i> Zarejestruj się
-                    </a>
-                </li>
-            @endif
-        </ul>
-      </div>
-      @include('shared.success-toast')
+                @endif
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="-mr-2 flex md:hidden">
+                <button type="button" id="mobile-menu-btn" class="inline-flex items-center justify-center p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 focus:outline-none transition-colors" aria-controls="mobile-menu" aria-expanded="false">
+                    <span class="sr-only">Open main menu</span>
+                    <i class="bi bi-list text-2xl" id="menu-icon-closed"></i>
+                    <i class="bi bi-x text-2xl hidden" id="menu-icon-opened"></i>
+                </button>
+            </div>
+        </div>
     </div>
-  </nav>
+
+    <!-- Mobile menu, show/hide based on menu state. -->
+    <div class="hidden md:hidden border-t border-border px-4 pt-2 pb-4 space-y-1 bg-card-bg" id="mobile-menu">
+        <a class="block px-3 py-2 rounded-xl text-base font-medium @if (request()->is('/')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ url('/') }}">
+            <i class="bi bi-house-door mr-2"></i> Panel Główny
+        </a>
+        <a class="block px-3 py-2 rounded-xl text-base font-medium @if (str_contains(request()->path(), 'trips')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('trips') }}">
+            <i class="bi bi-journal-text mr-2"></i> Baza Notatek
+        </a>
+        <a class="block px-3 py-2 rounded-xl text-base font-medium @if (str_contains(request()->path(), 'countries')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('countries') }}">
+            <i class="bi bi-mortarboard mr-2"></i> Przedmioty
+        </a>
+        <div class="border-t border-border my-3"></div>
+        <div class="flex items-center justify-between px-3 py-2">
+            <span class="text-sm font-semibold text-slate-500">Zmień motyw</span>
+            <div class="flex space-x-1">
+                <button onclick="setTheme('light')" class="p-2 rounded-lg text-amber-500 hover:bg-slate-100 dark:hover:bg-slate-700/50" title="Jasny"><i class="bi bi-sun-fill"></i></button>
+                <button onclick="setTheme('dark')" class="p-2 rounded-lg text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-700/50" title="Ciemny"><i class="bi bi-moon-stars-fill"></i></button>
+                <button onclick="setTheme('beige')" class="p-2 rounded-lg text-[#c2593f] hover:bg-slate-100 dark:hover:bg-slate-700/50" title="Kremowy"><i class="bi bi-palette-fill"></i></button>
+                <button onclick="setTheme('system')" class="p-2 rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50" title="Systemowy"><i class="bi bi-circle-half"></i></button>
+            </div>
+        </div>
+        <div class="border-t border-border my-3"></div>
+        @if (Auth::check())
+            <div class="px-3 py-2">
+                <div class="text-base font-bold text-text-body mb-2"><i class="bi bi-person-circle mr-2 text-primary"></i>{{ Auth::user()->name }}</div>
+                <a class="block py-2 text-sm text-slate-600 dark:text-slate-300 hover:text-primary" href="{{ route('dashboard') }}">
+                    <i class="bi bi-speedometer2 mr-2"></i> Panel roboczy
+                </a>
+                <form action="{{ route('logout') }}" method="POST" class="mt-3">
+                    @csrf
+                    <button type="submit" class="w-full flex items-center justify-center py-2 bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 font-bold rounded-xl text-sm hover:bg-red-100/50 dark:hover:bg-red-950/40 transition-colors cursor-pointer">
+                        <i class="bi bi-box-arrow-right mr-2"></i> Wyloguj się
+                    </button>
+                </form>
+            </div>
+        @else
+            <div class="grid grid-cols-2 gap-2 pt-2 px-3">
+                <a class="flex justify-center items-center py-2.5 border border-border rounded-xl text-sm font-semibold text-text-body hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors" href="{{ route('login') }}">
+                    Zaloguj się
+                </a>
+                <a class="flex justify-center items-center py-2.5 bg-primary hover:bg-primary-hover text-white rounded-xl text-sm font-bold shadow-sm transition-colors" href="{{ route('register') }}">
+                    Zarejestruj się
+                </a>
+            </div>
+        @endif
+    </div>
+
+    <!-- Toggle scripts for menus -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme dropdown
+            const themeBtn = document.getElementById('themeDropdownBtn');
+            const themeMenu = document.getElementById('themeDropdownMenu');
+            if (themeBtn && themeMenu) {
+                themeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    themeMenu.classList.toggle('hidden');
+                    // Hide user menu if open
+                    if (userMenu) userMenu.classList.add('hidden');
+                });
+            }
+
+            // User dropdown
+            const userBtn = document.getElementById('userDropdownBtn');
+            const userMenu = document.getElementById('userDropdownMenu');
+            if (userBtn && userMenu) {
+                userBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    userMenu.classList.toggle('hidden');
+                    // Hide theme menu if open
+                    if (themeMenu) themeMenu.classList.add('hidden');
+                });
+            }
+
+            // Mobile menu toggle
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const iconClosed = document.getElementById('menu-icon-closed');
+            const iconOpened = document.getElementById('menu-icon-opened');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    iconClosed.classList.toggle('hidden');
+                    iconOpened.classList.toggle('hidden');
+                });
+            }
+
+            // Close dropdowns on body click
+            document.addEventListener('click', () => {
+                if (themeMenu) themeMenu.classList.add('hidden');
+                if (userMenu) userMenu.classList.add('hidden');
+            });
+        });
+    </script>
+
+    @include('shared.success-toast')
+</nav>
