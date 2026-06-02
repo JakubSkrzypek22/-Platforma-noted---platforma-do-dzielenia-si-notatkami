@@ -2,177 +2,18 @@
 
 @section('content')
 @php
-// Dummy data representing public notes in the database for instant gorgeous layout rendering
-$dummyNotes = [
-    [
-        'id' => 1,
-        'title' => 'Analiza Matematyczna 1 - Kompletne opracowanie teorii',
-        'author' => 'Anna Kowalska',
-        'university' => 'Politechnika Warszawska',
-        'category' => 'Matematyka',
-        'category_class' => 'bg-cyan-100 text-cyan-800 dark:bg-cyan-950/30 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-900/30',
-        'excerpt' => 'Zbiór twierdzeń, definicji i przykładowych zadań z analizy matematycznej (granice, pochodne, całki oznaczone i nieoznaczone). Zawiera rysunki pomocnicze.',
-        'likes' => 142,
-        'views' => 2480,
-        'downloads' => 921,
-        'rating' => '4.9',
-        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Anna'
-    ],
-    [
-        'id' => 2,
-        'title' => 'Anatomia Prawidłowa - Układ nerwowy i naczyniowy',
-        'author' => 'Mateusz Nowak',
-        'university' => 'Uniwersytet Jagielloński',
-        'category' => 'Medycyna',
-        'category_class' => 'bg-red-100 text-red-800 dark:bg-red-950/30 dark:text-red-400 border border-red-200 dark:border-red-900/30',
-        'excerpt' => 'Szczegółowe streszczenie struktur anatomicznych ośrodkowego i obwodowego układu nerwowego. Zawiera tabele z unerwieniem i unaczynieniem mięśni.',
-        'likes' => 289,
-        'views' => 4820,
-        'downloads' => 1845,
-        'rating' => '5.0',
-        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Mateusz'
-    ],
-    [
-        'id' => 3,
-        'title' => 'Programowanie Obiektowe w C++ i Java',
-        'author' => 'Tomasz Wiśniewski',
-        'university' => 'AGH w Krakowie',
-        'category' => 'Informatyka',
-        'category_class' => 'bg-blue-100 text-blue-800 dark:bg-blue-950/30 dark:text-blue-400 border border-blue-200 dark:border-blue-900/30',
-        'excerpt' => 'Wyjaśnienie pojęć takich jak polimorfizm, dziedziczenie, hermetyzacja, interfejsy i klasy abstrakcyjne. Przykłady kodu gotowe do kompilacji.',
-        'likes' => 94,
-        'views' => 1950,
-        'downloads' => 432,
-        'rating' => '4.7',
-        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Tomasz'
-    ],
-    [
-        'id' => 4,
-        'title' => 'Prawo Rzymskie - Skrót przedegzaminacyjny',
-        'author' => 'Karolina Wójcik',
-        'university' => 'Uniwersytet Warszawski',
-        'category' => 'Prawo',
-        'category_class' => 'bg-amber-100 text-amber-800 dark:bg-amber-950/30 dark:text-amber-400 border border-amber-200 dark:border-amber-900/30',
-        'excerpt' => 'Najważniejsze pojęcia, skróty i łacińskie paremie prawne niezbędne do zaliczenia egzaminu z prawa rzymskiego. Przejrzysty układ i schematy powiązań.',
-        'likes' => 210,
-        'views' => 3120,
-        'downloads' => 1054,
-        'rating' => '4.8',
-        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Karolina'
-    ],
-    [
-        'id' => 5,
-        'title' => 'Podstawy Makroekonomii - Wskaźniki, modele, polityka',
-        'author' => 'Kamil Lewandowski',
-        'university' => 'Szkoła Główna Handlowa',
-        'category' => 'Ekonomia',
-        'category_class' => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/30',
-        'excerpt' => 'Opracowanie modeli IS-LM, bezrobocia, inflacji oraz stóp procentowych. Prezentacja mechanizmów polityki monetarnej i fiskalnej banku centralnego.',
-        'likes' => 88,
-        'views' => 1240,
-        'downloads' => 310,
-        'rating' => '4.6',
-        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Kamil'
-    ],
-    [
-        'id' => 6,
-        'title' => 'Gramatyka opisowa języka angielskiego (Tenses & Syntax)',
-        'author' => 'Zofia Kamińska',
-        'university' => 'Uniwersytet Wrocławski',
-        'category' => 'Języki Obce',
-        'category_class' => 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700/50',
-        'excerpt' => 'Kompendium wiedzy o strukturach czasowych języka angielskiego, zdaniach warunkowych i mowie zależnej. Idealne pod kolokwium z gramatyki praktycznej.',
-        'likes' => 156,
-        'views' => 2340,
-        'downloads' => 789,
-        'rating' => '4.9',
-        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Zofia'
-    ],
-    [
-        'id' => 7,
-        'title' => 'Mechanika Kwantowa - Podstawy i formalizm matematyczny',
-        'author' => 'Piotr Zając',
-        'university' => 'Politechnika Gdańska',
-        'category' => 'Fizyka',
-        'category_class' => 'bg-violet-100 text-violet-800 dark:bg-violet-950/30 dark:text-violet-400 border border-violet-200 dark:border-violet-900/30',
-        'excerpt' => 'Omówienie równania Schrödingera, zasady nieoznaczoności Heisenberga i modelu atomu Bohra. Zawiera wyprowadzenia i przykłady zastosowań w fizyce atomowej.',
-        'likes' => 121,
-        'views' => 2100,
-        'downloads' => 678,
-        'rating' => '4.8',
-        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Piotr'
-    ],
-    [
-        'id' => 8,
-        'title' => 'Termodynamika - Zasady i procesy termodynamiczne',
-        'author' => 'Alicja Szymańska',
-        'university' => 'Politechnika Łódźka',
-        'category' => 'Fizyka',
-        'category_class' => 'bg-violet-100 text-violet-800 dark:bg-violet-950/30 dark:text-violet-400 border border-violet-200 dark:border-violet-900/30',
-        'excerpt' => 'Streszczenie czterech zasad termodynamiki, cyklu Carnota, entropii i entalpi. Tabele wzorów przydatne na egzamin z fizyki technicznej.',
-        'likes' => 76,
-        'views' => 1540,
-        'downloads' => 412,
-        'rating' => '4.5',
-        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Alicja'
-    ],
-    [
-        'id' => 9,
-        'title' => 'Chemia Organiczna - Reakcje substytucji i eliminacji',
-        'author' => 'Bartosz Krawczyk',
-        'university' => 'Politechnika Wrocławska',
-        'category' => 'Chemia',
-        'category_class' => 'bg-lime-100 text-lime-800 dark:bg-lime-950/30 dark:text-lime-400 border border-lime-200 dark:border-lime-900/30',
-        'excerpt' => 'Systematyczne omówienie reakcji SN1, SN2, E1 i E2 z mechanizmami krokowymi i przykładami substratów. Idealne do powtórki przed egzaminem.',
-        'likes' => 109,
-        'views' => 1870,
-        'downloads' => 534,
-        'rating' => '4.7',
-        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Bartosz'
-    ],
-    [
-        'id' => 10,
-        'title' => 'Stechiometria i obliczenia chemiczne - Skrypt ćwiczeniowy',
-        'author' => 'Natalia Dąbrowska',
-        'university' => 'Uniwersytet Gdański',
-        'category' => 'Chemia',
-        'category_class' => 'bg-lime-100 text-lime-800 dark:bg-lime-950/30 dark:text-lime-400 border border-lime-200 dark:border-lime-900/30',
-        'excerpt' => 'Zestaw 60 rozwiązanych zadań z chemii ogólnej i nieorganicznej: stężenia, pH, równowagi i ilości molarne. Pełne toki rozwiązań krok po kroku.',
-        'likes' => 92,
-        'views' => 1380,
-        'downloads' => 460,
-        'rating' => '4.6',
-        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Natalia'
-    ],
-    [
-        'id' => 11,
-        'title' => 'Algorytmy i Struktury Danych - Kompleksowy przewodnik',
-        'author' => 'Michał Kowalczyk',
-        'university' => 'Politechnika Poznańska',
-        'category' => 'Informatyka',
-        'category_class' => 'bg-blue-100 text-blue-800 dark:bg-blue-950/30 dark:text-blue-400 border border-blue-200 dark:border-blue-900/30',
-        'excerpt' => 'Wyczerpujące opracowanie sortowania, grafów, drzew binarnych i programowania dynamicznego. Każdy algorytm z analizą złożoności O-notation.',
-        'likes' => 318,
-        'views' => 5300,
-        'downloads' => 2100,
-        'rating' => '5.0',
-        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Michal'
-    ],
-    [
-        'id' => 12,
-        'title' => 'Algebra liniowa - Macierze, wektory i przekształcenia',
-        'author' => 'Ewa Jabłońska',
-        'university' => 'Uniwersytet im. Adama Mickiewicza',
-        'category' => 'Matematyka',
-        'category_class' => 'bg-cyan-100 text-cyan-800 dark:bg-cyan-950/30 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-900/30',
-        'excerpt' => 'Streszczenie działań na macierzach, wyznacznikach, przestrzeniach wektorowych i wartościach własnych. Zawiera schematy do typowych zadań egzaminacyjnych.',
-        'likes' => 183,
-        'views' => 3020,
-        'downloads' => 1120,
-        'rating' => '4.8',
-        'avatar' => 'https://api.dicebear.com/7.x/adventurer/svg?seed=Ewa'
-    ],
+// Mapowanie kategorii na klasy kolorystyczne odznak (Tailwind)
+$categoryClasses = [
+    'Matematyka'  => 'bg-cyan-100 text-cyan-800 dark:bg-cyan-950/30 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-900/30',
+    'Medycyna'    => 'bg-red-100 text-red-800 dark:bg-red-950/30 dark:text-red-400 border border-red-200 dark:border-red-900/30',
+    'Informatyka' => 'bg-blue-100 text-blue-800 dark:bg-blue-950/30 dark:text-blue-400 border border-blue-200 dark:border-blue-900/30',
+    'Prawo'       => 'bg-amber-100 text-amber-800 dark:bg-amber-950/30 dark:text-amber-400 border border-amber-200 dark:border-amber-900/30',
+    'Ekonomia'    => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/30',
+    'Języki Obce' => 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700/50',
+    'Fizyka'      => 'bg-violet-100 text-violet-800 dark:bg-violet-950/30 dark:text-violet-400 border border-violet-200 dark:border-violet-900/30',
+    'Chemia'      => 'bg-lime-100 text-lime-800 dark:bg-lime-950/30 dark:text-lime-400 border border-lime-200 dark:border-lime-900/30',
 ];
+$defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700/50';
 @endphp
 @include('shared.navbar')
 
@@ -423,35 +264,32 @@ $dummyNotes = [
         <!-- Tytuł Katalogu -->
         <div class="flex items-center justify-between mb-6">
             <h4 class="text-xl font-extrabold" id="catalogTitle">Najnowsze publiczne notatki</h4>
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="catalogCount">{{ count($dummyNotes) }} pozycji</span>
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="catalogCount">{{ $notes->count() }} pozycji</span>
         </div>
 
         <!-- Siatka notatek (Vinted Grid) -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="notesGrid">
             
-            @forelse ($dummyNotes as $note)
-                <div class="note-item" data-category="{{ $note['category'] }}">
+            @forelse ($notes as $note)
+                @php
+                    $catClass = $categoryClasses[$note->category] ?? $defaultCategoryClass;
+                    $avgRating = $note->reviews_avg_rating ? number_format($note->reviews_avg_rating, 1) : null;
+                @endphp
+                <div class="note-item" data-category="{{ $note->category }}">
                     <div class="catalog-card flex-grow flex flex-col justify-between">
-                        <!-- Header karty: Kategoria i Polubienie -->
+                        <!-- Header karty: Kategoria i Cena -->
                         <div class="px-5 pt-5 pb-2 flex justify-between items-center bg-transparent border-0">
-                            <span class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-semibold {{ $note['category_class'] }}">
-                                {{ $note['category'] }}
+                            <span class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-semibold {{ $catClass }}">
+                                {{ $note->category }}
                             </span>
-                            
-                            <!-- Logika Polub / Zapisz -->
-                            @auth
-                                <form action="{{ route('notes.like', $note['id']) }}" method="POST" class="m-0">
-                                    @csrf
-                                    <button type="submit" class="btn-like cursor-pointer" title="Zapisz w bibliotece">
-                                        <i class="bi bi-heart-fill"></i>
-                                    </button>
-                                </form>
-                            @endauth
-                            @guest
-                                <a href="{{ route('login') }}" class="btn-like" title="Zaloguj się, aby zapisać">
-                                    <i class="bi bi-heart"></i>
-                                </a>
-                            @endguest
+
+                            @if ($note->isFree())
+                                <span class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400">
+                                    Za darmo
+                                </span>
+                            @else
+                                <span class="text-sm font-extrabold text-text-body">{{ number_format($note->price, 2, ',', ' ') }} zł</span>
+                            @endif
                         </div>
 
                         <!-- Body karty -->
@@ -460,30 +298,33 @@ $dummyNotes = [
                             <div class="flex items-center gap-1.5 mb-2 text-amber-500 text-xs">
                                 <div class="flex items-center gap-1 font-bold">
                                     <i class="bi bi-star-fill"></i>
-                                    <span class="text-text-body">{{ $note['rating'] }}</span>
+                                    <span class="text-text-body">{{ $avgRating ?? '—' }}</span>
+                                    <span class="text-slate-400 font-normal">({{ $note->reviews_count }})</span>
                                 </div>
-                                <span class="text-slate-400">•</span>
-                                <span class="text-slate-400 truncate max-w-[200px]">{{ $note['university'] }}</span>
+                                @if ($note->university)
+                                    <span class="text-slate-400">•</span>
+                                    <span class="text-slate-400 truncate max-w-[160px]">{{ $note->university }}</span>
+                                @endif
                             </div>
 
                             <!-- Tytuł -->
                             <h5 class="text-base font-bold text-text-body mb-2.5">
-                                <a href="{{ route('notes.show', $note['id']) }}" class="hover:text-primary transition-colors">
-                                    {{ $note['title'] }}
+                                <a href="{{ route('notes.show', $note) }}" class="hover:text-primary transition-colors">
+                                    {{ $note->title }}
                                 </a>
                             </h5>
 
                             <!-- Zajawka Tekstu -->
                             <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4 flex-grow">
-                                {{ strlen($note['excerpt']) > 130 ? substr($note['excerpt'], 0, 130) . '...' : $note['excerpt'] }}
+                                {{ \Illuminate\Support\Str::limit($note->description, 130) }}
                             </p>
 
                             <!-- Autor z awatarem -->
                             <div class="flex items-center gap-2.5 border-t border-border pt-4 mt-auto">
-                                <img src="{{ $note['avatar'] }}" alt="{{ $note['author'] }}" class="author-avatar">
+                                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed={{ urlencode($note->author->name ?? 'Notet') }}" alt="{{ $note->author->name ?? '' }}" class="author-avatar">
                                 <div class="text-xs">
-                                    <span class="font-bold block text-text-body leading-none">{{ $note['author'] }}</span>
-                                    <small class="text-slate-400">Dodano niedawno</small>
+                                    <span class="font-bold block text-text-body leading-none">{{ $note->author->name ?? 'Nieznany' }}</span>
+                                    <small class="text-slate-400">{{ $note->created_at?->diffForHumans() ?? 'Dodano niedawno' }}</small>
                                 </div>
                             </div>
                         </div>
@@ -491,21 +332,14 @@ $dummyNotes = [
                         <!-- Footer karty: CTA i Statystyki -->
                         <div class="px-5 pb-5 pt-3 bg-transparent border-0">
                             <div class="flex justify-between items-center mb-4 text-slate-400 text-xs">
-                                <span><i class="bi bi-eye mr-1"></i> {{ number_format($note['views']) }} wyświetleń</span>
-                                <span><i class="bi bi-download mr-1"></i> {{ number_format($note['downloads']) }} pobrań</span>
+                                <span><i class="bi bi-eye mr-1"></i> {{ number_format($note->views) }} wyświetleń</span>
+                                <span><i class="bi bi-download mr-1"></i> {{ number_format($note->downloads) }} pobrań</span>
                             </div>
-                            
-                            <!-- Akcja pobrania/pełnej wersji -->
-                            @auth
-                                <a href="{{ route('notes.download', $note['id']) }}" class="w-full py-2.5 border border-primary hover:bg-primary hover:text-white text-primary rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer">
-                                    <i class="bi bi-cloud-arrow-down-fill text-sm"></i> Zobacz / Pobierz PDF
-                                </a>
-                            @endauth
-                            @guest
-                                <a href="{{ route('login') }}" class="w-full py-2.5 border border-primary hover:bg-primary hover:text-white text-primary rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer">
-                                    <i class="bi bi-lock-fill text-sm"></i> Zaloguj się, aby pobrać
-                                </a>
-                            @endguest
+
+                            <!-- Akcja: podgląd / szczegóły notatki -->
+                            <a href="{{ route('notes.show', $note) }}" class="w-full py-2.5 border border-primary hover:bg-primary hover:text-white text-primary rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer">
+                                <i class="bi bi-eye-fill text-sm"></i> Zobacz / Pobierz PDF
+                            </a>
                         </div>
                     </div>
                 </div>

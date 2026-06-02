@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             TripSeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
+            NoteSeeder::class,
         ]);
     }
 }

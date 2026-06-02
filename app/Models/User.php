@@ -47,4 +47,34 @@ class User extends Authenticatable
         // Wait, 'user_country' exists. Let's add countries()
         return $this->belongsToMany(Country::class);
     }
+
+    public function notes()
+    {
+        return $this->hasMany(Note::class);
+    }
+
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class);
+    }
+
+    public function reviewsReceived()
+    {
+        return $this->hasMany(Review::class, 'seller_id');
+    }
+
+    public function reviewsGiven()
+    {
+        return $this->hasMany(Review::class, 'user_id');
+    }
+
+    public function sellerRating(): float
+    {
+        return round((float) $this->reviewsReceived()->avg('rating'), 1);
+    }
+
+    public function sellerReviewsCount(): int
+    {
+        return $this->reviewsReceived()->count();
+    }
 }
