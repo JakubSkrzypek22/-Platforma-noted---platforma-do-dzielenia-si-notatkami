@@ -24,8 +24,8 @@
                     </div>
                     <div>
                         <h3 class="font-bold text-text-body text-sm">E-mail</h3>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">kontakt@noded.pl</p>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">pomoc@noded.pl</p>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">jakubskrzypek005@gmail.com</p>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">js137139@stud.ur.edu.pl</p>
                     </div>
                 </div>
 
@@ -35,7 +35,7 @@
                     </div>
                     <div>
                         <h3 class="font-bold text-text-body text-sm">Telefon</h3>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">+48 123 456 789</p>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">+48 531 179 284</p>
                         <p class="text-slate-400 text-xs">pon.–pt. 9:00–17:00</p>
                     </div>
                 </div>
@@ -46,17 +46,17 @@
                     </div>
                     <div>
                         <h3 class="font-bold text-text-body text-sm">Adres</h3>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">ul. Akademicka 12<br>00-001 Warszawa</p>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">ul. Tadeusza Rejtana 16C<br>35-310 Rzeszów</p>
                     </div>
                 </div>
 
                 <div class="bg-card-bg border border-border rounded-2xl p-5">
                     <h3 class="font-bold text-text-body text-sm mb-3">Znajdź nas</h3>
                     <div class="flex gap-3 text-xl text-slate-400">
-                        <a href="#" class="hover:text-primary transition-colors"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="hover:text-primary transition-colors"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="hover:text-primary transition-colors"><i class="bi bi-linkedin"></i></a>
-                        <a href="#" class="hover:text-primary transition-colors"><i class="bi bi-github"></i></a>
+                        <a href="https://www.facebook.com/profile.php?id=61583774580375" class="hover:text-primary transition-colors"><i class="bi bi-facebook"></i></a>
+                        <a href="https://www.instagram.com/skn.trojan.ur/" class="hover:text-primary transition-colors"><i class="bi bi-instagram"></i></a>
+                        <a href="https://www.linkedin.com/in/jakub-skrzypek-2628242b5/" class="hover:text-primary transition-colors"><i class="bi bi-linkedin"></i></a>
+                        <a href="https://github.com/JakubSkrzypek22/-Platforma-noted---platforma-do-dzielenia-si-notatkami" class="hover:text-primary transition-colors"><i class="bi bi-github"></i></a>
                     </div>
                 </div>
             </div>
