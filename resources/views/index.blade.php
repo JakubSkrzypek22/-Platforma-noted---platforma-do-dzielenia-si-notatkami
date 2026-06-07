@@ -293,11 +293,9 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
                         <div class="relative">
                             <a href="{{ route('notes.show', $note) }}" class="block">
                                 @if ($main && $main->file_type === 'image')
-                                    <img src="{{ route('notes.preview', $note) }}" alt="{{ $note->title }}" class="w-full h-44 object-cover bg-slate-100 dark:bg-slate-800">
+                                    <img src="{{ route('notes.preview', $note) }}" alt="{{ $note->title }}" class="w-full h-44 object-cover object-top bg-slate-100 dark:bg-slate-800">
                                 @else
-                                    <div class="w-full h-44 flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 text-slate-400">
-                                        <i class="bi bi-file-earmark-pdf text-5xl"></i>
-                                    </div>
+                                    <img src="{{ route('notes.cover', $note) }}" alt="{{ $note->title }}" class="w-full h-44 object-cover object-top bg-white">
                                 @endif
                             </a>
                             @auth

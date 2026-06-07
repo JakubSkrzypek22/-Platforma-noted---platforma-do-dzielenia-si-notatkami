@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Purchase;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -34,6 +35,7 @@ class DashboardController extends Controller
             'purchased' => $purchasedNotes->count(),
             'favorites' => $favoriteNotes->count(),
             'earnings'  => round($myNotes->sum(fn ($n) => $n->purchases()->sum('amount')), 2),
+            'spent'     => round(Purchase::where('user_id', $user->id)->sum('amount'), 2),
             'rating'    => $user->sellerReviewsCount() ? $user->sellerRating() : null,
         ];
 

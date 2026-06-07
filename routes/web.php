@@ -67,9 +67,10 @@ Route::middleware('auth')->group(function () {
     // Ulubione
     Route::post('/notes/{note}/favorite', [NoteController::class, 'toggleFavorite'])->name('notes.favorite');
 
-    // Proces zakupu (symulowana płatność)
+    // Proces zakupu (płatność Stripe)
     Route::get('/notes/{note}/checkout', [NoteController::class, 'checkout'])->name('notes.checkout');
     Route::post('/notes/{note}/checkout', [NoteController::class, 'processPayment'])->name('notes.payment');
+    Route::get('/notes/{note}/payment/success', [NoteController::class, 'paymentSuccess'])->whereNumber('note')->name('notes.payment.success');
 
     // Pobranie pełnej zawartości (po zakupie / autor / darmowe)
     Route::get('/notes/{note}/download', [NoteController::class, 'download'])->name('notes.download');
@@ -93,6 +94,7 @@ Route::middleware('auth')->group(function () {
 
 // Podgląd okładki (dla gościa rozmyty po stronie widoku)
 Route::get('/notes/{note}/preview', [NoteController::class, 'preview'])->name('notes.preview');
+Route::get('/notes/{note}/cover', [NoteController::class, 'cover'])->name('notes.cover');
 
 // Streamowanie konkretnego pliku (dostęp kontrolowany w kontrolerze)
 Route::get('/notes/{note}/files/{file}', [NoteController::class, 'file'])->name('notes.files.show');

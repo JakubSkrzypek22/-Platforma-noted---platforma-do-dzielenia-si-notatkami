@@ -42,7 +42,7 @@
 </div>
 
 <!-- Statystyki = zakładki (kliknij kafelek, aby przełączyć widok) -->
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 text-center" id="profileTabs">
+<div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8 text-center" id="profileTabs">
     <button type="button" onclick="showTab('mynotes')" data-tab="mynotes" class="stat-tab profile-card p-4 text-left cursor-pointer">
         <span class="text-xs uppercase font-bold tracking-wider opacity-70"><i class="bi bi-journal-text mr-1"></i> Moje notatki</span>
         <h4 class="text-2xl font-extrabold mt-1">{{ $stats['notes'] }}</h4>
@@ -56,8 +56,12 @@
         <h4 class="text-2xl font-extrabold mt-1" id="statFav">{{ $stats['favorites'] }}</h4>
     </button>
     <div class="profile-card p-4">
-        <span class="text-slate-400 text-xs uppercase font-bold tracking-wider">Zarobki (symul.)</span>
-        <h4 class="text-2xl font-extrabold mt-1 text-amber-500">{{ number_format($stats['earnings'], 2, ',', ' ') }} zł</h4>
+        <span class="text-slate-400 text-xs uppercase font-bold tracking-wider"><i class="bi bi-cash-coin mr-1"></i> Zarobki</span>
+        <h4 class="text-2xl font-extrabold mt-1 text-emerald-500">{{ number_format($stats['earnings'], 2, ',', ' ') }} zł</h4>
+    </div>
+    <div class="profile-card p-4">
+        <span class="text-slate-400 text-xs uppercase font-bold tracking-wider"><i class="bi bi-wallet2 mr-1"></i> Wydatki</span>
+        <h4 class="text-2xl font-extrabold mt-1 text-rose-500">{{ number_format($stats['spent'], 2, ',', ' ') }} zł</h4>
     </div>
 </div>
 
