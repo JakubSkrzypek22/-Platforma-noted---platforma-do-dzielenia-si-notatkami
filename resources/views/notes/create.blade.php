@@ -63,8 +63,8 @@
                     <label for="files" id="dropArea"
                            class="flex flex-col items-center justify-center gap-2 w-full p-8 border-2 border-dashed border-border rounded-xl cursor-pointer hover:border-primary hover:bg-primary/5 transition-colors text-center">
                         <i class="bi bi-cloud-arrow-up text-3xl text-primary"></i>
-                        <span class="text-sm font-semibold text-text-body">Kliknij, aby wybrać pliki</span>
-                        <span class="text-xs text-slate-400">PDF, JPG lub PNG · można zaznaczyć wiele · maks. 20 MB / plik</span>
+                        <span class="text-sm font-semibold text-text-body">Przeciągnij pliki tutaj lub kliknij, aby wybrać</span>
+                        <span class="text-xs text-slate-400">PDF, JPG lub PNG · możesz dodawać wielokrotnie · maks. 20 MB / plik</span>
                         <input type="file" name="files[]" id="files" accept=".pdf,.jpg,.jpeg,.png" class="hidden" multiple required>
                     </label>
 
@@ -85,43 +85,88 @@
 <script>
     (function () {
         const input    = document.getElementById('files');
+        const dropArea = document.getElementById('dropArea');
         const list     = document.getElementById('fileList');
         const mainIdx  = document.getElementById('mainIndex');
         const mainHint = document.getElementById('mainHint');
 
-        function iconFor(name) {
-            return name.toLowerCase().endsWith('.pdf') ? 'bi-file-earmark-pdf-fill' : 'bi-file-earmark-image-fill';
+        // Akumulator wszystkich wybranych plików — dzięki niemu kolejne wybory NIE nadpisują poprzednich.
+        const dt = new DataTransfer();
+        let mainName = null; // który plik (po nazwie) jest zdjęciem głównym
+
+        const iconFor = (name) => name.toLowerCase().endsWith('.pdf') ? 'bi-file-earmark-pdf-fill' : 'bi-file-earmark-image-fill';
+        const keyOf   = (f) => f.name + '|' + f.size;
+        const isAllowed = (f) => /\.(pdf|jpe?g|png)$/i.test(f.name);
+
+        function addFiles(fileList) {
+            const existing = new Set(Array.from(dt.files).map(keyOf));
+            Array.from(fileList).forEach(f => {
+                if (isAllowed(f) && !existing.has(keyOf(f))) {
+                    dt.items.add(f);
+                    existing.add(keyOf(f));
+                }
+            });
+            input.files = dt.files; // przepisujemy komplet do inputa, aby wysłać wszystkie pliki
+            render();
         }
 
-        input.addEventListener('change', () => {
+        function removeAt(i) {
+            dt.items.remove(i);
+            input.files = dt.files;
+            render();
+        }
+
+        function render() {
+            const files = Array.from(dt.files);
             list.innerHTML = '';
-            const files = Array.from(input.files);
 
             if (files.length === 0) {
                 mainHint.classList.add('hidden');
+                mainIdx.value = '0';
                 return;
             }
             mainHint.classList.remove('hidden');
-            mainIdx.value = '0';
+
+            if (!files.some(f => f.name === mainName)) mainName = files[0].name;
+            mainIdx.value = String(files.findIndex(f => f.name === mainName));
 
             files.forEach((file, i) => {
-                const row = document.createElement('label');
-                row.className = 'flex items-center justify-between gap-3 p-3 rounded-xl border border-border bg-card-bg cursor-pointer';
+                const row = document.createElement('div');
+                row.className = 'flex items-center justify-between gap-3 p-3 rounded-xl border border-border bg-card-bg';
                 row.innerHTML = `
-                    <span class="flex items-center gap-2 min-w-0">
+                    <label class="flex items-center gap-2 min-w-0 flex-grow cursor-pointer">
+                        <input type="radio" name="mainPick" value="${i}" ${file.name === mainName ? 'checked' : ''} class="text-primary focus:ring-primary">
                         <i class="bi ${iconFor(file.name)} text-primary text-lg"></i>
                         <span class="text-sm text-text-body truncate">${file.name}</span>
-                    </span>
-                    <span class="flex items-center gap-1.5 text-xs font-semibold text-slate-500 whitespace-nowrap">
-                        <input type="radio" name="mainPick" value="${i}" ${i === 0 ? 'checked' : ''} class="text-primary focus:ring-primary">
-                        Główny
-                    </span>`;
+                        <span class="text-[11px] text-slate-400 whitespace-nowrap">${(file.size / 1048576).toFixed(1)} MB</span>
+                    </label>
+                    <button type="button" data-remove="${i}" class="text-slate-400 hover:text-red-500 p-1.5 rounded-lg transition-colors" title="Usuń plik">
+                        <i class="bi bi-x-lg"></i>
+                    </button>`;
                 list.appendChild(row);
             });
 
-            list.querySelectorAll('input[name="mainPick"]').forEach(radio => {
-                radio.addEventListener('change', () => { mainIdx.value = radio.value; });
+            list.querySelectorAll('input[name="mainPick"]').forEach((radio, i) => {
+                radio.addEventListener('change', () => { mainName = files[i].name; mainIdx.value = String(i); });
             });
+            list.querySelectorAll('button[data-remove]').forEach(btn => {
+                btn.addEventListener('click', () => removeAt(parseInt(btn.dataset.remove, 10)));
+            });
+        }
+
+        input.addEventListener('change', () => addFiles(input.files));
+
+        // Przeciąganie i upuszczanie
+        ['dragenter', 'dragover'].forEach(ev => dropArea.addEventListener(ev, (e) => {
+            e.preventDefault(); e.stopPropagation();
+            dropArea.classList.add('border-primary', 'bg-primary/5');
+        }));
+        ['dragleave', 'drop'].forEach(ev => dropArea.addEventListener(ev, (e) => {
+            e.preventDefault(); e.stopPropagation();
+            dropArea.classList.remove('border-primary', 'bg-primary/5');
+        }));
+        dropArea.addEventListener('drop', (e) => {
+            if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files);
         });
     })();
 </script>

@@ -21,13 +21,26 @@
         border-radius: 1rem;
         overflow: hidden;
         background: #1e293b;
+        /* Stała wysokość — strony (obraz/PDF) o różnych proporcjach mieszczą się w tym samym kadrze,
+           dzięki czemu przyciski nawigacji nie przeskakują. */
+        height: 70vh;
         min-height: 420px;
+        max-height: 760px;
         display: flex;
         align-items: center;
         justify-content: center;
     }
+    .preview-stage .preview-media { width: 100%; height: 100%; }
     .preview-stage canvas,
-    .preview-stage img { max-width: 100%; height: auto; display: block; }
+    .preview-stage img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        margin: auto;
+        display: block;
+        object-fit: contain;
+    }
     .preview-locked .preview-media {
         filter: blur(14px);
         transform: scale(1.05);
@@ -61,6 +74,13 @@
             <div class="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 text-emerald-700 dark:text-emerald-400 p-4 rounded-xl text-sm flex items-center justify-between shadow-sm mb-6" id="successAlert">
                 <span><i class="bi bi-check-circle-fill mr-2"></i>{{ session('success') }}</span>
                 <button type="button" onclick="document.getElementById('successAlert').style.display='none'" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"><i class="bi bi-x-lg"></i></button>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/50 text-red-700 dark:text-red-400 p-4 rounded-xl text-sm flex items-center justify-between shadow-sm mb-6" id="errorAlert">
+                <span><i class="bi bi-exclamation-triangle-fill mr-2"></i>{{ session('error') }}</span>
+                <button type="button" onclick="document.getElementById('errorAlert').style.display='none'" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"><i class="bi bi-x-lg"></i></button>
             </div>
         @endif
 
@@ -99,9 +119,9 @@
                         <i class="bi bi-unlock-fill text-lg"></i>
                         <span>Masz pełny dostęp — przeglądaj wszystkie strony przyciskami i pobierz komplet plików obok.</span>
                     </div>
-                @else
-                    {{-- Brak dostępu: tylko okładka (strona 1), rozmyta dla gościa --}}
-                    <div class="preview-stage @guest preview-locked @endguest"
+                @elseif (auth()->check())
+                    {{-- Zalogowany, bez zakupu: prawdziwa pierwsza strona (okładka) --}}
+                    <div class="preview-stage"
                          id="coverStage"
                          data-type="{{ $main?->file_type }}"
                          data-url="{{ route('notes.preview', $note) }}">
@@ -116,29 +136,34 @@
                                 <img src="{{ route('notes.preview', $note) }}" alt="Podgląd notatki">
                             @endif
                         </div>
-
-                        @guest
-                            <div class="preview-overlay">
-                                <i class="bi bi-lock-fill text-4xl mb-3"></i>
-                                <h3 class="text-lg font-bold mb-1">Podgląd dostępny po zalogowaniu</h3>
-                                <p class="text-white/70 text-sm max-w-xs mb-5">
-                                    Zaloguj się, aby zobaczyć pierwszą stronę. Kolejne strony odblokujesz po zakupie.
-                                </p>
-                                <a href="{{ route('login') }}" class="bg-primary hover:bg-primary-hover text-white font-bold py-2.5 px-6 rounded-xl text-sm transition-colors">
-                                    <i class="bi bi-box-arrow-in-right mr-1.5"></i> Zaloguj się
-                                </a>
-                            </div>
-                        @endguest
                     </div>
 
                     <div class="mt-4 flex items-start gap-3 p-4 rounded-xl bg-slate-100/60 dark:bg-slate-800/40 border border-border text-sm text-slate-500 dark:text-slate-400">
-                        @auth
-                            <i class="bi bi-eye-fill text-primary text-lg"></i>
-                            <span>To podgląd <strong>tylko pierwszej strony</strong>. Kup notatkę, aby przeglądać i pobierać wszystkie strony.</span>
-                        @else
-                            <i class="bi bi-lock-fill text-slate-400 text-lg"></i>
-                            <span>Podgląd pierwszej strony jest rozmyty dla niezalogowanych. Zaloguj się, aby go odblokować.</span>
-                        @endauth
+                        <i class="bi bi-eye-fill text-primary text-lg"></i>
+                        <span>To podgląd <strong>tylko pierwszej strony</strong>. Kup notatkę, aby przeglądać i pobierać wszystkie strony.</span>
+                    </div>
+                @else
+                    {{-- Gość: serwerowo rozmyty obraz przykładowy — prawdziwa treść NIE jest wysyłana do przeglądarki --}}
+                    <div class="preview-stage" id="coverStage">
+                        <div class="preview-media w-full flex items-center justify-center">
+                            <img src="{{ route('notes.preview', $note) }}" alt="Zablokowany podgląd notatki">
+                        </div>
+
+                        <div class="preview-overlay">
+                            <i class="bi bi-lock-fill text-4xl mb-3"></i>
+                            <h3 class="text-lg font-bold mb-1">Podgląd dostępny po zalogowaniu</h3>
+                            <p class="text-white/70 text-sm max-w-xs mb-5">
+                                Zaloguj się, aby zobaczyć pierwszą stronę. Kolejne strony odblokujesz po zakupie.
+                            </p>
+                            <a href="{{ route('login') }}" class="bg-primary hover:bg-primary-hover text-white font-bold py-2.5 px-6 rounded-xl text-sm transition-colors">
+                                <i class="bi bi-box-arrow-in-right mr-1.5"></i> Zaloguj się
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex items-start gap-3 p-4 rounded-xl bg-slate-100/60 dark:bg-slate-800/40 border border-border text-sm text-slate-500 dark:text-slate-400">
+                        <i class="bi bi-lock-fill text-slate-400 text-lg"></i>
+                        <span>Podgląd jest rozmyty dla niezalogowanych. Zaloguj się, aby zobaczyć pierwszą stronę, a po zakupie — całość.</span>
                     </div>
                 @endif
             </div>
@@ -230,7 +255,7 @@
                            class="w-full py-3.5 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-md transition-all mb-3">
                             <i class="bi bi-cart-fill text-lg"></i> Kup i odblokuj całość
                         </a>
-                        <p class="text-center text-xs text-slate-400">Bezpieczna, symulowana płatność — bez prawdziwego obciążenia.</p>
+                        <p class="text-center text-xs text-slate-400">Bezpieczna płatność online obsługiwana przez Stripe.</p>
                     @else
                         <a href="{{ route('login') }}"
                            class="w-full py-3.5 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-md transition-all mb-3">
@@ -323,7 +348,7 @@
     </div>
 </main>
 
-@php $needsPdfJs = $hasAccess ? $note->files->contains(fn ($f) => $f->file_type === 'pdf') : $note->isPdf(); @endphp
+@php $needsPdfJs = $hasAccess ? $note->files->contains(fn ($f) => $f->file_type === 'pdf') : (auth()->check() && $note->isPdf()); @endphp
 
 @if ($needsPdfJs || $hasAccess)
 <script type="module">
