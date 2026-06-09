@@ -17,17 +17,7 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
 @endphp
 @include('shared.navbar')
 
-@if(auth()->check() && auth()->user()->isAdmin())
-    <div class="bg-red-600 text-white text-center py-2.5 px-4 text-sm font-bold z-50 relative flex flex-wrap justify-center items-center gap-4 shadow-md">
-        <span>
-            <i class="bi bi-shield-lock-fill mr-1 text-lg"></i> 
-            Tryb Administratora Aktywny (Zdjęto wszystkie blokady wizualne)
-        </span>
-        <a href="{{ route('admin.index') }}" class="bg-white text-red-600 px-4 py-1.5 rounded-full text-xs font-extrabold hover:bg-red-50 hover:scale-105 transition-all shadow-sm">
-            Przejdź do panelu
-        </a>
-    </div>
-@endif
+
 
 <style>
     /* Hero Search Section - Vinted/OLX Style */
