@@ -25,12 +25,18 @@ class NoteController extends Controller
     /**
      * Strona główna - katalog publicznych notatek.
      */
+   /**
+     * Strona główna - katalog publicznych notatek z pozycjonowaniem VIP (Boost).
+     */
     public function index()
     {
         $notes = Note::with(['author', 'files'])
+            ->select('notes.*')
+            ->join('users', 'notes.user_id', '=', 'users.id') // Łączymy z tabelą użytkowników, żeby sprawdzić rangę autora
             ->withCount('reviews')
             ->withAvg('reviews', 'rating')
-            ->latest()
+            ->orderByDesc('users.is_vip') // NAJPIERW: Autorzy z kontem VIP (Wyróżnione)
+            ->latest('notes.created_at')  // POTEM: Od najnowszych
             ->get();
 
         return view('index', compact('notes'));
@@ -45,9 +51,11 @@ class NoteController extends Controller
         $note->increment('views');
 
         $user        = $request->user();
-        $hasAccess   = $note->isAccessibleBy($user);
+        // ADMIN DOSTAJE DOSTĘP Z AUTOMATU
+        $hasAccess   = $note->isAccessibleBy($user) || ($user && $user->isAdmin());
         $isPurchased = $note->isPurchasedBy($user);
-        $isOwner     = $user && $note->user_id === $user->id;
+        // ADMIN JEST TRAKTOWANY JAK WŁAŚCICIEL
+        $isOwner     = $user && ($note->user_id === $user->id || $user->isAdmin()); 
         $isFavorited = $note->isFavoritedBy($user);
 
         $canReview = $isPurchased && ! $isOwner
@@ -293,7 +301,7 @@ class NoteController extends Controller
     public function file(Request $request, Note $note, NoteFile $file): BinaryFileResponse
     {
         abort_unless($file->note_id === $note->id, 404);
-        abort_unless($note->isAccessibleBy($request->user()), 403, 'Musisz kupić tę notatkę, aby zobaczyć kolejne strony.');
+        abort_unless($note->isAccessibleBy($request->user()) || ($request->user() && $request->user()->isAdmin()), 403, 'Musisz kupić tę notatkę, aby zobaczyć kolejne strony.');
         abort_unless(Storage::disk('local')->exists($file->path), 404);
 
         return response()->file(Storage::disk('local')->path($file->path));
@@ -305,7 +313,8 @@ class NoteController extends Controller
      */
     public function download(Request $request, Note $note)
     {
-        abort_unless($note->isAccessibleBy($request->user()), 403, 'Musisz kupić tę notatkę, aby ją pobrać.');
+        abort_unless($note->isAccessibleBy($request->user()) || ($request->user() && $request->user()->isAdmin()), 403, 'Musisz kupić tę notatkę, aby ją pobrać.');
+       
 
         $files = $note->files;
         abort_if($files->isEmpty(), 404);
@@ -406,7 +415,8 @@ class NoteController extends Controller
 
     private function authorizeOwner(Request $request, Note $note): void
     {
-        abort_unless($request->user() && $note->user_id === $request->user()->id, 403);
+        // Puszczamy, jeśli to właściciel LUB jeśli zalogowany jest admin
+        abort_unless($request->user() && ($note->user_id === $request->user()->id || $request->user()->isAdmin()), 403);
     }
 
     private function storeNoteFile(Note $note, $file, int $position, bool $isMain): NoteFile

@@ -84,7 +84,13 @@ Route::middleware('auth')->group(function () {
     Route::middleware('can:admin')->group(function () {
         Route::post('/trips', [TripController::class, 'store'])->name('trips.store');
     });
-});
+
+// ==========================================
+    // ZAKUP I OFERTA VIP
+    // ==========================================
+    Route::get('/vip', [\App\Http\Controllers\VipController::class, 'index'])->name('vip.index');
+    Route::get('/vip/checkout', [\App\Http\Controllers\VipController::class, 'checkout'])->name('vip.checkout');
+    Route::post('/vip/checkout', [\App\Http\Controllers\VipController::class, 'processPayment'])->name('vip.payment');    });
 
 
 // ==========================================
@@ -99,3 +105,22 @@ Route::get('/notes/{note}/files/{file}', [NoteController::class, 'file'])->name(
 
 // Szczegóły konkretnej notatki
 Route::get('/notes/{note}', [NoteController::class, 'show'])->whereNumber('note')->name('notes.show');
+// Strefa tylko dla Admina
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', function () {
+        return "Witaj w tajnym panelu administratora!";
+    });
+});
+// ==========================================
+// STREFA TYLKO DLA ADMINA
+// ==========================================
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Podsumowanie i lista notatek
+    Route::get('/', [\App\Http\Controllers\AdminController::class, 'index'])->name('index');
+    
+    // Zarządzanie użytkownikami
+    Route::get('/users', [\App\Http\Controllers\AdminController::class, 'users'])->name('users');
+    Route::patch('/users/{user}/vip', [\App\Http\Controllers\AdminController::class, 'toggleVip'])->name('users.vip');
+    Route::delete('/users/{user}', [\App\Http\Controllers\AdminController::class, 'destroyUser'])->name('users.destroy');
+    Route::delete('/reviews/{review}', [\App\Http\Controllers\AdminController::class, 'destroyReview'])->name('reviews.destroy');
+    });

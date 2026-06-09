@@ -169,7 +169,11 @@
                             @endauth
                         </div>
                     </div>
-
+                    @if(auth()->check() && auth()->user()->isAdmin() && !$isPurchased && $note->user_id !== auth()->id())
+    <div class="mb-4 p-3 bg-red-500/10 border border-red-500 text-red-500 rounded-xl text-sm font-bold flex items-center justify-center">
+        <i class="bi bi-shield-lock-fill mr-2 text-lg"></i> Oglądasz jako Administrator (Blokady zdjęte)
+    </div>
+@endif
                     <h1 class="text-2xl font-extrabold text-text-body leading-snug mb-2">{{ $note->title }}</h1>
 
                     @if ($note->university)
@@ -249,6 +253,11 @@
                             <div>
                                 <div class="font-bold text-text-body text-sm">{{ $note->author->name ?? 'Nieznany' }}</div>
                                 <div class="flex items-center gap-1 text-xs text-amber-500">
+                                    @if($note->author?->isVip())
+                    <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-amber-500 text-white rounded text-[10px] font-black uppercase tracking-wide">
+                        <i class="bi bi-crown-fill"></i> VIP
+                    </span>
+                @endif
                                     <i class="bi bi-star-fill"></i>
                                     <span class="text-text-body font-semibold">{{ $sellerCount ? $sellerRating : 'Nowy' }}</span>
                                     <span class="text-slate-400">{{ $sellerCount ? "· {$sellerCount} opinii" : 'sprzedawca' }}</span>
@@ -302,11 +311,23 @@
                                     <div class="text-xs text-slate-400">{{ $review->created_at->diffForHumans() }}</div>
                                 </div>
                             </div>
-                            <div class="text-amber-500 text-sm">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    <i class="bi {{ $i <= $review->rating ? 'bi-star-fill' : 'bi-star' }}"></i>
-                                @endfor
-                            </div>
+                            <div class="flex items-center gap-4">
+    <div class="text-amber-500 text-sm">
+        @for ($i = 1; $i <= 5; $i++)
+            <i class="bi {{ $i <= $review->rating ? 'bi-star-fill' : 'bi-star' }}"></i>
+        @endfor
+    </div>
+    
+    @if(auth()->check() && auth()->user()->isAdmin())
+        <form action="{{ route('admin.reviews.destroy', $review) }}" method="POST" onsubmit="return confirm('Na pewno usunąć tę opinię?');" class="m-0">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="text-red-500 hover:text-red-700 bg-red-500/10 hover:bg-red-500/20 px-2.5 py-1 rounded-lg text-xs font-bold transition-colors">
+                <i class="bi bi-trash3"></i> Usuń
+            </button>
+        </form>
+    @endif
+</div>
                         </div>
                         @if ($review->comment)
                             <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{{ $review->comment }}</p>

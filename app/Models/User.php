@@ -15,6 +15,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
+        'is_vip', // Dodane z naszej migracji dla kont premium
     ];
 
     protected $hidden = [
@@ -27,24 +28,19 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_vip' => 'boolean', // Automatycznie zamienia 0/1 z bazy na true/false
         ];
     }
+
+    // --- RELACJE ---
 
     public function role()
     {
         return $this->belongsTo(Role::class);
     }
 
-    public function isAdmin()
-    {
-        return $this->role && $this->role->name === 'admin';
-    }
-
     public function trips()
     {
-        // Assuming user_trip table or relation. There is a user_country table though.
-        // I will use user_country since it was mentioned in migrations, maybe the user wants that?
-        // Wait, 'user_country' exists. Let's add countries()
         return $this->belongsToMany(Country::class);
     }
 
@@ -82,6 +78,26 @@ class User extends Authenticatable
     {
         return $this->hasMany(Review::class, 'user_id');
     }
+
+    // --- FUNKCJE DO SPRAWDZANIA RÓL I UPRAWNIEŃ ---
+
+    public function isAdmin()
+    {
+        return $this->role && $this->role->name === 'admin';
+    }
+
+    public function isModerator()
+    {
+        // Sprawdzamy czy rola to moderator LUB admin (admin zazwyczaj może to, co moderator)
+        return $this->role && in_array($this->role->name, ['admin', 'moderator']);
+    }
+
+    public function isVip()
+    {
+        return $this->is_vip === true;
+    }
+
+    // --- STATYSTYKI SPRZEDAWCY ---
 
     public function sellerRating(): float
     {

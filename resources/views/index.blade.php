@@ -17,11 +17,24 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
 @endphp
 @include('shared.navbar')
 
+@if(auth()->check() && auth()->user()->isAdmin())
+    <div class="bg-red-600 text-white text-center py-2.5 px-4 text-sm font-bold z-50 relative flex flex-wrap justify-center items-center gap-4 shadow-md">
+        <span>
+            <i class="bi bi-shield-lock-fill mr-1 text-lg"></i> 
+            Tryb Administratora Aktywny (Zdjęto wszystkie blokady wizualne)
+        </span>
+        <a href="{{ route('admin.index') }}" class="bg-white text-red-600 px-4 py-1.5 rounded-full text-xs font-extrabold hover:bg-red-50 hover:scale-105 transition-all shadow-sm">
+            Przejdź do panelu
+        </a>
+    </div>
+@endif
+
 <style>
     /* Hero Search Section - Vinted/OLX Style */
     .search-hero {
         position: relative;
-        background: linear-gradient(135deg, rgba(15, 23, 42, 0.94) 0%, rgba(30, 41, 59, 0.86) 100%), url("{{ asset('img/carousel3.jpg') }}");
+        /* Elegancki gradient zamiast jeziora */
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 100%);
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -132,7 +145,7 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
         transform: scale(1.1);
     }
 
-    /* Serce na okładce — stały, czytelny kolor niezależnie od motywu (jasne tło) */
+    /* Serce na okładce */
     .fav-btn {
         background: rgba(255, 255, 255, 0.9);
         color: #475569;
@@ -170,11 +183,9 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
     }
 </style>
 
-<!-- SEKCJA HERO: DUŻE WYSZUKIWANIE + PŁYWAJĄCY BOKS VINTED -->
 <section class="search-hero py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <!-- Lewa kolumna: Wyszukiwarka -->
             <div class="lg:col-span-7 text-center lg:text-left">
                 <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-white leading-tight">
                     Znajdź notatki, <br>których potrzebujesz na egzamin
@@ -183,7 +194,6 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
                     Przeszukuj tysiące opracowań i wykładów udostępnionych za darmo przez studentów z całej Polski.
                 </p>
 
-                <!-- Formularz wyszukiwania -->
                 <form id="heroSearchForm" class="mb-6" onsubmit="return false;">
                     <div class="flex shadow-2xl rounded-2xl overflow-hidden bg-white dark:bg-slate-800 p-1.5 border border-white/10 max-w-2xl mx-auto lg:mx-0">
                         <span class="inline-flex items-center px-4 text-slate-400 bg-transparent">
@@ -191,14 +201,13 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
                         </span>
                         <input type="text" id="heroSearchInput" name="search"
                                class="w-full px-3 py-3 bg-transparent text-slate-900 dark:text-white border-0 focus:ring-0 focus:outline-none placeholder-slate-400 text-base"
-                               placeholder="Wpisz tytu&#322; notatki..."
+                               placeholder="Wpisz tytuł notatki..."
                                aria-label="Wyszukaj notatki"
                                autocomplete="off">
                         <button class="bg-primary hover:bg-primary-hover text-white px-6 py-3 rounded-xl font-bold shadow-md transition-colors cursor-pointer" type="submit" id="heroSearchBtn">Szukaj</button>
                     </div>
                 </form>
 
-                <!-- Popularne wyszukiwania -->
                 <div class="flex items-center gap-2 flex-wrap justify-center lg:justify-start">
                     <span class="text-white/60 text-sm">Popularne:</span>
                     <button type="button" class="quick-search-tag bg-white/10 hover:bg-primary text-white border border-white/10 text-xs font-semibold rounded-full px-3 py-1.5 transition-all hover:scale-105 cursor-pointer" data-search="Informatyka">Informatyka</button>
@@ -208,7 +217,6 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
                 </div>
             </div>
 
-            <!-- Prawa kolumna: Boks Vinted "Dodaj notatkę" -->
             <div class="lg:col-span-5 w-full max-w-md mx-auto lg:ml-auto">
                 <div class="vinted-cta-card p-6 text-text-body">
                     <h3 class="text-xl font-bold mb-3">Masz własne notatki?</h3>
@@ -216,7 +224,6 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
                         Uporządkuj pliki na dysku i udostępnij je innym! Pomóż społeczności w nauce, zbieraj punkty reputacji i buduj swoje portfolio naukowe.
                     </p>
                     
-                    <!-- Warunkowy przycisk (zalogowany / gość) -->
                     @auth
                         <a href="{{ route('notes.create') }}" class="bg-primary hover:bg-primary-hover text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer w-full text-center">
                             <i class="bi bi-plus-circle-fill text-lg"></i> Udostępnij notatki
@@ -233,11 +240,31 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
     </div>
 </section>
 
-<!-- SEKCJA KATALOGU: FILTRY KATEGORII + SIATKA NOTATEK -->
+@if(!auth()->check() || !auth()->user()->isVip())
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 -mb-4 relative z-20">
+    <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-3xl p-6 md:p-8 shadow-xl text-white flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden group">
+        <div class="absolute -right-10 -bottom-10 text-white/10 text-9xl transform rotate-12 transition-transform group-hover:scale-110 duration-500 pointer-events-none">
+            <i class="bi bi-crown-fill"></i>
+        </div>
+        
+        <div class="z-10 text-center md:text-left">
+            <h3 class="text-xl md:text-2xl font-black mb-2 flex items-center justify-center md:justify-start gap-2">
+                <i class="bi bi-crown-fill"></i> Zyskaj potężne przywileje z kontem Noted VIP!
+            </h3>
+            <p class="text-white/80 text-sm max-w-xl leading-relaxed">
+                Chcesz zarabiać więcej? Aktywuj pakiet VIP: sprzedawaj swoje notatki z <strong>prowizją 0%</strong>, pozycjonuj materiały na górze listy i zdobądź unikalną złotą odznakę.
+            </p>
+        </div>
+        
+        <a href="{{ route('vip.index') }}" class="z-10 bg-white text-amber-600 font-extrabold px-8 py-4 rounded-xl shadow-md hover:bg-amber-50 hover:scale-105 transition-all text-sm whitespace-nowrap cursor-pointer uppercase tracking-wider">
+            Dołącz do VIP <i class="bi bi-arrow-right ml-1"></i>
+        </a>
+    </div>
+</div>
+@endif
 <section class="py-12 bg-slate-100/50 dark:bg-slate-900/30">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         
-        <!-- Pasek filtrów kategorii w stylu Vinted -->
         <div class="mb-8">
             <h5 class="text-base font-bold mb-4">Przeglądaj według kategorii:</h5>
             <div class="category-scroll-container" id="categoryBar">
@@ -271,13 +298,11 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
             </div>
         </div>
 
-        <!-- Tytuł Katalogu -->
         <div class="flex items-center justify-between mb-6">
             <h4 class="text-xl font-extrabold" id="catalogTitle">Najnowsze publiczne notatki</h4>
             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300" id="catalogCount">{{ $notes->count() }} pozycji</span>
         </div>
 
-        <!-- Siatka notatek (Vinted Grid) -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="notesGrid">
             
             @forelse ($notes as $note)
@@ -289,11 +314,18 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
                 @endphp
                 <div class="note-item" data-category="{{ $note->category }}">
                     <div class="catalog-card flex-grow flex flex-col justify-between">
-                        <!-- Okładka (zdjęcie główne) -->
-                        <div class="relative">
+                        <div class="relative overflow-hidden group">
+                            
+                            @if(auth()->check() && auth()->user()->isAdmin())
+                                <div class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-extrabold px-2 py-1 rounded shadow-md z-20 flex items-center gap-1">
+                                    <i class="bi bi-unlock-fill"></i> ODBLOKOWANE
+                                </div>
+                            @endif
+
                             <a href="{{ route('notes.show', $note) }}" class="block">
                                 @if ($main && $main->file_type === 'image')
-                                    <img src="{{ route('notes.preview', $note) }}" alt="{{ $note->title }}" class="w-full h-44 object-cover bg-slate-100 dark:bg-slate-800">
+                                    <img src="{{ route('notes.preview', $note) }}" alt="{{ $note->title }}" 
+                                         class="w-full h-44 object-cover bg-slate-100 dark:bg-slate-800 transition-all duration-300 {{ (!auth()->check() || !auth()->user()->isAdmin()) ? 'blur-[6px] group-hover:blur-none' : '' }}">
                                 @else
                                     <div class="w-full h-44 flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 text-slate-400">
                                         <i class="bi bi-file-earmark-pdf text-5xl"></i>
@@ -301,20 +333,19 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
                                 @endif
                             </a>
                             @auth
-                                <form action="{{ route('notes.favorite', $note) }}" method="POST" class="fav-form absolute top-3 right-3 m-0">
+                                <form action="{{ route('notes.favorite', $note) }}" method="POST" class="fav-form absolute top-3 right-3 m-0 z-20">
                                     @csrf
                                     <button type="submit" class="btn-like fav-btn cursor-pointer {{ $favorited ? 'is-fav' : '' }}" title="{{ $favorited ? 'Usuń z ulubionych' : 'Dodaj do ulubionych' }}">
                                         <i class="bi {{ $favorited ? 'bi-heart-fill' : 'bi-heart' }}"></i>
                                     </button>
                                 </form>
                             @else
-                                <a href="{{ route('login') }}" class="btn-like fav-btn absolute top-3 right-3" title="Zaloguj się, aby zapisać">
+                                <a href="{{ route('login') }}" class="btn-like fav-btn absolute top-3 right-3 z-20" title="Zaloguj się, aby zapisać">
                                     <i class="bi bi-heart"></i>
                                 </a>
                             @endauth
                         </div>
 
-                        <!-- Header karty: Kategoria i Cena -->
                         <div class="px-5 pt-4 pb-2 flex justify-between items-center bg-transparent border-0">
                             <span class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-semibold {{ $catClass }}">
                                 {{ $note->category }}
@@ -329,9 +360,7 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
                             @endif
                         </div>
 
-                        <!-- Body karty -->
                         <div class="px-5 py-2 flex flex-col flex-grow">
-                            <!-- Ocena i Uczelnia -->
                             <div class="flex items-center gap-1.5 mb-2 text-amber-500 text-xs">
                                 <div class="flex items-center gap-1 font-bold">
                                     <i class="bi bi-star-fill"></i>
@@ -344,36 +373,36 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
                                 @endif
                             </div>
 
-                            <!-- Tytuł -->
                             <h5 class="text-base font-bold text-text-body mb-2.5">
                                 <a href="{{ route('notes.show', $note) }}" class="hover:text-primary transition-colors">
                                     {{ $note->title }}
                                 </a>
                             </h5>
 
-                            <!-- Zajawka Tekstu -->
                             <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4 flex-grow">
                                 {{ \Illuminate\Support\Str::limit($note->description, 130) }}
                             </p>
 
-                            <!-- Autor z awatarem -->
                             <div class="flex items-center gap-2.5 border-t border-border pt-4 mt-auto">
                                 <img src="https://api.dicebear.com/7.x/adventurer/svg?seed={{ urlencode($note->author->name ?? 'Noted') }}" alt="{{ $note->author->name ?? '' }}" class="author-avatar">
                                 <div class="text-xs">
-                                    <span class="font-bold block text-text-body leading-none">{{ $note->author->name ?? 'Nieznany' }}</span>
+                                    <span class="font-bold block text-text-body leading-none">
+                                        {{ $note->author->name ?? 'Nieznany' }}
+                                        @if($note->author?->isVip())
+                                            <i class="bi bi-crown-fill text-amber-500 ml-1" title="Użytkownik Premium VIP"></i>
+                                        @endif
+                                    </span>
                                     <small class="text-slate-400">{{ $note->created_at?->diffForHumans() ?? 'Dodano niedawno' }}</small>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Footer karty: CTA i Statystyki -->
                         <div class="px-5 pb-5 pt-3 bg-transparent border-0">
                             <div class="flex justify-between items-center mb-4 text-slate-400 text-xs">
                                 <span><i class="bi bi-eye mr-1"></i> {{ number_format($note->views) }} wyświetleń</span>
                                 <span><i class="bi bi-download mr-1"></i> {{ number_format($note->downloads) }} pobrań</span>
                             </div>
 
-                            <!-- Akcja: podgląd / szczegóły notatki -->
                             <a href="{{ route('notes.show', $note) }}" class="w-full py-2.5 border border-primary hover:bg-primary hover:text-white text-primary rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer">
                                 <i class="bi bi-eye-fill text-sm"></i> Zobacz / Pobierz PDF
                             </a>
@@ -388,7 +417,6 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
             @endforelse
         </div>
 
-        <!-- Stan pusty (gdy filtr nie zwraca wyników) -->
         <div class="col-span-full flex-col items-center justify-center py-16 text-center" id="catalog-empty-state">
             <div class="w-16 h-16 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center mx-auto mb-4">
                 <i class="bi bi-search text-2xl text-slate-400"></i>
