@@ -262,6 +262,7 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
     </div>
 </div>
 @endif
+
 <section class="py-12 bg-slate-100/50 dark:bg-slate-900/30">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         
@@ -327,9 +328,7 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
                                     <img src="{{ route('notes.preview', $note) }}" alt="{{ $note->title }}" 
                                          class="w-full h-44 object-cover bg-slate-100 dark:bg-slate-800 transition-all duration-300 {{ (!auth()->check() || !auth()->user()->isAdmin()) ? 'blur-[6px] group-hover:blur-none' : '' }}">
                                 @else
-                                    <div class="w-full h-44 flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 text-slate-400">
-                                        <i class="bi bi-file-earmark-pdf text-5xl"></i>
-                                    </div>
+                                    <img src="{{ route('notes.cover', $note) }}" alt="{{ $note->title }}" class="w-full h-44 object-cover object-top bg-white">
                                 @endif
                             </a>
                             @auth
@@ -444,7 +443,6 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
 
     let activeFilter = 'all';
 
-    // Core filter: combines category + title search
     function applyFilters() {
         const query = searchInput.value.trim().toLowerCase();
         let visible = 0;
@@ -465,10 +463,8 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
             }
         });
 
-        // Counter
         countEl.textContent = visible + ' ' + (visible === 1 ? 'pozycja' : 'pozycji');
 
-        // Heading
         var q = searchInput.value.trim();
         if (q !== '' && activeFilter === 'all') {
             titleEl.textContent = 'Wyniki: \u201e' + q + '\u201d';
@@ -480,11 +476,9 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
             titleEl.textContent = 'Najnowsze publiczne notatki';
         }
 
-        // Empty state
         emptyEl.classList.toggle('visible', visible === 0);
     }
 
-    // Category pills
     pills.forEach(function (pill) {
         pill.addEventListener('click', function () {
             pills.forEach(function (p) { p.classList.remove('active'); });
@@ -494,7 +488,6 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
         });
     });
 
-    // Live search while typing
     searchInput.addEventListener('input', function () {
         applyFilters();
         if (searchInput.value.length === 1) {
@@ -502,14 +495,12 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
         }
     });
 
-    // "Szukaj" button / Enter - scroll to results
     searchForm.addEventListener('submit', function (e) {
         e.preventDefault();
         applyFilters();
         catalogSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
-    // Reset button (empty state)
     resetBtn.addEventListener('click', function () {
         searchInput.value = '';
         pills.forEach(function (p) { p.classList.remove('active'); });
@@ -518,7 +509,6 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
         applyFilters();
     });
 
-    // Quick-search popular tags
     document.querySelectorAll('.quick-search-tag').forEach(function (tag) {
         tag.addEventListener('click', function () {
             var term = tag.getAttribute('data-search');
@@ -532,7 +522,6 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
 </script>
 
 <script>
-// Dodawanie/usuwanie z ulubionych bez przeładowania strony
 (function () {
     document.querySelectorAll('form.fav-form').forEach(function (form) {
         form.addEventListener('submit', async function (e) {
@@ -560,7 +549,7 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
                     btn.title = 'Dodaj do ulubionych';
                 }
             } catch (err) {
-                form.submit(); // awaryjnie: zwykłe wysłanie formularza
+                form.submit();
             } finally {
                 btn.disabled = false;
             }

@@ -95,9 +95,15 @@
 
                 <!-- Dodanie kolejnych plików -->
                 <div>
-                    <label for="new_files" class="block text-xs font-bold text-text-body mb-1.5">Dodaj kolejne pliki (opcjonalnie)</label>
-                    <input type="file" name="new_files[]" id="new_files" accept=".pdf,.jpg,.jpeg,.png" multiple
-                           class="w-full text-sm text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
+                    <label class="block text-xs font-bold text-text-body mb-1.5">Dodaj kolejne pliki (opcjonalnie)</label>
+                    <label for="new_files" id="newDropArea"
+                           class="flex flex-col items-center justify-center gap-2 w-full p-6 border-2 border-dashed border-border rounded-xl cursor-pointer hover:border-primary hover:bg-primary/5 transition-colors text-center">
+                        <i class="bi bi-cloud-arrow-up text-2xl text-primary"></i>
+                        <span class="text-sm font-semibold text-text-body">Przeciągnij pliki tutaj lub kliknij, aby wybrać</span>
+                        <span class="text-xs text-slate-400">PDF, JPG lub PNG · możesz dodawać wielokrotnie · maks. 20 MB / plik</span>
+                        <input type="file" name="new_files[]" id="new_files" accept=".pdf,.jpg,.jpeg,.png" multiple class="hidden">
+                    </label>
+                    <div id="newFileList" class="mt-3 flex flex-col gap-2"></div>
                 </div>
 
                 <button type="submit" class="w-full py-3.5 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-md transition-all">
@@ -130,6 +136,74 @@
         @method('DELETE')
     </form>
 @endforeach
+
+<script>
+    (function () {
+        const input    = document.getElementById('new_files');
+        const dropArea = document.getElementById('newDropArea');
+        const list     = document.getElementById('newFileList');
+        if (!input) return;
+
+        const dt = new DataTransfer(); // akumulacja — kolejne wybory nie nadpisują poprzednich
+        const iconFor = (name) => name.toLowerCase().endsWith('.pdf') ? 'bi-file-earmark-pdf-fill' : 'bi-file-earmark-image-fill';
+        const keyOf   = (f) => f.name + '|' + f.size;
+        const isAllowed = (f) => /\.(pdf|jpe?g|png)$/i.test(f.name);
+
+        function addFiles(fileList) {
+            const existing = new Set(Array.from(dt.files).map(keyOf));
+            Array.from(fileList).forEach(f => {
+                if (isAllowed(f) && !existing.has(keyOf(f))) {
+                    dt.items.add(f);
+                    existing.add(keyOf(f));
+                }
+            });
+            input.files = dt.files;
+            render();
+        }
+
+        function removeAt(i) {
+            dt.items.remove(i);
+            input.files = dt.files;
+            render();
+        }
+
+        function render() {
+            const files = Array.from(dt.files);
+            list.innerHTML = '';
+            files.forEach((file, i) => {
+                const row = document.createElement('div');
+                row.className = 'flex items-center justify-between gap-3 p-3 rounded-xl border border-border bg-card-bg';
+                row.innerHTML = `
+                    <span class="flex items-center gap-2 min-w-0">
+                        <i class="bi ${iconFor(file.name)} text-primary text-lg"></i>
+                        <span class="text-sm text-text-body truncate">${file.name}</span>
+                        <span class="text-[11px] text-slate-400 whitespace-nowrap">${(file.size / 1048576).toFixed(1)} MB</span>
+                    </span>
+                    <button type="button" data-remove="${i}" class="text-slate-400 hover:text-red-500 p-1.5 rounded-lg transition-colors" title="Usuń plik">
+                        <i class="bi bi-x-lg"></i>
+                    </button>`;
+                list.appendChild(row);
+            });
+            list.querySelectorAll('button[data-remove]').forEach(btn => {
+                btn.addEventListener('click', () => removeAt(parseInt(btn.dataset.remove, 10)));
+            });
+        }
+
+        input.addEventListener('change', () => addFiles(input.files));
+
+        ['dragenter', 'dragover'].forEach(ev => dropArea.addEventListener(ev, (e) => {
+            e.preventDefault(); e.stopPropagation();
+            dropArea.classList.add('border-primary', 'bg-primary/5');
+        }));
+        ['dragleave', 'drop'].forEach(ev => dropArea.addEventListener(ev, (e) => {
+            e.preventDefault(); e.stopPropagation();
+            dropArea.classList.remove('border-primary', 'bg-primary/5');
+        }));
+        dropArea.addEventListener('drop', (e) => {
+            if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files);
+        });
+    })();
+</script>
 
 @include('shared.footer')
 @endsection

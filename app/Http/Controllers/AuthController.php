@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function showLogin()
+    public function showLogin(Request $request)
     {
+        $this->stashIntended($request);
+
         return view('auth.login');
     }
 
@@ -25,7 +27,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
-            return redirect()->route('dashboard');
+            return redirect()->intended(route('dashboard'));
         }
 
         return back()->withErrors([
@@ -33,8 +35,10 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    public function showRegister()
+    public function showRegister(Request $request)
     {
+        $this->stashIntended($request);
+
         return view('auth.register');
     }
 
@@ -55,7 +59,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('dashboard');
+        return redirect()->intended(route('dashboard'));
     }
 
     public function logout(Request $request)
@@ -65,5 +69,19 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
         
         return redirect()->route('login');
+    }
+
+    /**
+     * Zapamiętuje stronę, z której użytkownik wszedł na logowanie/rejestrację,
+     * aby po zalogowaniu wrócić w to samo miejsce. Pomija strony logowania/rejestracji.
+     */
+    private function stashIntended(Request $request): void
+    {
+        $previous = url()->previous();
+        $authUrls = [route('login'), route('register')];
+
+        if ($previous && ! in_array($previous, $authUrls, true) && str_starts_with($previous, $request->getSchemeAndHttpHost())) {
+            $request->session()->put('url.intended', $previous);
+        }
     }
 }
