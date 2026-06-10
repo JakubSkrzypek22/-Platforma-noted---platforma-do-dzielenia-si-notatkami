@@ -230,7 +230,7 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
     </div>
 </section>
 
-@if(!auth()->check() || !auth()->user()->isVip())
+@if(!auth()->check() || (!auth()->user()->isVip() && !auth()->user()->isAdmin()))
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 mb-8">
     <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-3xl p-6 md:p-8 shadow-xl text-white flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden group">
         <div class="absolute -right-10 -bottom-10 text-white/10 text-9xl transform rotate-12 transition-transform group-hover:scale-110 duration-500 pointer-events-none">

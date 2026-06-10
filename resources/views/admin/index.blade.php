@@ -20,27 +20,6 @@
             </div>
         </div>
 
-        @if(!auth()->check() || !auth()->user()->isVip())
-        <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-3xl p-6 md:p-8 shadow-xl text-white flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden group mb-8">
-            <div class="absolute -right-10 -bottom-10 text-white/10 text-9xl transform rotate-12 transition-transform group-hover:scale-110 duration-500 pointer-events-none">
-                <i class="bi bi-crown-fill"></i>
-            </div>
-
-            <div class="z-10 text-center md:text-left">
-                <h3 class="text-xl md:text-2xl font-black mb-2 flex items-center justify-center md:justify-start gap-2">
-                    <i class="bi bi-crown-fill"></i> Zyskaj potężne przywileje z kontem Noted VIP!
-                </h3>
-                <p class="text-white/90 text-sm max-w-xl leading-relaxed">
-                    Chcesz zarabiać więcej? Aktywuj pakiet VIP: sprzedawaj swoje notatki z <strong>prowizją 0%</strong>, pozycjonuj swoje materiały zawsze na górze listy i zdobądź unikalną złotą odznakę.
-                </p>
-            </div>
-
-            <a href="{{ route('vip.index') }}" class="btn-vip-cta z-10">
-                Sprawdź ofertę VIP <i class="bi bi-arrow-right"></i>
-            </a>
-        </div>
-        @endif
-
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="admin-card p-6 flex items-center gap-4">
                 <div class="w-12 h-12 rounded-full stat-icon-blue flex items-center justify-center text-xl"><i class="bi bi-people-fill"></i></div>
