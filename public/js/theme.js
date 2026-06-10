@@ -8,12 +8,15 @@
 function applyThemeData(theme) {
     const htmlEl = document.querySelector("html");
     if (!htmlEl) return;
+
+    let resolvedTheme = theme;
+
     if (theme === "system") {
-        const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        htmlEl.dataset.bsTheme = isDark ? "dark" : "light";
-    } else {
-        htmlEl.dataset.bsTheme = theme;
+        resolvedTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     }
+
+    htmlEl.dataset.bsTheme = resolvedTheme;
+    htmlEl.classList.toggle("dark", resolvedTheme === "dark");
 }
 
 // Function to set and save a theme

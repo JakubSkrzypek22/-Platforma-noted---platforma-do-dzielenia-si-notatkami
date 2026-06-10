@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-bs-theme="dark"], [data-bs-theme="dark"] *));
+
 :root {
     --color-primary: #3b82f6;
     --color-primary-hover: #2563eb;
