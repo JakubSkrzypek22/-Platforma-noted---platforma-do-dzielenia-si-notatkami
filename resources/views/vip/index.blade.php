@@ -3,59 +3,46 @@
 @section('content')
 @include('shared.navbar')
 
-<main class="flex-grow py-12 theme-page flex items-center justify-center">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+<div class="max-w-4xl mx-auto px-4 py-16 text-center">
+    <div class="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-amber-100 to-orange-100 text-amber-500 rounded-full mb-8 shadow-inner border border-amber-200">
+        <i class="bi bi-crown-fill text-5xl"></i>
+    </div>
+    
+    <h1 class="text-4xl md:text-5xl font-black mb-4 text-slate-900 dark:text-white tracking-tight">Zgarnij status Noted VIP</h1>
+    <p class="text-lg text-slate-500 dark:text-slate-400 mb-12 max-w-2xl mx-auto">
+        Dołącz do elitarnego grona studentów i zyskaj potężne przywileje do nauki oraz sprzedaży swoich materiałów.
+    </p>
 
-        <div class="inline-flex items-center justify-center w-20 h-20 rounded-full text-4xl mb-6 shadow-lg"
-             style="background-color: var(--color-vip); color: #ffffff;">
-            <i class="bi bi-crown-fill"></i>
-        </div>
-
-        <h1 class="text-4xl font-black text-text-body tracking-tight mb-4">
-            Zgarnij status <span style="color: var(--color-vip);">Noted VIP</span>
-        </h1>
-        <p class="text-muted-theme text-lg max-w-xl mx-auto mb-12">
-            Dołącz do elitarnego grona studentów i zyskaj potężne przywileje do nauki oraz sprzedaży swoich materiałów.
-        </p>
-
-        <div class="vip-offer-card max-w-md mx-auto">
-            <div class="absolute top-0 right-0 text-white text-[10px] font-black uppercase px-4 py-1 rounded-bl-xl tracking-wider"
-                 style="background-color: var(--color-vip);">Premium</div>
-
-            <h3 class="text-xl font-bold text-text-body mb-2">Konto VIP (30 dni)</h3>
-            <div class="flex items-baseline justify-center gap-1 mb-6 border-b border-border pb-6">
-                <span class="text-4xl font-black text-text-body">19,99 zł</span>
-                <span class="text-subtle-theme text-sm">/ miesiąc</span>
+    <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-700 max-w-md mx-auto overflow-hidden transition-transform hover:scale-105 duration-300">
+        <div class="p-8 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+            <h2 class="text-xl font-bold text-slate-500 dark:text-slate-400 mb-2">Konto VIP (30 dni)</h2>
+            <div class="text-5xl font-black text-slate-900 dark:text-white">
+                19,99 zł <span class="text-base font-medium text-slate-400">/ miesiąc</span>
             </div>
-
-            <ul class="vip-feature-list space-y-4 mb-8">
-                <li class="flex items-center gap-3">
-                    <i class="bi bi-check-circle-fill text-lg" style="color: var(--color-vip);"></i>
-                    <span><strong>0% prowizji</strong> — zatrzymujesz cały zysk ze sprzedaży</span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <i class="bi bi-check-circle-fill text-lg" style="color: var(--color-vip);"></i>
-                    <span><strong>Pozycjonowanie Boost</strong> — Twoje notatki zawsze na samej górze</span>
-                </li>
-                <li class="flex items-center gap-3">
-                    <i class="bi bi-check-circle-fill text-lg" style="color: var(--color-vip);"></i>
-                    <span><strong>Złota odznaka korony</strong> — większe zaufanie i wyższa sprzedaż</span>
-                </li>
-            </ul>
-
-            @if(auth()->user()->isVip())
-                <button class="w-full py-3.5 rounded-xl font-bold cursor-not-allowed text-sm text-muted-theme"
-                        style="background-color: var(--color-surface-muted);" disabled>
-                    <i class="bi bi-check-circle-fill mr-1"></i> Status VIP jest już aktywny
-                </button>
-            @else
-                <a href="{{ route('vip.checkout') }}" class="btn-vip-primary">
-                    Aktywuj konto VIP
-                </a>
-            @endif
+        </div>
+        
+        <div class="p-8 text-left space-y-6">
+            <div class="flex items-start gap-4">
+                <i class="bi bi-check-circle-fill text-emerald-500 text-xl mt-0.5"></i> 
+                <p class="text-slate-700 dark:text-slate-300"><strong class="text-slate-900 dark:text-white">0% prowizji</strong> — zatrzymujesz cały zysk ze sprzedaży swoich notatek.</p>
+            </div>
+            <div class="flex items-start gap-4">
+                <i class="bi bi-check-circle-fill text-emerald-500 text-xl mt-0.5"></i> 
+                <p class="text-slate-700 dark:text-slate-300"><strong class="text-slate-900 dark:text-white">Pozycjonowanie Boost</strong> — Twoje notatki wyświetlają się zawsze na samej górze wyszukiwania.</p>
+            </div>
+            <div class="flex items-start gap-4">
+                <i class="bi bi-check-circle-fill text-emerald-500 text-xl mt-0.5"></i> 
+                <p class="text-slate-700 dark:text-slate-300"><strong class="text-slate-900 dark:text-white">Złota odznaka korony</strong> — budujesz większe zaufanie u kupujących i zwiększasz sprzedaż.</p>
+            </div>
+        </div>
+        
+        <div class="p-8 pt-0">
+            <a href="{{ route('vip.checkout') }}" class="block w-full text-center bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-black py-4 rounded-xl transition-all shadow-md hover:shadow-lg uppercase tracking-wider text-sm">
+                Aktywuj konto VIP
+            </a>
         </div>
     </div>
-</main>
+</div>
 
 @include('shared.footer')
 @endsection
