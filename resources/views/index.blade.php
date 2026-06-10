@@ -246,12 +246,50 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
             </p>
         </div>
 
-        <a href="{{ route('vip.index') }}" class="btn-vip-cta z-10 shrink-0">
-            Dołącz do VIP <i class="bi bi-arrow-right"></i>
+        <a href="{{ route('vip.index') }}" class="vip-cta z-10 shrink-0 rounded-full px-5 py-3 shadow-sm relative overflow-hidden isolate transition-all duration-300 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/60">
+            <span class="vip-cta__sheen"></span>
+            <span class="relative z-10">Dołącz do VIP <i class="bi bi-arrow-right"></i></span>
         </a>
     </div>
 </section>
 @endif
+
+<style>
+    .vip-cta {
+        border: 1px solid rgba(255, 255, 255, 0.45);
+        background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    .vip-cta__sheen {
+        position: absolute;
+        inset: -1px;
+        border-radius: 9999px;
+        pointer-events: none;
+        opacity: 0;
+        background: linear-gradient(120deg,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.35) 25%,
+            rgba(255,255,255,0.9) 45%,
+            rgba(255,255,255,0.35) 65%,
+            rgba(255,255,255,0) 100%);
+        transform: translateX(-120%) skewX(-18deg);
+        transition: opacity 0.25s ease;
+        filter: blur(1px);
+    }
+
+    .vip-cta:hover .vip-cta__sheen,
+    .vip-cta:focus-visible .vip-cta__sheen {
+        opacity: 1;
+        animation: vipSheen 1.1s ease-in-out;
+    }
+
+    @keyframes vipSheen {
+        0%   { transform: translateX(-140%) skewX(-18deg); }
+        45%  { transform: translateX(0%) skewX(-18deg); }
+        100% { transform: translateX(140%) skewX(-18deg); }
+    }
+</style>
 
 <section class="py-12 theme-page">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
