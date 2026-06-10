@@ -191,7 +191,7 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
                         </span>
                         <input type="text" id="heroSearchInput" name="search"
                                class="w-full px-3 py-3 bg-transparent text-slate-900 dark:text-white border-0 focus:ring-0 focus:outline-none placeholder-slate-400 text-base"
-                               placeholder="Wpisz tytuł notatki..."
+                               placeholder="Wpisz frazy oddzielone przecinkiem, np. matematyka, uniwersytet"
                                aria-label="Wyszukaj notatki"
                                autocomplete="off">
                         <button class="bg-primary hover:bg-primary-hover text-white px-6 py-3 rounded-xl font-bold shadow-md transition-colors cursor-pointer" type="submit" id="heroSearchBtn">Szukaj</button>
@@ -358,7 +358,7 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
                                 </div>
                                 @if ($note->university)
                                     <span class="text-slate-400">•</span>
-                                    <span class="text-slate-400 truncate max-w-[160px]">{{ $note->university }}</span>
+                                    <span class="text-slate-400 truncate max-w-[160px]" data-note-university="{{ $note->university }}">{{ $note->university }}</span>
                                 @endif
                             </div>
 
@@ -435,17 +435,29 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
 
     function applyFilters() {
         const query = searchInput.value.trim().toLowerCase();
+        const terms = query
+            .split(',')
+            .map(function (term) { return term.trim().toLowerCase(); })
+            .filter(Boolean);
         let visible = 0;
 
         cards.forEach(function (card) {
-            const cat       = card.getAttribute('data-category');
+            const cat       = card.getAttribute('data-category') || '';
             const titleEl2  = card.querySelector('h5 a');
             const descEl    = card.querySelector('p');
+            const uniEl     = card.querySelector('[data-note-university]');
             const title     = titleEl2 ? titleEl2.textContent.trim().toLowerCase() : '';
             const description = descEl ? descEl.textContent.trim().toLowerCase() : '';
+            const university = uniEl ? uniEl.getAttribute('data-note-university').toLowerCase() : '';
+            const categoryName = cat.toLowerCase();
 
             const categoryMatch = (activeFilter === 'all' || cat === activeFilter);
-            const searchMatch   = (query === '' || title.includes(query) || description.includes(query) || cat.toLowerCase().includes(query));
+            const searchMatch = (terms.length === 0) || terms.every(function (term) {
+                return title.includes(term)
+                    || description.includes(term)
+                    || university.includes(term)
+                    || categoryName.includes(term);
+            });
 
             if (categoryMatch && searchMatch) {
                 card.classList.remove('hidden-card');
