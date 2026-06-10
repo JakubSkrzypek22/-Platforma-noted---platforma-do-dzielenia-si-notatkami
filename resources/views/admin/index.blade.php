@@ -106,14 +106,14 @@
                         
                         <td class="p-4 pr-6 text-right">
                             <div class="flex items-center justify-end gap-2 opacity-80 group-hover:opacity-100 transition-opacity">
-                                <a href="{{ route('notes.show', $note) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg text-xs font-bold transition-colors">
+                                <a href="{{ route('notes.show', $note) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-800/40 text-blue-600 dark:text-blue-300 rounded-lg text-xs font-bold transition-colors">
                                     <i class="bi bi-eye-fill"></i> Podgląd
                                 </a>
                                 
                                 <form action="{{ route('notes.destroy', $note) }}" method="POST" class="m-0" onsubmit="return confirm('Czy na pewno chcesz bezpowrotnie usunąć tę notatkę?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="inline-flex items-center justify-center w-8 h-8 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors" title="Usuń notatkę">
+                                    <button type="submit" class="inline-flex items-center justify-center w-8 h-8 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-800/40 text-red-600 dark:text-red-300 rounded-lg transition-colors" title="Usuń notatkę">
                                         <i class="bi bi-trash3-fill"></i>
                                     </button>
                                 </form>
