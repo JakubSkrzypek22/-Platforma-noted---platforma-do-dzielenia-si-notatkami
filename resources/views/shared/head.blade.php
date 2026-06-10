@@ -7,6 +7,12 @@
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
+    {{-- Driver.js — biblioteka do podświetlania elementów (samouczek) --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css">
+
+    {{-- Chat Help Widget --}}
+    <link rel="stylesheet" href="{{ asset('css/chat-widget.css') }}">
+
     <script src="{{ asset('js/theme.js') }}"></script>
     <script defer src="{{ asset('js/toast.js') }}"></script>
 </head>

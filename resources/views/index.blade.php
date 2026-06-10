@@ -215,12 +215,12 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
                     </p>
                     
                     @auth
-                        <a href="{{ route('notes.create') }}" class="bg-primary hover:bg-primary-hover text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer w-full text-center">
+                        <a id="btn-share-notes" href="{{ route('notes.create') }}" class="bg-primary hover:bg-primary-hover text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer w-full text-center">
                             <i class="bi bi-plus-circle-fill text-lg"></i> Udostępnij notatki
                         </a>
                     @endauth
                     @guest
-                        <a href="{{ route('login') }}" class="bg-primary hover:bg-primary-hover text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer w-full text-center">
+                        <a id="btn-share-notes" href="{{ route('login') }}" class="bg-primary hover:bg-primary-hover text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer w-full text-center">
                             <i class="bi bi-plus-circle-fill text-lg"></i> Udostępnij notatki
                         </a>
                     @endguest

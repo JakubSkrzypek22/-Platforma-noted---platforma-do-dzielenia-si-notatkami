@@ -13,5 +13,12 @@
 @endif
 <body class="flex flex-col min-h-screen bg-bg-body text-text-body font-sans antialiased">
     @yield('content')
+
+    {{-- Driver.js + Chat Help Widget — tylko dla zalogowanych użytkowników --}}
+    @auth
+        <script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.iife.js"></script>
+        <script defer src="{{ asset('js/chat-widget.js') }}"></script>
+    @endauth
 </body>
 </html>
+
