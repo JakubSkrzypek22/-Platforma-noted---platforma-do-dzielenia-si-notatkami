@@ -53,8 +53,16 @@ class NoteController extends Controller
         $hasAccess   = $note->isAccessibleBy($user) || ($user && $user->isAdmin());
         $isPurchased = $note->isPurchasedBy($user);
         // ADMIN JEST TRAKTOWANY JAK WŁAŚCICIEL
-        $isOwner     = $user && ($note->user_id === $user->id || $user->isAdmin()); 
+        $isOwner     = $user && ($note->user_id === $user->id || $user->isAdmin());
         $isFavorited = $note->isFavoritedBy($user);
+
+        // Wyświetlenie: raz na sesję, bez liczenia własnych podglądów autora
+        $seen = $request->session()->get('viewed_notes', []);
+        if (! $isOwner && ! in_array($note->id, $seen, true)) {
+            $note->increment('views');
+            $seen[] = $note->id;
+            $request->session()->put('viewed_notes', $seen);
+        }
 
         $canReview = $isPurchased && ! $isOwner
             && ! $note->reviews()->where('user_id', $user->id)->exists();

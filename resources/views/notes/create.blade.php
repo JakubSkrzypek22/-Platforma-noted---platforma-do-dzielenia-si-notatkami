@@ -45,10 +45,10 @@
                         </select>
                     </div>
                     <div>
-                        <label for="university" class="block text-xs font-bold text-text-body mb-1.5">Uczelnia (opcjonalnie)</label>
+                        <label for="university" class="block text-xs font-bold text-text-body mb-1.5">Uczelnia</label>
                         <input type="text" name="university" id="university" value="{{ old('university') }}"
                                class="w-full px-3.5 py-2.5 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm"
-                               placeholder="np. Politechnika Warszawska">
+                               placeholder="np. Uniwersytet Rzeszowski">
                     </div>
                 </div>
 
