@@ -440,10 +440,12 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
         cards.forEach(function (card) {
             const cat       = card.getAttribute('data-category');
             const titleEl2  = card.querySelector('h5 a');
+            const descEl    = card.querySelector('p');
             const title     = titleEl2 ? titleEl2.textContent.trim().toLowerCase() : '';
+            const description = descEl ? descEl.textContent.trim().toLowerCase() : '';
 
             const categoryMatch = (activeFilter === 'all' || cat === activeFilter);
-            const searchMatch   = (query === '' || title.includes(query) || cat.toLowerCase().includes(query));
+            const searchMatch   = (query === '' || title.includes(query) || description.includes(query) || cat.toLowerCase().includes(query));
 
             if (categoryMatch && searchMatch) {
                 card.classList.remove('hidden-card');
