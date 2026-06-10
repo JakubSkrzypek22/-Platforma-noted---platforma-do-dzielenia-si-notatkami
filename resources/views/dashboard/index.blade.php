@@ -27,13 +27,25 @@
     <div class="flex flex-col sm:flex-row sm:items-center gap-5">
         <img src="https://api.dicebear.com/7.x/adventurer/svg?seed={{ urlencode($user->name) }}" alt="" class="w-20 h-20 rounded-full border-4 border-white/30 bg-white/10">
         <div class="flex-grow">
-            <h1 class="text-2xl font-extrabold">{{ $user->name }}</h1>
+            <h1 class="text-2xl font-extrabold flex items-center gap-2 flex-wrap">
+                {{ $user->name }}
+                @if ($user->isVip())
+                    <span class="inline-flex items-center gap-1 bg-amber-400 text-amber-950 text-xs font-black uppercase tracking-wider px-2.5 py-1 rounded-full shadow">
+                        <i class="bi bi-crown-fill"></i> VIP
+                    </span>
+                @endif
+            </h1>
             <p class="text-white/70 text-sm">{{ $user->email }}</p>
             <div class="flex items-center gap-2 mt-2 text-sm">
                 <i class="bi bi-star-fill text-amber-300"></i>
                 <span class="font-bold">{{ $stats['rating'] ?? 'Brak ocen' }}</span>
                 @if ($stats['rating'])<span class="text-white/60">jako sprzedawca</span>@endif
             </div>
+            @if (! $user->isVip())
+                <a href="{{ route('vip.index') }}" class="inline-flex items-center gap-1.5 mt-3 bg-white/15 hover:bg-white/25 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-colors">
+                    <i class="bi bi-crown-fill text-amber-300"></i> Zdobądź status VIP
+                </a>
+            @endif
         </div>
         <a href="{{ route('notes.create') }}" class="bg-white text-primary font-bold px-5 py-2.5 rounded-xl text-sm flex items-center gap-2 shadow-md self-start hover:bg-slate-100 transition-all">
             <i class="bi bi-plus-circle-fill"></i> Wystaw notatkę

@@ -231,29 +231,29 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
 </section>
 
 @if(!auth()->check() || !auth()->user()->isVip())
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 -mb-4 relative z-20">
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 mb-8">
     <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-3xl p-6 md:p-8 shadow-xl text-white flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden group">
         <div class="absolute -right-10 -bottom-10 text-white/10 text-9xl transform rotate-12 transition-transform group-hover:scale-110 duration-500 pointer-events-none">
             <i class="bi bi-crown-fill"></i>
         </div>
-        
+
         <div class="z-10 text-center md:text-left">
             <h3 class="text-xl md:text-2xl font-black mb-2 flex items-center justify-center md:justify-start gap-2">
                 <i class="bi bi-crown-fill"></i> Zyskaj potężne przywileje z kontem Noted VIP!
             </h3>
-            <p class="text-white/80 text-sm max-w-xl leading-relaxed">
+            <p class="text-white/90 text-sm max-w-xl leading-relaxed">
                 Chcesz zarabiać więcej? Aktywuj pakiet VIP: sprzedawaj swoje notatki z <strong>prowizją 0%</strong>, pozycjonuj materiały na górze listy i zdobądź unikalną złotą odznakę.
             </p>
         </div>
-        
-        <a href="{{ route('vip.index') }}" class="z-10 bg-white text-amber-600 font-extrabold px-8 py-4 rounded-xl shadow-md hover:bg-amber-50 hover:scale-105 transition-all text-sm whitespace-nowrap cursor-pointer uppercase tracking-wider">
-            Dołącz do VIP <i class="bi bi-arrow-right ml-1"></i>
+
+        <a href="{{ route('vip.index') }}" class="btn-vip-cta z-10 shrink-0">
+            Dołącz do VIP <i class="bi bi-arrow-right"></i>
         </a>
     </div>
-</div>
+</section>
 @endif
 
-<section class="py-12 bg-slate-100/50 dark:bg-slate-900/30">
+<section class="py-12 theme-page">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         
         <div class="mb-8">

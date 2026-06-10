@@ -91,7 +91,9 @@ Route::middleware('auth')->group(function () {
     // ==========================================
     Route::get('/vip', [\App\Http\Controllers\VipController::class, 'index'])->name('vip.index');
     Route::get('/vip/checkout', [\App\Http\Controllers\VipController::class, 'checkout'])->name('vip.checkout');
-    Route::post('/vip/checkout', [\App\Http\Controllers\VipController::class, 'processPayment'])->name('vip.payment');    });
+    Route::post('/vip/checkout', [\App\Http\Controllers\VipController::class, 'processPayment'])->name('vip.payment');
+    Route::get('/vip/payment/success', [\App\Http\Controllers\VipController::class, 'paymentSuccess'])->name('vip.payment.success');
+});
 
 
 // ==========================================

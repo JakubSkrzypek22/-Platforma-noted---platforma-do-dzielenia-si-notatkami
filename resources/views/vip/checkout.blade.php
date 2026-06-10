@@ -3,51 +3,76 @@
 @section('content')
 @include('shared.navbar')
 
-<main class="flex-grow py-12 bg-slate-50 dark:bg-slate-900">
+<main class="flex-grow py-12 theme-page">
     <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div class="bg-card-bg border border-border rounded-2xl p-6 shadow-sm">
-            <h2 class="text-xl font-black text-text-body mb-2 flex items-center gap-2">
-                <i class="bi bi-credit-card text-amber-500"></i> Aktywacja pakietu VIP
+
+        <a href="{{ route('vip.index') }}" class="inline-flex items-center gap-1.5 text-sm text-muted-theme hover:opacity-80 mb-6 transition-opacity">
+            <i class="bi bi-arrow-left"></i> Wróć do oferty VIP
+        </a>
+
+        @if (session('error'))
+            <div class="mb-6 p-4 rounded-xl text-sm font-bold alert-error">
+                <i class="bi bi-exclamation-triangle-fill mr-2"></i>{{ session('error') }}
+            </div>
+        @endif
+
+        <div class="admin-card p-6 sm:p-8">
+            <h2 class="text-xl font-black text-text-body mb-1 flex items-center gap-2">
+                <i class="bi bi-crown-fill" style="color: var(--color-vip);"></i> Aktywacja pakietu VIP
             </h2>
-            <p class="text-sm text-slate-400 mb-6">Symulacja bezpiecznej płatności za subskrypcję Premium (19,99 zł).</p>
+            <p class="text-sm text-muted-theme mb-6">Bezpieczna płatność online obsługiwana przez Stripe.</p>
 
-            @if ($errors->any())
-                <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-xl text-sm font-bold">
-                    <ul class="list-disc pl-5">@foreach ($errors->all() as $error) <li>{{ $error }}</li> @endforeach</ul>
+            <div class="flex items-start gap-4 p-4 rounded-xl border border-border mb-6"
+                 style="background-color: var(--color-surface-muted);">
+                <div class="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0"
+                     style="background-color: rgba(99, 91, 255, 0.15); color: #635bff;">
+                    <i class="bi bi-stripe text-2xl"></i>
                 </div>
-            @endif
+                <p class="text-sm text-muted-theme leading-relaxed">
+                    Po kliknięciu przycisku zostaniesz przekierowany na zabezpieczoną stronę Stripe.
+                    Status VIP zostanie aktywowany natychmiast po opłaceniu.
+                </p>
+            </div>
 
-            <form action="{{ route('vip.payment') }}" method="POST">
+            <div class="border-t border-border pt-4 space-y-2 text-sm mb-6">
+                <div class="flex justify-between text-muted-theme">
+                    <span>Konto VIP (30 dni)</span>
+                    <span>{{ number_format($price, 2, ',', ' ') }} zł</span>
+                </div>
+                <div class="flex justify-between font-extrabold text-text-body text-base border-t border-border pt-3 mt-2">
+                    <span>Do zapłaty</span>
+                    <span>{{ number_format($price, 2, ',', ' ') }} zł</span>
+                </div>
+            </div>
+
+            <form action="{{ route('vip.payment') }}" method="POST" id="vipPayForm">
                 @csrf
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Właściciel karty</label>
-                        <input type="text" name="card_name" value="{{ old('card_name') }}" class="w-full px-3 py-2.5 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 focus:outline-none text-sm placeholder-slate-400" placeholder="Jan Kowalski">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Numer karty</label>
-                        <input type="text" name="card_number" value="{{ old('card_number') }}" class="w-full px-3 py-2.5 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 focus:outline-none text-sm placeholder-slate-400" placeholder="4000 1234 5678 9010">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Ważność (MM/RR)</label>
-                            <input type="text" name="card_expiry" value="{{ old('card_expiry') }}" class="w-full px-3 py-2.5 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 focus:outline-none text-sm placeholder-slate-400" placeholder="12/28">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Kod CVC</label>
-                            <input type="text" name="card_cvc" value="{{ old('card_cvc') }}" class="w-full px-3 py-2.5 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 focus:outline-none text-sm placeholder-slate-400" placeholder="123">
-                        </div>
-                    </div>
-                </div>
-
-                <button type="submit" class="w-full mt-6 py-3.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all text-sm">
-                    <i class="bi bi-shield-check text-base"></i> Zapłać 19,99 zł i aktywuj VIP
+                <button type="submit" id="vipPayBtn" class="btn-vip-primary flex items-center justify-center gap-2">
+                    <i class="bi bi-lock-fill"></i>
+                    <span id="vipPayBtnText">Zapłać {{ number_format($price, 2, ',', ' ') }} zł i aktywuj VIP</span>
                 </button>
             </form>
+
+            <p class="text-center text-[11px] text-subtle-theme mt-3">
+                <i class="bi bi-shield-check"></i> Płatność obsługuje Stripe. Dane Twojej karty nie trafiają na nasz serwer.
+            </p>
         </div>
     </div>
 </main>
+
+<script>
+    (function () {
+        const form = document.getElementById('vipPayForm');
+        const btn  = document.getElementById('vipPayBtn');
+        const txt  = document.getElementById('vipPayBtnText');
+        form.addEventListener('submit', function () {
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+            btn.style.cursor = 'wait';
+            txt.innerHTML = '<i class="bi bi-arrow-repeat"></i> Przekierowanie do Stripe…';
+        });
+    })();
+</script>
 
 @include('shared.footer')
 @endsection
