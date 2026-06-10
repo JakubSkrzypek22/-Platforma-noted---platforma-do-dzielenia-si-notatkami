@@ -504,3 +504,18 @@
     border-radius: 50%;
   }
 }
+
+/* ── BLINKING ANIMATION ── */
+@keyframes nw-pulse-blink {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.03);
+  }
+}
+.nw-blink-animation {
+  animation: nw-pulse-blink 0.5s ease-in-out 3;
+}

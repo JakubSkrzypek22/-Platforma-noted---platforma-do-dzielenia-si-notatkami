@@ -104,13 +104,23 @@
       answer: 'Status VIP to <strong>prowizja 0%</strong> od sprzedaży, wyższe pozycjonowanie Twoich notatek, złota odznaka i priorytetowe wsparcie. Pokażę Ci więcej!',
       tourSteps: [
         {
-          element: '.btn-vip-cta, [href*="vip"]',
+          element: '#vip-promo-title, .btn-vip-cta, [href*="vip"]',
           popover: {
-            title: '👑 Noted VIP',
-            description: 'Kliknij tutaj, aby dowiedzieć się więcej o pakiecie VIP i aktywować go dla swojego konta!',
-            side: 'top',
+            title: '👑 Status VIP',
+            description: 'Zyskaj potężne przywileje, takie jak prowizja 0% od sprzedaży i złota odznaka VIP!',
+            side: 'bottom',
             align: 'center',
           },
+          onHighlighted: (element) => {
+            // Instant scroll to center the element
+            element.scrollIntoView({ behavior: 'auto', block: 'center' });
+            
+            // Add custom blinking animation
+            element.classList.add('nw-blink-animation');
+            setTimeout(() => {
+              element.classList.remove('nw-blink-animation');
+            }, 1600);
+          }
         },
       ],
     },

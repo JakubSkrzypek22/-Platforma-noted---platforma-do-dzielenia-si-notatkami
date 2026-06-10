@@ -238,7 +238,7 @@ $defaultCategoryClass = 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text
         </div>
 
         <div class="z-10 text-center md:text-left">
-            <h3 class="text-xl md:text-2xl font-black mb-2 flex items-center justify-center md:justify-start gap-2">
+            <h3 id="vip-promo-title" class="text-xl md:text-2xl font-black mb-2 flex items-center justify-center md:justify-start gap-2">
                 <i class="bi bi-crown-fill"></i> Zyskaj potężne przywileje z kontem Noted VIP!
             </h3>
             <p class="text-white/90 text-sm max-w-xl leading-relaxed">
