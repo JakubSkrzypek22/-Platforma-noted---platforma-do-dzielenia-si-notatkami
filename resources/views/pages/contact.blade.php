@@ -67,29 +67,27 @@
                     <h2 class="text-lg font-bold text-text-body mb-1">Napisz do nas</h2>
                     <p class="text-sm text-slate-500 dark:text-slate-400 mb-5">Wypełnij formularz, a my skontaktujemy się z Tobą najszybciej, jak to możliwe.</p>
 
-                    <form onsubmit="event.preventDefault(); document.getElementById('contactDone').classList.remove('hidden'); this.reset();" class="flex flex-col gap-4">
+                    <form id="contactForm" class="flex flex-col gap-4">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-xs font-bold text-text-body mb-1.5">Imię i nazwisko</label>
-                                <input type="text" class="w-full px-3.5 py-2.5 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm" placeholder="Jan Kowalski" required>
+                                <label for="user_name" class="block text-xs font-bold text-text-body mb-1.5">Imię i nazwisko</label>
+                                <input id="user_name" name="user_name" type="text" class="w-full px-3.5 py-2.5 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm" placeholder="Jan Kowalski" required>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-text-body mb-1.5">E-mail</label>
-                                <input type="email" class="w-full px-3.5 py-2.5 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm" placeholder="jan@example.com" required>
+                                <label for="user_email" class="block text-xs font-bold text-text-body mb-1.5">E-mail</label>
+                                <input id="user_email" name="user_email" type="email" class="w-full px-3.5 py-2.5 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm" placeholder="jan@example.com" required>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-text-body mb-1.5">Temat</label>
-                            <input type="text" class="w-full px-3.5 py-2.5 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm" placeholder="W czym możemy pomóc?" required>
+                            <label for="subject" class="block text-xs font-bold text-text-body mb-1.5">Temat</label>
+                            <input id="subject" name="subject" type="text" class="w-full px-3.5 py-2.5 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm" placeholder="W czym możemy pomóc?" required>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-text-body mb-1.5">Wiadomość</label>
-                            <textarea rows="5" class="w-full px-3.5 py-2.5 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm resize-none" placeholder="Treść wiadomości…" required></textarea>
+                            <label for="message" class="block text-xs font-bold text-text-body mb-1.5">Wiadomość</label>
+                            <textarea id="message" name="message" rows="5" class="w-full px-3.5 py-2.5 border border-border rounded-xl bg-card-bg text-text-body focus:ring-2 focus:ring-primary/30 focus:border-primary focus:outline-none text-sm resize-none" placeholder="Treść wiadomości…" required></textarea>
                         </div>
 
-                        <div id="contactDone" class="hidden bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 text-emerald-700 dark:text-emerald-400 p-3.5 rounded-xl text-sm">
-                            <i class="bi bi-check-circle-fill mr-1.5"></i> Dziękujemy! Wiadomość została wysłana (demo).
-                        </div>
+                        <div id="contactDone" class="hidden p-3.5 rounded-xl text-sm"></div>
 
                         <button type="submit" class="self-start px-6 py-3 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold text-sm transition-colors">
                             <i class="bi bi-send-fill mr-1.5"></i> Wyślij wiadomość
@@ -102,4 +100,39 @@
 </main>
 
 @include('shared.footer')
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>
+    (function () {
+        const form = document.getElementById('contactForm');
+        const statusBox = document.getElementById('contactDone');
+
+        if (!form || !statusBox) return;
+
+        emailjs.init('q4D-O_OWAvixuXAD3'); // PUBLIC_KEY z EmailJS
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            statusBox.className = 'hidden';
+            statusBox.textContent = '';
+
+            statusBox.className = 'block bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 text-amber-700 dark:text-amber-400 p-3.5 rounded-xl text-sm';
+            statusBox.innerHTML = '<i class="bi bi-send-fill mr-1.5"></i> Wysyłanie wiadomości...';
+
+            emailjs.sendForm('service_9gproeo', 'template_tj0dp59', this) // SERVICE_ID i TEMPLATE_ID z EmailJS
+                .then(function () {
+                    statusBox.className = 'block bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 text-emerald-700 dark:text-emerald-400 p-3.5 rounded-xl text-sm';
+                    statusBox.innerHTML = '<i class="bi bi-check-circle-fill mr-1.5"></i> Dziękujemy! Wiadomość została wysłana.';
+                    form.reset();
+                })
+                .catch(function (error) {
+                    console.error('EmailJS error:', error);
+                    statusBox.className = 'block bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-400 p-3.5 rounded-xl text-sm';
+                    statusBox.innerHTML = '<i class="bi bi-exclamation-triangle-fill mr-1.5"></i> Wysyłanie nie powiodło się. Sprawdź ustawienia EmailJS i spróbuj ponownie.';
+                });
+        });
+    })();
+</script>
+
 @endsection
