@@ -8,13 +8,13 @@
                     <span class="bg-gradient-to-r from-primary to-amber-500 bg-clip-text text-transparent">Noted</span>
                 </a>
                 <div class="hidden md:flex ml-10 items-baseline space-x-2">
-                    <a class="px-3 py-2 rounded-xl text-sm font-medium transition-colors @if (request()->is('/')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ url('/') }}">
+                    <a id="nav-home-link" class="navbar-nav-link navbar-nav-link-home px-3 py-2 rounded-xl text-sm font-medium transition-colors @if (request()->is('/')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ url('/') }}">
                         <i class="bi bi-house-door mr-1.5"></i> Strona Główna
                     </a>
-                    <a class="px-3 py-2 rounded-xl text-sm font-medium transition-colors @if (request()->is('o-nas')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('about') }}">
+                    <a id="nav-about-link" class="navbar-nav-link navbar-nav-link-about px-3 py-2 rounded-xl text-sm font-medium transition-colors @if (request()->is('o-nas')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('about') }}">
                         <i class="bi bi-people mr-1.5"></i> O nas
                     </a>
-                    <a class="px-3 py-2 rounded-xl text-sm font-medium transition-colors @if (request()->is('kontakt')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('contact') }}">
+                    <a id="nav-contact-link" class="navbar-nav-link navbar-nav-link-contact px-3 py-2 rounded-xl text-sm font-medium transition-colors @if (request()->is('kontakt')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('contact') }}">
                         <i class="bi bi-envelope mr-1.5"></i> Kontakt
                     </a>
                 </div>
@@ -96,13 +96,13 @@
 
     <!-- Mobile menu, show/hide based on menu state. -->
     <div class="hidden md:hidden border-t border-border px-4 pt-2 pb-4 space-y-1 bg-card-bg" id="mobile-menu">
-        <a class="block px-3 py-2 rounded-xl text-base font-medium @if (request()->is('/')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ url('/') }}">
+        <a id="nav-home-link-mobile" class="navbar-nav-link navbar-nav-link-home block px-3 py-2 rounded-xl text-base font-medium @if (request()->is('/')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ url('/') }}">
             <i class="bi bi-house-door mr-2"></i> Strona Główna
         </a>
-        <a class="block px-3 py-2 rounded-xl text-base font-medium @if (request()->is('o-nas')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('about') }}">
+        <a id="nav-about-link-mobile" class="navbar-nav-link navbar-nav-link-about block px-3 py-2 rounded-xl text-base font-medium @if (request()->is('o-nas')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('about') }}">
             <i class="bi bi-people mr-2"></i> O nas
         </a>
-        <a class="block px-3 py-2 rounded-xl text-base font-medium @if (request()->is('kontakt')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('contact') }}">
+        <a id="nav-contact-link-mobile" class="navbar-nav-link navbar-nav-link-contact block px-3 py-2 rounded-xl text-base font-medium @if (request()->is('kontakt')) text-primary bg-primary/10 @else text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 @endif" href="{{ route('contact') }}">
             <i class="bi bi-envelope mr-2"></i> Kontakt
         </a>
         <div class="border-t border-border my-3"></div>
