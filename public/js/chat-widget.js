@@ -156,8 +156,10 @@
       doneBtnText: '✓ Rozumiem!',
       popoverClass: 'noted-driver-popover',
       onDestroyStarted: () => {
-        // Reopen chat after tour
-        setTimeout(() => reopenChat(), 400);
+        // Reopen/reset questions opacity only if chat panel is still open
+        if (isOpen) {
+          setTimeout(() => reopenChat(), 400);
+        }
       },
     });
   }
@@ -308,7 +310,6 @@
       }, 1300);
 
       setTimeout(() => {
-        closeChatPanel();
         startTour(q.tourSteps);
       }, 2400);
     } else {
@@ -368,6 +369,11 @@
     if (toggle) { toggle.setAttribute('aria-expanded', 'false'); toggle.classList.remove('nw-toggle-active'); }
     if (iconClosed) iconClosed.style.display = '';
     if (iconOpen) iconOpen.style.display = 'none';
+
+    // Stop active tour if panel is closed
+    if (driverInstance && typeof driverInstance.destroy === 'function') {
+      driverInstance.destroy();
+    }
   }
 
   // ─── RESET ────────────────────────────────────────────────────────────────────
